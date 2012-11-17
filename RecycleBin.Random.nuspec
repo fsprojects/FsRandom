@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package>
+   <metadata>
+      <id>RecycleBin.Random</id>
+      <version>1.0.0.0</version>
+      <title>RecycleBin.Random</title>
+      <authors>RecycleBin</authors>
+      <owners>kos59125</owners>
+      <licenseUrl>https://github.com/kos59125/RecycleBin.Random/blob/master/LICENSE</licenseUrl>
+      <projectUrl>https://github.com/kos59125/RecycleBin.Random</projectUrl>
+      <requireLicenseAcceptance>true</requireLicenseAcceptance>
+      <description>Random number generating framework designed for F#. It includes a variety of random number generating functions such as uniform, normal, gamma, and Poisson.</description>
+      <summary>Random number generating framework designed for F#.</summary>
+      <copyright>Copyright 2012 RecycleBin</copyright>
+      <references>
+         <reference file="RecycleBin.Random.dll" />
+      </references>
+      <tags>F# random-number computation-expression xorshift uniform normal gamma beta exponential cauchy chi-square Student-t Poisson geometric Bernoulli binomial Dirichlet</tags>
+   </metadata>
+   <files>
+      <file src="publish\*.dll" target="lib\net40" />
+      <file src="publish\*.xml" target="lib\net40" />
+   </files>
+</package>
