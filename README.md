@@ -35,7 +35,7 @@ Supported Randoms
 How to Install
 --------------
 
-RecycleBin.Random is available on [the NuGet Gallery](https://nuget.org/packages/RecycleBin.Random/).
+RecycleBin.Random is [available on the NuGet Gallery](https://nuget.org/packages/RecycleBin.Random/).
 Use the following command to install RecycleBin.Random via NuGet.
 
 ```
@@ -204,11 +204,10 @@ printnf "%f" z
 
 Don't forget that RecycleBin.Random has a normal random number generator `normal`.
 
-Numerical Example
------------------
+Numerical Examples
+------------------
 
-This section shows a famous Monte Carlo example:
-estimating pi, the ratio of a circle's circumference to its diameter.
+### Estimating pi, the ratio of a circle's circumference to its diameter.
 
 ```fsharp
 // Generates random points on [-1, 1] x [-1, 1].
@@ -234,10 +233,39 @@ randomPoints (123456789u, 362436069u, 521288629u, 88675123u)
 |> printfn "%f"
 ```
 
+### Generating bivariate normal random numbers using Gibbs sampler
+
+To sample from bivariate normal distribution N2([meanX, meanY]^t, [[varX, cov]^t, [cov, varY]]),
+we will construct a Gibbs sample.
+Because the density function f(x, y) is propotional to f(x | y) * f(y) and
+f(x | y) is propotinal to p(meanX + (cov / varY) * (y - meanY), varX - cov^2 / varY)
+where p is a univariate normal density function,
+the Gibbs sampler for bivariate normal distribution consists of iterating as the following:
+
+1. Draw x[t + 1] ~ N(meanX + (cov / varY) * (y[t] - meanY), varX - cov^2 / varY)
+2. Draw y[t + 1] ~ N(meanY + (cov / varX) * (x[t + 1] - meanX), varY - cov^2 / varX)
+
+And it can be naturally translated into F# code as the following.
+
+```fsharp
+let rec binormal (meanX, meanY, varX, varY, cov as parameter) ((_, y), seed as state) =
+   seq {
+      let next =
+         xorshift seed {
+            // Pay attention to that `normal' takes not variance but standard deviation.
+            let! x' = normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
+            let! y' = normal (meanY + cov * (x' - meanX) / varX, sqrt <| varY - cov ** 2.0 / varX)
+            return (x', y')
+         }
+      yield fst next
+      yield! binormal parameter next
+   }
+```
+
+Note that the generating bivariate normal random number sequence is [autocorrelated](http://en.wikipedia.org/wiki/Autocorrelation).
+
 Related Projects
 ----------------
 
-* [Math.NET Numerics](https://github.com/mathnet/mathnet-numerics/)
-
-   An opensource numerical library for .NET, Silverlight and Mono.
+* [Math.NET Numerics](https://github.com/mathnet/mathnet-numerics/) -- An opensource numerical library for .NET, Silverlight and Mono.
 
