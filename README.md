@@ -32,6 +32,18 @@ Supported Randoms
   * Dirichlet
 * User-defined (see below)
 
+How to Install
+--------------
+
+RecycleBin.Random is available on [the NuGet Gallery](https://nuget.org/packages/RecycleBin.Random/).
+Use the following command to install RecycleBin.Random via NuGet.
+
+```
+Install-Package RecycleBin.Random
+```
+
+[Visit the site](https://nuget.org/) for more information.
+
 How to Use
 ----------
 
