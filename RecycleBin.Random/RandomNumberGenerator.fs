@@ -23,6 +23,11 @@ let xorshiftPrng (x:uint32, y:uint32, z:uint32, w:uint32) =
    w', s
 let xorshift seed = random xorshiftPrng seed
 
+let getRandom (generator : State<PrngState<'s>, 'a >) =
+   getState |>> (fun s0 -> let r, s' = generator s0 in setState s' &>> returnState r)
+let getRandomBy f (generator : State<PrngState<'s>, 'a >) =
+   getState |>> (fun s0 -> let r, s' = generator s0 in setState s' &>> returnState (f r))
+
 [<Literal>]
 let ``1 / 2^32`` = 2.3283064365386963e-10
 [<Literal>]

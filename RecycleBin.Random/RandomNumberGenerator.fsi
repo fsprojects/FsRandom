@@ -52,6 +52,18 @@ val systemrandom : random:Random -> RandomBuilder<Random>
 val xorshift : seed:(uint32 * uint32 * uint32 * uint32) -> RandomBuilder<uint32 * uint32 * uint32 * uint32>
 
 /// <summary>
+/// Generates a random number by <paramref name="generator" /> and returns the value.
+/// </summary>
+/// <param name="generator">The random number generator.</param>
+val getRandom : generator:State<PrngState<'s>, 'a> -> State<PrngState<'s>, 'a>
+/// <summary>
+/// Generates a random number by <paramref name="generator" /> and returns a transformed value by <paramref name="transformation" /> function.
+/// </summary>
+/// <param name="transformation">The function to transform a random value.</param>
+/// <param name="generator">The random number generator.</param>
+val getRandomBy : transformation:('a -> 'b) -> generator:State<PrngState<'s>, 'a> -> State<PrngState<'s>, 'b>
+
+/// <summary>
 /// Returns a random number in the range of (0, 1).
 /// </summary>
 val ``(0, 1)`` : (PrngState<'s> -> float * PrngState<'s>)
