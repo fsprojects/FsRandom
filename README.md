@@ -235,7 +235,7 @@ randomPoints (123456789u, 362436069u, 521288629u, 88675123u)
 
 ### Generating bivariate normal random numbers using Gibbs sampler
 
-To sample from bivariate normal distribution N2([meanX, meanY]^t, [[varX, cov]^t, [cov, varY]]),
+To sample from bivariate normal distribution N2([meanX, meanY]^t, [[varX, cov]^t, [cov, varY]^t]) (^t denotes transposition),
 we will construct a Gibbs sample.
 Because the density function f(x, y) is propotional to f(x | y) * f(y) and
 f(x | y) is propotinal to p(meanX + (cov / varY) * (y - meanY), varX - cov^2 / varY)
