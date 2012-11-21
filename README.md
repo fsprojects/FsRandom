@@ -84,6 +84,39 @@ let z2, _ = xorshift nextSeed { return! generator }
 printfn "%f" z2
 ```
 
+### Transforming random numbers
+
+Transformation of random numbers is a regular work.
+RecycleBin.Random defines `getRandomBy` function for the purpose.
+The following code shows how to use it.
+
+```fsharp
+let plusOne x = x + 1.0
+xorshift seed {
+   return! getRandomBy plusOne <| uniform (0.0, 1.0)
+}
+```
+
+`plusOne` is a function that takes an argument and adds one to it.
+`uniform` is a uniform random number generator between its two arguments.
+So `x` finally becomes a uniform random number between 1 and 2.
+
+The both following codes return the same results as above.
+
+``` fsharp
+xorshift seed {
+   let! u = getRandom <| uniform (0.0, 1.0)
+   return plusOne u
+}
+```
+
+```fsharp
+xorshift seed {
+   let! u = uniform (0.0, 1.0)
+   return plusOne u
+}
+```
+
 ### Random number sequence
 
 Usually, we use a lot of random numbers for our needs.
