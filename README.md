@@ -200,6 +200,7 @@ This section explains how to construct generator functions such like `normal` an
 Random number generator functions are just required to return (`PrngState<'s> -> 'a * PrngState<'s>`)
 where `'s` is a type of random seed and `'a` is a type of random number.
 `PrngState<'s>` is defined as `Prng<'s> * 's` and `Prng<'s>` is `'s -> uint32 * 's`.
+The type looks too complex, but implementation is not difficult as you see soon.
 
 As an example of user-defined generator function,
 let's construct a random number generator to produce an *approximate*
@@ -211,21 +212,14 @@ Therefore, if we subtract 6 from the sum of 12 standard random numbers, the resu
 approximates a standard normal random number.
 
 ```fsharp
-let approximatelyStandardNormal (s0 : PrngState<'s>) =
-   let u1, s1 = ``(0, 1)`` s0  // ``(0, 1)`` is a standard random number generator in (0, 1)
-   let u2, s2 = ``(0, 1)`` s1
-   let u3, s3 = ``(0, 1)`` s2
-   let u4, s4 = ``(0, 1)`` s3
-   let u5, s5 = ``(0, 1)`` s4
-   let u6, s6 = ``(0, 1)`` s5
-   let u7, s7 = ``(0, 1)`` s6
-   let u8, s8 = ``(0, 1)`` s7
-   let u9, s9 = ``(0, 1)`` s8
-   let u10, s10 = ``(0, 1)`` s9
-   let u11, s11 = ``(0, 1)`` s10
-   let u12, s12 = ``(0, 1)`` s11
-   let approximation = u1 + u2 + u3 + u4 + u5 + u6 + u7 + u8 + u9 + u10 + u11 + u12 - 6.0
-   approximation, s12  // returns the random number and the last state
+let approximatelyStandardNormal =
+   state {
+      let values = Array.zeroCreate 12
+      for index = 0 to Array.length values - 1 do
+         let! u = ``(0, 1)``  // ``(0, 1)`` is a standard random number generator in (0, 1)
+         values.[index] <- u
+      return Array.sum values - 6.0
+   }
 ```
 
 The `approximatelyStandardNormal` can be used in the generating process as the following.
