@@ -26,3 +26,4 @@ type StateBuilder () =
    member this.For (source : seq<'a>, f) =
       use e = source.GetEnumerator ()
       this.While (e.MoveNext, this.Delay (fun () -> f e.Current))
+let state = StateBuilder ()

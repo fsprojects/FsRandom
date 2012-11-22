@@ -1,4 +1,5 @@
-﻿module RecycleBin.Random.StateMonad
+﻿[<AutoOpen>]
+module RecycleBin.Random.StateMonad
 
 type State<'s, 'a> = 's -> 'a * 's
 
@@ -19,3 +20,4 @@ type StateBuilder =
    member Delay : (unit -> State<'s, 'a>) -> State<'s, 'a>
    member While : condition:(unit -> bool) * m:State<'s, unit> -> State<'s, unit>
    member For : source:seq<'a> * f:('a -> State<'s, unit>) -> State<'s, unit>
+val state : StateBuilder
