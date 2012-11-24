@@ -11,43 +11,44 @@ let UpperMask = 0x80000000u
 [<Literal>]
 let LowerMask = 0x7FFFFFFFu
 
+let initialize seed =
+   let vector = Array.zeroCreate N
+   vector.[0] <- seed &&& 0xFFFFFFFFu
+   for index = 1 to N - 1 do
+      let previous = vector.[index - 1]
+      vector.[index] <- 1812433253u * (previous ^^^ (previous >>> 30)) + uint32 index
+   vector
+
 type StateVector (index : int, vector : uint32 []) =
    static member Initialize (seed : uint32) =
-      let vector = Array.zeroCreate N
-      vector.[0] <- seed &&& 0xFFFFFFFFu
-      for index = 1 to N - 1 do
-         let previous = vector.[index - 1]
-         vector.[index] <- 1812433253u * (previous ^^^ (previous >>> 30)) + uint32 index
-      StateVector (N, vector)
+      StateVector (N, initialize seed)
    static member Initialize (seed : uint32 []) =
-      let state = StateVector.Initialize (19650218u)
+      let vector = initialize 19650218u
       let mutable i = 1
       let mutable j = 0
       for k = max N seed.Length downto 1 do
-         state.[i] <- (state.[i] ^^^ ((state.[i - 1] ^^^ (state.[i - 1] >>> 30)) * 1664525u)) + seed.[j] + uint32 j
+         vector.[i] <- (vector.[i] ^^^ ((vector.[i - 1] ^^^ (vector.[i - 1] >>> 30)) * 1664525u)) + seed.[j] + uint32 j
          i <- i + 1
          j <- j + 1
          if i >= N
          then
-            state.[0] <- state.[N - 1]
+            vector.[0] <- vector.[N - 1]
             i <- 1
          if j >= seed.Length
          then
             j <- 0
          ()
       for k = N - 1 downto 1 do
-         state.[i] <- (state.[i] ^^^ ((state.[i - 1] ^^^ (state.[i - 1] >>> 30)) * 1566083941u)) - uint32 i
+         vector.[i] <- (vector.[i] ^^^ ((vector.[i - 1] ^^^ (vector.[i - 1] >>> 30)) * 1566083941u)) - uint32 i
          i <- i + 1
          if i >= N
          then
-            state.[0] <- state.[N - 1]
+            vector.[0] <- vector.[N - 1]
             i <- 1
-      state.[0] <- 0x80000000u
-      state
+      vector.[0] <- 0x80000000u
+      StateVector (N, vector)
    member val Index = index with get
-   member this.Item
-      with get (index) = vector.[index]
-      and set index value = vector.[index] <- value
+   member this.Item (index) = vector.[index]
    member this.Vector = vector
    
 let inline twist u l v =
