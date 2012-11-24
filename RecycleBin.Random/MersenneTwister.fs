@@ -44,18 +44,18 @@ type StateVector (index : int, vector : uint32 []) =
             i <- 1
       state.[0] <- 0x80000000u
       state
-   member val Index = index with get, set
+   member val Index = index with get
    member this.Item
       with get (index) = vector.[index]
       and set index value = vector.[index] <- value
-   member this.CopyVector () = Array.copy vector
+   member this.Vector = vector
    
 let inline twist u l v =
    let y = (u &&& UpperMask) ||| (l &&& LowerMask)
    let mag = if y &&& 1u = 0u then 0u else MatrixA  // mag01[y & 0x1]
    v ^^^ (y >>> 1) ^^^ mag
 let refresh (state : StateVector) =
-   let vector = state.CopyVector ()
+   let vector = Array.copy state.Vector
    for kk = 0 to N - M - 1 do
       vector.[kk] <-  twist vector.[kk] vector.[kk + 1] vector.[kk + M]
    for kk = N - M to N - 2 do
@@ -71,6 +71,6 @@ let mersennePrng (state : StateVector) =
    y <- y ^^^ ((y <<< 7) &&& 0x9D2C5680u)
    y <- y ^^^ ((y <<< 15) &&& 0xEFC60000u)
    y <- y ^^^ (y >>> 18)
-   state.Index <- index + 1
-   y, state
+   // Creates a new instance of StateVector, but the internal vector refers to the same array to avoid cost of copying.
+   y, StateVector(index + 1, state.Vector)
 let mersenne seed = random mersennePrng seed
