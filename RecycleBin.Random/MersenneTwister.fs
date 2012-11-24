@@ -23,8 +23,8 @@ type StateVector (index : int, vector : uint32 []) =
       let state = StateVector.Initialize (19650218u)
       let mutable i = 1
       let mutable j = 0
-      for k = (if N > seed.Length then N else seed.Length) downto 1 do
-         state.[i] <- state.[i] ^^^ ((state.[i - 1] ^^^ (state.[i - 1] >>> 30)) * 1664525u) + seed.[j] + uint32 j
+      for k = max N seed.Length downto 1 do
+         state.[i] <- (state.[i] ^^^ ((state.[i - 1] ^^^ (state.[i - 1] >>> 30)) * 1664525u)) + seed.[j] + uint32 j
          i <- i + 1
          j <- j + 1
          if i >= N
@@ -34,8 +34,9 @@ type StateVector (index : int, vector : uint32 []) =
          if j >= seed.Length
          then
             j <- 0
+         ()
       for k = N - 1 downto 1 do
-         state.[i] <- state.[i] ^^^ ((state.[i - 1] ^^^ (state.[i - 1] >>> 30)) * 1566083941u) - uint32 i
+         state.[i] <- (state.[i] ^^^ ((state.[i - 1] ^^^ (state.[i - 1] >>> 30)) * 1566083941u)) - uint32 i
          i <- i + 1
          if i >= N
          then
