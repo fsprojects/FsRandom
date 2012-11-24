@@ -176,82 +176,44 @@ let testBinomial tester parameter =
 let testDirichlet tester parameter =
    NotImplementedException () |> raise
 
+let test tester name seed =
+   printfn "========================================"
+   printfn "Test %s" name
+   printfn "Seed: %A" seed
+   printfn "----------------------------------------"
+   printfn "Kolmogorov-Smirnov tests"
+   testUniform tester (-10.0, 10.0)
+   testNormal tester (-5.0, 3.0)
+   testGamma tester (0.3, 2.0)
+   testGamma tester (5.6, 0.4)
+   testGamma tester (3.0, 7.9)
+   testExponential tester (1.5)
+   testBeta tester (1.5, 0.4)
+   testCauchy tester (-1.5, 0.1)
+   testChiSquare tester (10)
+   testT tester (3)
+   printfn "Chi-square goodness-of-fit test"
+   testUniformDiscrete tester (-10, 10)
+   testPoisson tester (5.2)
+   testGeometric tester (0.2)
+   testBernoulli tester (0.7)
+   testBinomial tester (20, 0.3)
+   // To be implemented.
+   // testDirichlet tester [1.0; 2.0; 2.5; 0.5]
+
 [<EntryPoint>]
 let main argv =
    printfn "Number of samples: %d" n
    printfn "Significance level: %.2f" level
-   printfn "----------------------------------------"
-   printfn "Test xorshift"
-   printfn "Seed: %A" (snd xorshiftTester)
-   printfn "Kolmogorov-Smirnov tests"
-   testUniform xorshiftTester (-10.0, 10.0)
-   testNormal xorshiftTester (-5.0, 3.0)
-   testGamma xorshiftTester (0.3, 2.0)
-   testGamma xorshiftTester (5.6, 0.4)
-   testGamma xorshiftTester (3.0, 7.9)
-   testExponential xorshiftTester (1.5)
-   testBeta xorshiftTester (1.5, 0.4)
-   testCauchy xorshiftTester (-1.5, 0.1)
-   testChiSquare xorshiftTester (10)
-   testT xorshiftTester (3)
-   printfn "Chi-square goodness-of-fit test"
-   testUniformDiscrete xorshiftTester (-10, 10)
-   testPoisson xorshiftTester (5.2)
-   testGeometric xorshiftTester (0.2)
-   testBernoulli xorshiftTester (0.7)
-   testBinomial xorshiftTester (20, 0.3)
-   // To be implemented.
-   // testDirichlet xorshiftTester [1.0; 2.0; 2.5; 0.5]
-   printfn "----------------------------------------"
-   printfn "Test systemrandom (System.Random)"
-   printfn "Seed: %A" systemrandomSeed
-   printfn "Kolmogorov-Smirnov tests"
-   testUniform systemrandomTester (-10.0, 10.0)
-   testNormal systemrandomTester (-5.0, 3.0)
-   testGamma systemrandomTester (0.3, 2.0)
-   testGamma systemrandomTester (5.6, 0.4)
-   testGamma systemrandomTester (3.0, 7.9)
-   testExponential systemrandomTester (1.5)
-   testBeta systemrandomTester (1.5, 0.4)
-   testCauchy systemrandomTester (-1.5, 0.1)
-   testChiSquare systemrandomTester (10)
-   testT systemrandomTester (3)
-   printfn "Chi-square goodness-of-fit test"
-   testUniformDiscrete systemrandomTester (-10, 10)
-   testPoisson systemrandomTester (5.2)
-   testGeometric systemrandomTester (0.2)
-   testBernoulli systemrandomTester (0.7)
-   testBinomial systemrandomTester (20, 0.3)
-   // To be implemented.
-   // testDirichlet systemrandomTester [1.0; 2.0; 2.5; 0.5]
-   printfn "----------------------------------------"
-   printfn "Test mersenne"
-   printfn "Seed: %A" mersenneSeed
-   printfn "Kolmogorov-Smirnov tests"
-   testUniform mersenneTester (-10.0, 10.0)
-   testNormal mersenneTester (-5.0, 3.0)
-   testGamma mersenneTester (0.3, 2.0)
-   testGamma mersenneTester (5.6, 0.4)
-   testGamma mersenneTester (3.0, 7.9)
-   testExponential mersenneTester (1.5)
-   testBeta mersenneTester (1.5, 0.4)
-   testCauchy mersenneTester (-1.5, 0.1)
-   testChiSquare mersenneTester (10)
-   testT mersenneTester (3)
-   printfn "Chi-square goodness-of-fit test"
-   testUniformDiscrete mersenneTester (-10, 10)
-   testPoisson mersenneTester (5.2)
-   testGeometric mersenneTester (0.2)
-   testBernoulli mersenneTester (0.7)
-   testBinomial mersenneTester (20, 0.3)
-   // To be implemented.
-   // testDirichlet mersenneTester [1.0; 2.0; 2.5; 0.5]
+   test xorshiftTester "xorshift" (snd xorshiftTester)
+   test systemrandomTester "systemrandom (System.Random)" systemrandomSeed
+   test mersenneTester "mersenne" mersenneSeed
    
    if !totalTestCount > 0
    then
       let success = !successTestCount
       let total = !totalTestCount
       let rate = float success / float total * 100.0
-      printfn "----------------------------------------"
+      printfn "========================================"
       printfn "%d out of %d tests (%.0f%%) succeeded." success total rate
    0
