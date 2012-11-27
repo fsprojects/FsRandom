@@ -44,6 +44,8 @@
     <Compile Include="RandomNumberGenerator.fs" />
     <Compile Include="MersenneTwister.fsi" />
     <Compile Include="MersenneTwister.fs" />
+    <Compile Include="SimdOrientedFastMersenneTwister.fsi" />
+    <Compile Include="SimdOrientedFastMersenneTwister.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
