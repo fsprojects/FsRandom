@@ -2,6 +2,8 @@
 
 open System
 open RecycleBin.Random
+open RecycleBin.Random.MersenneTwister
+open RecycleBin.Random.SimdOrientedFastMersenneTwister
 open MathNet.Numerics
 open MathNet.Numerics.Distributions
 open MathNet.Numerics.Statistics
@@ -12,7 +14,9 @@ let xorshiftTester = xorshift, (123456789u, 362436069u, 521288629u, 88675123u)
 let systemrandomSeed = 12345
 let systemrandomTester = systemrandom, Random (systemrandomSeed)
 let mersenneSeed = [| 0x123u; 0x234u; 0x345u; 0x456u |]
-let mersenneTester = mersenne, StateVector.Initialize mersenneSeed
+let mersenneTester = mersenne, MersenneTwister.StateVector.Initialize mersenneSeed
+let sfmtSeed = [| 0x1234u; 0x5678u; 0x9ABCu; 0xDEF0u |]
+let sfmtTester = sfmt, SimdOrientedFastMersenneTwister.StateVector.Initialize (SfmtParams.Params19937, sfmtSeed)
 let rec generate f seed =
    seq {
       let r, s = f seed
@@ -208,6 +212,7 @@ let main argv =
    test xorshiftTester "xorshift" (snd xorshiftTester)
    test systemrandomTester "systemrandom (System.Random)" systemrandomSeed
    test mersenneTester "mersenne" mersenneSeed
+   test sfmtTester "sfmt" sfmtTester
    
    if !totalTestCount > 0
    then
