@@ -1,5 +1,4 @@
-﻿[<AutoOpen>]
-module RecycleBin.Random.MersenneTwister
+﻿module RecycleBin.Random.MersenneTwister
 
 /// <summary>
 /// Keeps a random state used in the Mersenne Twister process.
