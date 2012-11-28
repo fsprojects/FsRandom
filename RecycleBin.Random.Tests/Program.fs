@@ -212,7 +212,7 @@ let main argv =
    test xorshiftTester "xorshift" (snd xorshiftTester)
    test systemrandomTester "systemrandom (System.Random)" systemrandomSeed
    test mersenneTester "mersenne" mersenneSeed
-   test sfmtTester "sfmt" sfmtTester
+   test sfmtTester "sfmt" sfmtSeed
    
    if !totalTestCount > 0
    then
