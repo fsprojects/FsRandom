@@ -5,6 +5,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RecycleBin.Random", "Recycl
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "RecycleBin.Random.Tests", "RecycleBin.Random.Tests\RecycleBin.Random.Tests.fsproj", "{FF3B2DE6-21ED-4A6C-9F2C-92DE0CD00C7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecycleBin.Random.Tests.Resources", "RecycleBin.Random.Tests.Resources\RecycleBin.Random.Tests.Resources.csproj", "{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{FF3B2DE6-21ED-4A6C-9F2C-92DE0CD00C7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF3B2DE6-21ED-4A6C-9F2C-92DE0CD00C7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF3B2DE6-21ED-4A6C-9F2C-92DE0CD00C7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

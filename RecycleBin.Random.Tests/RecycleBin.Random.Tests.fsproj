@@ -40,6 +40,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildExtensionsPath32)\..\Microsoft SDKs\F#\3.0\Framework\v4.0\Microsoft.FSharp.Targets')" />
   <ItemGroup>
+    <Compile Include="RuntimeHelper.fs" />
+    <Compile Include="MersenneTwisterTest.fs" />
+    <Compile Include="SimdOrientedFastMersenneTwisterTest.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <None Include="packages.config" />
@@ -48,6 +51,11 @@
     <Content Include="App_Readme\MathNet.Numerics.authors.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\RecycleBin.Random.Tests.Resources\RecycleBin.Random.Tests.Resources.csproj">
+      <Name>RecycleBin.Random.Tests.Resources</Name>
+      <Project>{eba281f7-5d4c-4e0b-885d-a4ca87474c7f}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <Reference Include="MathNet.Numerics">
       <HintPath>..\packages\MathNet.Numerics.2.2.1\lib\Net40\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>
@@ -58,6 +66,9 @@
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.1.12217, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

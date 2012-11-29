@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RecycleBin.Random.Tests.Resources</RootNamespace>
+    <AssemblyName>RecycleBin.Random.Tests.Resources</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="KnownRandomSequence.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>KnownRandomSequence.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="KnownRandomSequence.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>KnownRandomSequence.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\mt19937ar.out.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SFMT.216091.out.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SFMT.607.out.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SFMT.1279.out.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SFMT.2281.out.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SFMT.4253.out.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SFMT.11213.out.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SFMT.19937.out.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SFMT.44497.out.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SFMT.86243.out.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SFMT.132049.out.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
