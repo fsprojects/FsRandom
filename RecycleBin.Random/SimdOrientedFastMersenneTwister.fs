@@ -76,7 +76,7 @@ let certificatePeriod (parameter : SfmtParams) vector =
    let parity = [|parameter.Parity1; parameter.Parity2; parameter.Parity3; parameter.Parity4|]
    let mutable inner = 0u
    for index = 0 to 3 do
-      inner <- inner ^^^ (W128.Array.get index vector) &&& parity.[index]
+      inner <- inner ^^^ ((W128.Array.get index vector) &&& parity.[index])
    for i in [16; 8; 4; 2; 1] do
       inner <- inner ^^^ (inner >>> i)
    inner <- inner &&& 1u
