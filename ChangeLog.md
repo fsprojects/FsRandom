@@ -1,6 +1,12 @@
 RecycleBin.Random ChangeLog
 ===========================
 
+Version 1.1.3.0 (2012-11-29)
+----------------------------
+Tagged: 6d91d3df1ddc6aae4d52710fb56856c75f5125d6
+
+* Fixed SimdOrientedFastMersenneTwister implementation.
+
 Version 1.1.2.0 (2012-11-27)
 ----------------------------
 Tagged: 1cc5c0474b9048862b849bededd00aa26f9ae1bd
