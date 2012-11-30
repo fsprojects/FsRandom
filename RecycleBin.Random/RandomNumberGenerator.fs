@@ -108,6 +108,11 @@ let normal (mean, sd) =
          let theta = ``2pi`` * u2
          let z = r * cos theta
          mean + z * sd, s'
+
+let lognormal (mu, sigma) =
+   fun s0 ->
+      let z, s' = normal (mu, sigma) s0
+      exp z, s'
       
 // random number distributed gamma for alpha < 1 (Best 1983).
 let gammaSmall alpha s0 =

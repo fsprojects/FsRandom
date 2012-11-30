@@ -108,6 +108,12 @@ let testNormal tester parameter =
    let cdf = cdfNormal parameter
    testContinuous tester generator cdf
    
+let cdfLognormal (mu, sigma) = LogNormal(mu, sigma).CumulativeDistribution
+let testLognormal tester parameter =
+   let generator = lognormal parameter
+   let cdf = cdfLognormal parameter
+   testContinuous tester generator cdf
+   
 let cdfGamma (shape, scale) =
    // Gamma.CumulativeDistribution (x) (x < 0) throws an exception.
    let distribution = Gamma (shape, 1.0 / scale)
@@ -195,6 +201,10 @@ let ``Validates triangular`` () =
 [<Test>]
 let ``Validates normal (-5.0, 3.0)`` () =
    testNormal (getDefaultTester ()) (-5.0, 3.0)
+
+[<Test>]
+let ``Validates lognormal`` () =
+   testLognormal (getDefaultTester ()) (3.1, 7.2)
 
 [<Test>]
 let ``Validates gamma (shape < 1)`` () =

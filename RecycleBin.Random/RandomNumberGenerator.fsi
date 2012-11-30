@@ -109,6 +109,12 @@ val triangular : min:float * max:float * mode:float -> State<PrngState<'s>, floa
 /// <param name="standardDeviation">The standard deviation.</param>
 val normal : mean:float * standardDeviation:float -> State<PrngState<'s>, float>
 /// <summary>
+/// Returns a random number distributed log-normally.
+/// </summary>
+/// <param name="mu">The mu parameter.</param>
+/// <param name="sigma">The sigma parameter.</param>
+val lognormal : mu:float * sigma:float -> State<PrngState<'s>, float>
+/// <summary>
 /// Returns a random number distributed gamma.
 /// </summary>
 /// <param name="shape">The shape parameter.</param>
