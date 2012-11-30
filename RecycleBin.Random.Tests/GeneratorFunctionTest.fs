@@ -69,6 +69,25 @@ let testUniform tester parameter =
    let cdf = cdfUniform parameter
    testContinuous tester generator cdf
    
+let cdfTriangular (a, b, c) x =
+   if x < a
+   then
+      0.0
+   elif a <= x && x <= b
+   then
+      let k = (b - a) * (c - a)
+      if x < c
+      then
+         (x - a) * (x - a) / k
+      else
+         1.0 - (b - x) * (b - x) / k
+   else
+      1.0
+let testTriangular tester parameter =
+   let generator = triangular parameter
+   let cdf = cdfTriangular parameter
+   testContinuous tester generator cdf
+   
 let cdfNormal (mean, sd) = Normal(mean, sd).CumulativeDistribution
 let testNormal tester parameter =
    let generator = normal parameter
@@ -150,6 +169,10 @@ let testDirichlet tester parameter =
 [<Test>]
 let ``Validates uniform`` () =
    testUniform (getDefaultTester ()) (-10.0, 10.0)
+
+[<Test>]
+let ``Validates triangular`` () =
+   testTriangular (getDefaultTester ()) (-3.3, 10.7, 2.1)
 
 [<Test>]
 let ``Validates normal (-5.0, 3.0)`` () =

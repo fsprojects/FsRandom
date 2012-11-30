@@ -66,6 +66,22 @@ let uniform (min, max) =
             let u, s' = ``[0, 1]`` s0
             min + u * length, s'
 
+let triangular (min, max, mode) =
+   ensuresFiniteValue min "min"
+   ensuresFiniteValue max "max"
+   ensuresFiniteValue mode "mode"
+   if mode < min || max < mode
+   then
+      ArgumentOutOfRangeException ("mode", "Invalid range.") |> raise
+   else
+      fun s0 ->
+         let u, s' = uniform (min, max) s0
+         if u < mode
+         then
+            min + sqrt ((u - min) * (mode - min)), s'
+         else
+            max - sqrt ((max - u) * (max - mode)), s'
+
 // Box-Muller's transformation.
 let normal (mean, sd) =
    ensuresFiniteValue mean "mean"
