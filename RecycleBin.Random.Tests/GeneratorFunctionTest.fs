@@ -89,12 +89,11 @@ let cdfTriangular (a, b, c) x =
       0.0
    elif a <= x && x <= b
    then
-      let k = (b - a) * (c - a)
       if x < c
       then
-         (x - a) * (x - a) / k
+         (x - a) * (x - a) / ((b - a) * (c - a))
       else
-         1.0 - (b - x) * (b - x) / k
+         1.0 - (b - x) * (b - x) / ((b - a) * (b - c))
    else
       1.0
 let testTriangular tester parameter =
