@@ -90,6 +90,12 @@ val ``[0, 1]`` : State<PrngState<'s>, float>
 /// <seealso cref="[0, 1]" />
 val uniform : min:float * max:float -> State<PrngState<'s>, float>
 /// <summary>
+/// Returns a random number distributed log-uniformly in the range of [<paramref name="min" />, <paramref name="max" />].
+/// </summary>
+/// <param name="min">The inclusive lower limit.</param>
+/// <param name="max">The inclusive upper limit.</param>
+val loguniform : min:float * max:float -> State<PrngState<'s>, float>
+/// <summary>
 /// Returns a random number distributed triangular.
 /// </summary>
 /// <param name="min">The inclusive lower limit.</param>

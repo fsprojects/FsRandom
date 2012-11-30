@@ -69,6 +69,20 @@ let testUniform tester parameter =
    let cdf = cdfUniform parameter
    testContinuous tester generator cdf
    
+let cdfLoguniform (a, b) x =
+   if x < a
+   then
+      0.0
+   elif a <= x && x <= b
+   then
+      1.0 / (x * (log b - log a))
+   else
+      1.0
+let testLoguniform tester parameter =
+   let generator = loguniform parameter
+   let cdf = cdfLoguniform parameter
+   testContinuous tester generator cdf
+   
 let cdfTriangular (a, b, c) x =
    if x < a
    then
@@ -169,6 +183,10 @@ let testDirichlet tester parameter =
 [<Test>]
 let ``Validates uniform`` () =
    testUniform (getDefaultTester ()) (-10.0, 10.0)
+
+[<Test>]
+let ``Validates loguniform`` () =
+   testUniform (getDefaultTester ()) (1.0, 100.0)
 
 [<Test>]
 let ``Validates triangular`` () =

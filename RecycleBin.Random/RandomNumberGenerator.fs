@@ -66,6 +66,17 @@ let uniform (min, max) =
             let u, s' = ``[0, 1]`` s0
             min + u * length, s'
 
+let loguniform (min, max) =
+   ensuresFiniteValue min "min"
+   ensuresFiniteValue max "max"
+   if min <= 0.0 || min > max
+   then
+      ArgumentOutOfRangeException ("min", "Invalid range.") |> raise
+   else
+      fun s0 ->
+         let u, s' = uniform (log min, log max) s0
+         exp u, s'
+
 let triangular (min, max, mode) =
    ensuresFiniteValue min "min"
    ensuresFiniteValue max "max"
