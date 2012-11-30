@@ -210,11 +210,11 @@ let ``Validates gamma (shape < 1)`` () =
    testGamma (getDefaultTester ()) (0.3, 2.0)
 
 [<Test>]
-let ``Validates gamme (shape > 1)`` () =
+let ``Validates gamma (shape > 1)`` () =
    testGamma (getDefaultTester ()) (5.6, 0.4)
 
 [<Test>]
-let ``Validates uniform (shape is integer)`` () =
+let ``Validates gamma (shape is integer)`` () =
    testGamma (getDefaultTester ()) (3.0, 7.9)
 
 [<Test>]
