@@ -184,6 +184,9 @@ let testBinomial tester parameter =
    
 let testDirichlet tester parameter =
    Assert.Inconclusive ("Not implemented.")
+   
+let testMultinomial tester parameter =
+   Assert.Inconclusive ("Not implemented.")
 
 [<Test>]
 let ``Validates uniform`` () =
@@ -260,3 +263,7 @@ let ``Validates binomial`` () =
 [<Test>]
 let ``Validates dirichlet`` () =
     testDirichlet (getDefaultTester ()) [1.0; 2.0; 2.5; 0.5]
+
+[<Test>]
+let ``Validates multinomial`` () =
+    testMultinomial (getDefaultTester ()) [1.0; 2.0; 2.5; 0.5]

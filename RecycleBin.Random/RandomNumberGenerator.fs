@@ -362,3 +362,27 @@ let dirichlet alpha =
       fun s0 ->
          let y, sum, s' = List.foldBack (fun a (xs, sum, s) -> let x, s' = gamma (a, 1.0) s in x :: xs, sum + x, s') alpha ([], 0.0, s0)
          List.map (fun y' -> y' / sum) y, s'
+
+let multinomial (n, weight) =
+   if n <= 0
+   then
+      ArgumentOutOfRangeException ("n", "`n' must be positive.") |> raise
+   let k = List.length weight
+   if k < 2
+   then
+      invalidArg "weight" "`weight' must contain two or more values."
+   elif List.exists (fun x -> isNaN x || isInfinity x || x <= 0.0) weight
+   then
+      ArgumentOutOfRangeException ("probability", "All elements in `weight' must be positive.") |> raise
+   else
+      fun s0 ->
+         let cdf, sum = List.fold (fun (xs, sum) x -> let s = sum + x in xs @ [s], s) ([], 0.0) weight
+         let result = Array.zeroCreate k
+         let mutable s = s0
+         for loop = 1 to n do
+            let u, s' = ``[0, 1)`` s
+            let p = sum * u
+            let index = List.findIndex (fun x -> p < x) cdf
+            result.[index] <- result.[index] + 1
+            s <- s'
+         Array.toList result, s

@@ -15,3 +15,7 @@ let inline ensuresFiniteValue argument argumentName =
    if isNaN argument || isInfinity argument
    then
       invalidArg argumentName (sprintf "`%s' must be a finite number." argumentName) |> raise
+
+let accumulate accumulation = function
+   | [] -> invalidArg "list" "Empty list."
+   | x :: xs -> List.scan accumulation x xs

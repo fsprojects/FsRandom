@@ -179,3 +179,10 @@ val binomial : n:int * probability:float -> State<PrngState<'s>, int>
 /// </summary>
 /// <param name="alpha">The alpha parameter.</param>
 val dirichlet : alpha:float list -> State<PrngState<'s>, float list>
+/// <summary>
+/// Returns a random number distributed multinomially.
+/// </summary>
+/// <param name="n">The number of trials.</param>
+/// <param name="weight">The list of probability.
+/// Each item is normalized in the function so that the sum of values can be less or greater than 1.</param>
+val multinomial : n:int * weight:float list -> State<PrngState<'s>, int list>
