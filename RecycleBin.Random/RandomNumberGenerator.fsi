@@ -166,7 +166,8 @@ val geometric : probability:float -> State<PrngState<'s>, int>
 /// <summary>
 /// Returns a random number distributed Bernoulli.
 /// </summary>
-/// <param name="probability">The probability to success a trial.</param>
+/// <param name="probability">The probability of success.</param>
+/// <seealso cref="flipCoin" />
 val bernoulli : probability:float -> State<PrngState<'s>, int>
 /// <summary>
 /// Returns a random number distributed binomially.
@@ -186,3 +187,10 @@ val dirichlet : alpha:float list -> State<PrngState<'s>, float list>
 /// <param name="weight">The list of probability.
 /// Each item is normalized in the function so that the sum of values can be less or greater than 1.</param>
 val multinomial : n:int * weight:float list -> State<PrngState<'s>, int list>
+
+/// <summary>
+/// Returns a random Boolean value with the specified probability.
+/// </summary>
+/// <param name="probability">The probability of success.</param>
+/// <seealso cref="bernoulli" />
+val flipCoin : probability:float -> State<PrngState<'s>, bool>

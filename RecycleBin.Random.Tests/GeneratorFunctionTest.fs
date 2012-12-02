@@ -188,6 +188,11 @@ let testDirichlet tester parameter =
 let testMultinomial tester parameter =
    Assert.Inconclusive ("Not implemented.")
 
+let testFlipCoin tester p =
+   let generator = getRandomBy (fun b -> if b then 1 else 0) <| flipCoin p
+   let cdf = cdfBernoulli p
+   testBinary tester generator cdf p
+
 [<Test>]
 let ``Validates uniform`` () =
    testUniform (getDefaultTester ()) (-10.0, 10.0)
@@ -267,3 +272,7 @@ let ``Validates dirichlet`` () =
 [<Test>]
 let ``Validates multinomial`` () =
     testMultinomial (getDefaultTester ()) [1.0; 2.0; 2.5; 0.5]
+
+[<Test>]
+let ``Validates flipCoin`` () =
+   testFlipCoin (getDefaultTester ()) (0.2)
