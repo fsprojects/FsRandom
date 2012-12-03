@@ -15,21 +15,26 @@ Supported Randoms
   * [0, 1]
 * Continuous (univariate)
   * uniform
+  * log-uniform
   * normal
+  * log-normal
   * gamma
   * beta
   * exponential
   * Cauchy
   * chi-square
   * Student's t
+  * triangular
 * Discrete (univariate)
   * uniform
   * poisson
   * geometric
-  * Bernoulli
+  * Bernoulli (includes two versions: `bernoulli` returns 0/1 and `flipCoin` returns `true`/`false`)
   * binomial
 * Continuous (multivariate)
   * Dirichlet
+* Discrete (multivariate)
+  * multinomial
 * User-defined (see below)
 
 How to Install
