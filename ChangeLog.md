@@ -1,6 +1,16 @@
 RecycleBin.Random ChangeLog
 ===========================
 
+Version 1.1.4.0 (2012-12-03)
+----------------------------
+Tagged: 265f8ddfb416f2c8804e4a5af5465e21fbc31908
+
+* Added `coinFlip` function (#2).
+* Added `trialgular` function (#11).
+* Added `loguniform` function (#12).
+* Added `lognormal` function (#13).
+* Added `multinomial` function (#14).
+
 Version 1.1.3.0 (2012-11-29)
 ----------------------------
 Tagged: 6d91d3df1ddc6aae4d52710fb56856c75f5125d6
