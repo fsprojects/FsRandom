@@ -2,6 +2,8 @@
 
 open System
 open RecycleBin.Random
+open RecycleBin.Random.Statistics
+open RecycleBin.Random.Utility
 open MathNet.Numerics
 open MathNet.Numerics.Distributions
 open MathNet.Numerics.Statistics
