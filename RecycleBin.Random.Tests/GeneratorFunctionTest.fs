@@ -278,3 +278,20 @@ let ``Validates multinomial`` () =
 [<Test>]
 let ``Validates flipCoin`` () =
    testFlipCoin (getDefaultTester ()) (0.2)
+
+[<Test>]
+let ``Validates sample`` () =
+   let array = Array.init 10 id
+   let builder, seed = getDefaultTester ()
+   let result, _ = builder seed { return! Utility.sample 8 array }
+   Assert.That (Array.length result, Is.EqualTo(8))
+   Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
+   Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(8))
+
+[<Test>]
+let ``Validates sampleWithReplacement`` () =
+   let array = Array.init 5 id
+   let builder, seed = getDefaultTester ()
+   let result, _ = builder seed { return! Utility.sampleWithReplacement 8 array }
+   Assert.That (Array.length result, Is.EqualTo(8))
+   Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
