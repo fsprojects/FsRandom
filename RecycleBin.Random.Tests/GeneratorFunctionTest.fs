@@ -1,4 +1,4 @@
-﻿module RecycleBin.Random.Tests.Program
+﻿module RecycleBin.Random.Tests.GeneratorFunctionTest
 
 open System
 open RecycleBin.Random
@@ -8,8 +8,6 @@ open MathNet.Numerics
 open MathNet.Numerics.Distributions
 open MathNet.Numerics.Statistics
 open NUnit.Framework
-
-let getDefaultTester () = xorshift, (123456789u, 362436069u, 521288629u, 88675123u)
 
 let n = 500
 let level = 0.01

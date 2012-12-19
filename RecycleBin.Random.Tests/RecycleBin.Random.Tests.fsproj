@@ -44,6 +44,7 @@
     <Compile Include="MersenneTwisterTest.fs" />
     <Compile Include="SimdOrientedFastMersenneTwisterTest.fs" />
     <Compile Include="GeneratorFunctionTest.fs" />
+    <Compile Include="Issues.fs" />
     <None Include="App.config" />
     <None Include="packages.config" />
     <Content Include="App_Readme\MathNet.Numerics.readme.txt" />
