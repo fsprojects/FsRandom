@@ -15,13 +15,13 @@ let buffer = Array.zeroCreate sizeof<uint32>
 let systemrandomPrng (random : Random) = 
    random.NextBytes (buffer)
    BitConverter.ToUInt32 (buffer, 0), random
-let systemrandom r = random systemrandomPrng r
+let systemrandom = random systemrandomPrng
    
 let xorshiftPrng (x:uint32, y:uint32, z:uint32, w:uint32) =
    let t = x ^^^ (x <<< 11)
    let (_, _, _, w') as s = y, z, w, (w ^^^ (w >>> 19)) ^^^ (t ^^^ (t >>> 8))
    w', s
-let xorshift seed = random xorshiftPrng seed
+let xorshift = random xorshiftPrng
 
 let getRandom (generator : State<PrngState<'s>, 'a >) =
    getState |>> (fun s0 -> let r, s' = generator s0 in setState s' &>> returnState r)

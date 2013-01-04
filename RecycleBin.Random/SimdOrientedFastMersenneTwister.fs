@@ -194,4 +194,4 @@ let sfmtPrng (state : StateVector) =
    // Creates a new instance of StateVector, but the parameter and the internal vector
    // refers to the same array to avoid cost of copying.
    r, StateVector(state.Parameter, index + 1, vector)
-let sfmt seed = random sfmtPrng seed
+let sfmt = random sfmtPrng

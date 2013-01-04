@@ -42,14 +42,12 @@ val random : prng:Prng<'s> -> seed:'s -> RandomBuilder<'s>
 /// <remarks>
 /// You will get different result on each call because an instance of <see cref="System.Random" /> has state by itself.
 /// </remarks>
-/// <param name="random">A random number generator.</param>
-val systemrandom : random:Random -> RandomBuilder<Random>
+val systemrandom : (Random -> RandomBuilder<Random>)
 
 /// <summary>
 /// Random number generator using Xorshift algorithm (Marsaglia 2003).
 /// </summary>
-/// <param name="seed">Random seed composed of four 32-bit unsigned integers.</param>
-val xorshift : seed:(uint32 * uint32 * uint32 * uint32) -> RandomBuilder<uint32 * uint32 * uint32 * uint32>
+val xorshift : (uint32 * uint32 * uint32 * uint32 -> RandomBuilder<uint32 * uint32 * uint32 * uint32>)
 
 /// <summary>
 /// Generates a random number by <paramref name="generator" /> and returns the value.

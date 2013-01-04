@@ -75,5 +75,4 @@ type StateVector =
 /// <remarks>
 /// SIMD is not supported.
 /// </remarks>
-/// <param name="seed">An instace of <see cref="StateVector" />.</param>
-val sfmt : StateVector -> RandomBuilder<StateVector>
+val sfmt : (StateVector -> RandomBuilder<StateVector>)

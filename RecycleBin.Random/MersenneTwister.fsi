@@ -19,5 +19,4 @@ type StateVector =
 /// <summary>
 /// Random number generator using Mersenne Twister algorithm (Matsumoto &amp; Nishimura 1998).
 /// </summary>
-/// <param name="seed">An instace of <see cref="StateVector" />.</param>
-val mersenne : StateVector -> RandomBuilder<StateVector>
+val mersenne : (StateVector -> RandomBuilder<StateVector>)
