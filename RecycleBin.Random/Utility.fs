@@ -39,10 +39,10 @@ let sampleWithReplacement n source =
    else
       fun s0 ->
          let result = Array.zeroCreate n
-         let size = Array.length source
+         let size = float <| Array.length source
          let mutable s = s0
          for index = 0 to n - 1 do
             let u, s' = ``[0, 1)`` s0
             s <- s'
-            result.[index] <- source.[int (u * float size)]
+            result.[index] <- source.[int (u * size)]
          result, s
