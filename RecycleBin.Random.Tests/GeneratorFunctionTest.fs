@@ -301,3 +301,12 @@ let ``Validates Array.randomCreate`` () =
    Assert.That (Array.length result, Is.EqualTo(8))
    let head = result.[0]
    Assert.That (Array.forall ((=) head) result, Is.False)
+
+[<Test>]
+let ``Validates Array.shuffle`` () =
+   let builder, seed = getDefaultTester ()
+   let array = Array.init 8 id
+   let result, _ = builder seed { return! Array.shuffle array }
+   Assert.That (Array.length result, Is.EqualTo(Array.length array))
+   Assert.That (Array.zip array result |> Array.forall (fun (x, y) -> x = y), Is.False)
+   Assert.That (Array.sort result, Is.EquivalentTo(array))
