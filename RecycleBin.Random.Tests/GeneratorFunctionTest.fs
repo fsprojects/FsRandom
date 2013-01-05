@@ -3,7 +3,6 @@
 open System
 open RecycleBin.Random
 open RecycleBin.Random.Statistics
-open RecycleBin.Random.Utility
 open MathNet.Numerics
 open MathNet.Numerics.Distributions
 open MathNet.Numerics.Statistics
@@ -189,7 +188,7 @@ let testMultinomial tester parameter =
    Assert.Inconclusive ("Not implemented.")
 
 let testFlipCoin tester p =
-   let generator = getRandomBy (fun b -> if b then 1 else 0) <| flipCoin p
+   let generator = getRandomBy (fun b -> if b then 1 else 0) <| Utility.flipCoin p
    let cdf = cdfBernoulli p
    testBinary tester generator cdf p
 
@@ -278,19 +277,19 @@ let ``Validates flipCoin`` () =
    testFlipCoin (getDefaultTester ()) (0.2)
 
 [<Test>]
-let ``Validates sample`` () =
+let ``Validates Array.sample`` () =
    let array = Array.init 10 id
    let builder, seed = getDefaultTester ()
-   let result, _ = builder seed { return! Utility.sample 8 array }
+   let result, _ = builder seed { return! Array.sample 8 array }
    Assert.That (Array.length result, Is.EqualTo(8))
    Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
    Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(8))
 
 [<Test>]
-let ``Validates sampleWithReplacement`` () =
+let ``Validates Array.sampleWithReplacement`` () =
    let array = Array.init 5 id
    let builder, seed = getDefaultTester ()
-   let result, _ = builder seed { return! Utility.sampleWithReplacement 8 array }
+   let result, _ = builder seed { return! Array.sampleWithReplacement 8 array }
    Assert.That (Array.length result, Is.EqualTo(8))
    Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
 

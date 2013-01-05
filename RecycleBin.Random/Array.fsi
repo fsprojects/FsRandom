@@ -13,3 +13,19 @@ val randomCreate : count:int -> generator:State<PrngState<'s>, 'a> -> State<Prng
 /// <param name="generator">The generator function.</param>
 /// <param name="array">The array to shuffle.</param>
 val shuffle : 'a [] -> State<PrngState<'s>, 'a []>
+
+/// <summary>
+/// Picks up random samples without replacement in the specified array.
+/// </summary>
+/// <param name="n">The number of samples to pick up.</param>
+/// <param name="source">The source array.</param>
+/// <seealso cref="sampleWithReplacement" />
+val sample : n:int -> source:'a [] -> State<PrngState<'s>, 'a []>
+
+/// <summary>
+/// Picks up random samples with replacement in the specified array.
+/// </summary>
+/// <param name="n">The number of samples to pick up.</param>
+/// <param name="source">The source array.</param>
+/// <seealso cref="sample" />
+val sampleWithReplacement : n:int -> source:'a [] -> State<PrngState<'s>, 'a []>
