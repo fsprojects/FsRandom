@@ -32,6 +32,16 @@ let shuffle array =
          swap index randomIndex copiedArray
       copiedArray, s0
 
+let shuffleInPlace array =
+   fun s0 ->
+      let mutable s0 = s0
+      for index = Array.length array - 1 downto 1 do
+         let u, s' = ``[0, 1)`` s0
+         s0 <- s'
+         let randomIndex = int <| u * float (index + 1)
+         swap index randomIndex array
+      (), s0
+
 let sample n source =
    let size = Array.length source
    if n < 0 || size < n

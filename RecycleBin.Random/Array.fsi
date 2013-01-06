@@ -10,9 +10,16 @@ val randomCreate : count:int -> generator:State<PrngState<'s>, 'a> -> State<Prng
 /// <summary>
 /// Creates a new array whose elements are random set of the elements of the specified array.
 /// </summary>
-/// <param name="generator">The generator function.</param>
 /// <param name="array">The array to shuffle.</param>
-val shuffle : 'a [] -> State<PrngState<'s>, 'a []>
+/// <seealso cref="shuffleInPlace" />
+val shuffle : array:'a [] -> State<PrngState<'s>, 'a []>
+
+/// <summary>
+/// Shuffles the elements of the specified array by mutating it in-place.
+/// </summary>
+/// <param name="array">The array to shuffle.</param>
+/// <seealso cref="shuffle" />
+val shuffleInPlace : array:'a [] -> State<PrngState<'s>, unit>
 
 /// <summary>
 /// Picks up random samples without replacement in the specified array.

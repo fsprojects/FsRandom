@@ -310,3 +310,12 @@ let ``Validates Array.shuffle`` () =
    Assert.That (Array.length result, Is.EqualTo(Array.length array))
    Assert.That (Array.zip array result |> Array.forall (fun (x, y) -> x = y), Is.False)
    Assert.That (Array.sort result, Is.EquivalentTo(array))
+
+[<Test>]
+let ``Validates Array.shuffleInPlace`` () =
+   let builder, seed = getDefaultTester ()
+   let array = Array.init 8 id
+   let copied = Array.copy array
+   builder seed { do! Array.shuffleInPlace array } |> ignore
+   Assert.That (Array.zip copied array |> Array.forall (fun (x, y) -> x = y), Is.False)
+   Assert.That (Array.sort array, Is.EquivalentTo(copied))
