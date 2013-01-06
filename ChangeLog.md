@@ -1,6 +1,11 @@
 RecycleBin.Random ChangeLog
 ===========================
 
+Version 1.2.1.0
+---------------
+
+* Bug fix.
+
 Version 1.2.0.0
 ---------------
 
