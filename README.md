@@ -219,10 +219,7 @@ approximates a standard normal random number.
 ```fsharp
 let approximatelyStandardNormal =
    state {
-      let values = Array.zeroCreate 12
-      for index = 0 to Array.length values - 1 do
-         let! u = ``(0, 1)``  // ``(0, 1)`` is a standard random number generator in (0, 1)
-         values.[index] <- u
+      let! values = Array.randomCreate 12 ``(0, 1)``  // ``(0, 1)`` is a standard random number generator in (0, 1)
       return Array.sum values - 6.0
    }
 ```
