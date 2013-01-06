@@ -5,37 +5,15 @@ RecycleBin.Random is a random number generator framework designed for F# languag
 It helps you to obtain a variety of random numbers to use more than ten predefined generators,
 and to define a new function to generate random numbers you want.
 
-Supported Randoms
+Randoms Functions
 -----------------
 
-* Standard random
-  * (0, 1)
-  * [0, 1)
-  * (0, 1]
-  * [0, 1]
-* Continuous (univariate)
-  * uniform
-  * log-uniform
-  * normal
-  * log-normal
-  * gamma
-  * beta
-  * exponential
-  * Cauchy
-  * chi-square
-  * Student's t
-  * triangular
-* Discrete (univariate)
-  * uniform
-  * poisson
-  * geometric
-  * Bernoulli (includes two versions: `bernoulli` returns 0/1 and `flipCoin` returns `true`/`false`)
-  * binomial
-* Continuous (multivariate)
-  * Dirichlet
-* Discrete (multivariate)
-  * multinomial
-* User-defined (see below)
+* **RandomNumberGenerator module** provides standard random number generators: <code>\`\`(0, 1)\`\`</code>, <code>\`\`[0, 1)\`\`</code>, <code>\`\`(0, 1]\`\`</code>, and <code>\`\`[0, 1]\`\`</code>.
+* **Statistics module** provides a variety of statistical distributions such like `uniform`, `normal` and `gamma`.
+* **Array module** provides functions for array operations like `shuffle`.
+* **Utility module** provides utility functions.
+
+Also, user-defined functions can be implemented easily (see below).
 
 How to Install
 --------------
