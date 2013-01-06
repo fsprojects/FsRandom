@@ -292,6 +292,7 @@ let ``Validates Array.sampleWithReplacement`` () =
    let result, _ = builder seed { return! Array.sampleWithReplacement 8 array }
    Assert.That (Array.length result, Is.EqualTo(8))
    Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
+   Assert.That (Seq.length (Seq.distinct result), Is.Not.EqualTo(1))
 
 [<Test>]
 let ``Validates Array.randomCreate`` () =
