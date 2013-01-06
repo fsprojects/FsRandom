@@ -1,6 +1,12 @@
 RecycleBin.Random ChangeLog
 ===========================
 
+Version 1.2.0.0
+---------------
+
+* Functions moved to separated modules (#15).
+* Added functions (#16, #18, #20).
+
 Version 1.1.4.0 (2012-12-03)
 ----------------------------
 Tagged: 265f8ddfb416f2c8804e4a5af5465e21fbc31908
