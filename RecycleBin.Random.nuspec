@@ -18,7 +18,7 @@
       <tags>F# random-number computation-expression</tags>
    </metadata>
    <files>
-      <file src="publish\*.dll" target="lib\net40" />
-      <file src="publish\*.xml" target="lib\net40" />
+      <file src="RecycleBin.Random\bin\Release\RecycleBin.Random.dll" target="lib\net40" />
+      <file src="RecycleBin.Random\bin\Release\RecycleBin.Random.xml" target="lib\net40" />
    </files>
 </package>
