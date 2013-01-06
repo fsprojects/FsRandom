@@ -10,7 +10,7 @@ let swap i j (array:'a []) =
 let randomCreate count (generator:State<PrngState<'s>, 'a>) =
    if count < 0
    then
-      ArgumentOutOfRangeException ("count") |> raise
+      ArgumentOutOfRangeException ("count", "`count' must not be negative.") |> raise
    else
       fun s0 ->
          let result = Array.zeroCreate count

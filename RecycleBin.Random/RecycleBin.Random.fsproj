@@ -44,10 +44,10 @@
     <Compile Include="RandomNumberGenerator.fs" />
     <Compile Include="Statistics.fsi" />
     <Compile Include="Statistics.fs" />
-    <Compile Include="Utility.fsi" />
-    <Compile Include="Utility.fs" />
     <Compile Include="Array.fsi" />
     <Compile Include="Array.fs" />
+    <Compile Include="Utility.fsi" />
+    <Compile Include="Utility.fs" />
     <Compile Include="MersenneTwister.fsi" />
     <Compile Include="MersenneTwister.fs" />
     <Compile Include="SimdOrientedFastMersenneTwister.fsi" />

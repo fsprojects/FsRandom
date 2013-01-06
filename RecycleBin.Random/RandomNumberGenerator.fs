@@ -36,4 +36,3 @@ let ``(0, 1)`` ((f, s0) : PrngState<'s>) = let r, s' = f s0 in (float r + 0.5) *
 let ``[0, 1)`` ((f, s0) : PrngState<'s>) = let r, s' = f s0 in float r * ``1 / 2^32``, (f, s')
 let ``(0, 1]`` ((f, s0) : PrngState<'s>) = let r, s' = f s0 in (float r + 1.0) * ``1 / 2^32``, (f, s')
 let ``[0, 1]`` ((f, s0) : PrngState<'s>) = let r, s' = f s0 in float r * ``1 / (2^32 - 1)``, (f, s')
-     

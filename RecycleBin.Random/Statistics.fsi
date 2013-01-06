@@ -5,10 +5,6 @@
 /// </summary>
 /// <param name="min">The inclusive lower limit.</param>
 /// <param name="max">The inclusive upper limit.</param>
-/// <seealso cref="(0, 1)" />
-/// <seealso cref="[0, 1)" />
-/// <seealso cref="(0, 1]" />
-/// <seealso cref="[0, 1]" />
 val uniform : min:float * max:float -> State<PrngState<'s>, float>
 /// <summary>
 /// Returns a random number distributed log-uniformly in the range of [<paramref name="min" />, <paramref name="max" />].
