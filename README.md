@@ -43,15 +43,15 @@ let initialSeed = 123456789u, 362436069u, 521288629u, 88675123u
 ```
 
 Because we want a random number `z` ~ N(0, 1),
-we should use `normal` random number generator with parameters `(0.0, 1.0)`.
+we should use `normal` random number generator in the Statistics module with parameters `(0.0, 1.0)`.
 
 ```fsharp
-let generator = normal (0.0, 1.0)
+let generator = Statistics.normal (0.0, 1.0)
 ```
 
 Then, we can use the generator and get the result.
 
-```fsharp 
+```fsharp
 let z, nextSeed = xorshift initialSeed { return! generator }
 printfn "%f" z
 ```
@@ -76,7 +76,7 @@ The following code shows how to use it.
 ```fsharp
 let plusOne x = x + 1.0
 xorshift seed {
-   return! getRandomBy plusOne <| uniform (0.0, 1.0)
+   return! getRandomBy plusOne <| Statistics.uniform (0.0, 1.0)
 }
 ```
 
@@ -88,14 +88,14 @@ The both following codes return the same results as above.
 
 ``` fsharp
 xorshift seed {
-   let! u = getRandom <| uniform (0.0, 1.0)
+   let! u = getRandom <| Statistics.uniform (0.0, 1.0)
    return plusOne u
 }
 ```
 
 ```fsharp
 xorshift seed {
-   let! u = uniform (0.0, 1.0)
+   let! u = Statistics.uniform (0.0, 1.0)
    return plusOne u
 }
 ```
@@ -110,7 +110,7 @@ and it illustrates how we can generate a number of random numbers.
 ```fsharp
 let rec binaries initialSeed =
    seq {
-      let binary, nextSeed = xorshift initialSeed { return! bernoulli 0.5 }
+      let binary, nextSeed = xorshift initialSeed { return! Statistics.bernoulli 0.5 }
       yield binary
       yield! binaries nextSeed  // recursively generating binaries.
    }
@@ -124,7 +124,7 @@ Just use `systemrandom` instead of `xorshift`.
 
 ```fsharp
 let r0 = System.Random ()
-let u, r1 = systemrandom r0 { return! gamma (2.0, 1.0) }
+let u, r1 = systemrandom r0 { return! Statistics.gamma (2.0, 1.0) }
 ```
 
 Because an instance of `System.Random` keeps a state by itself,
@@ -173,7 +173,7 @@ Hereafter we can use the `linear` builder to generate random numbers.
 ```fsharp
 let seed = uint32 Environment.TickCount
 let myLinear = linear (1664525u, 1013904223u)  // Numerical Recipes
-let u, nextSeed = myLinear seed { return! gamma (3.0, 1.0) }
+let u, nextSeed = myLinear seed { return! Statistics.gamma (3.0, 1.0) }
 ```
 
 #### Generator function
@@ -222,8 +222,8 @@ let rec randomPoints initialSeed =
    seq {
       let point, nextSeed =
          xorshift initialSeed {
-            let! x = uniform (-1.0, 1.0)
-            let! y = uniform (-1.0, 1.0)
+            let! x = Statistics.uniform (-1.0, 1.0)
+            let! y = Statistics.uniform (-1.0, 1.0)
             return (x, y)
          }
       yield point
@@ -260,8 +260,8 @@ let rec binormal (meanX, meanY, varX, varY, cov as parameter) ((_, y), seed as s
       let next =
          xorshift seed {
             // Pay attention to that `normal' takes not variance but standard deviation.
-            let! x' = normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
-            let! y' = normal (meanY + cov * (x' - meanX) / varX, sqrt <| varY - cov ** 2.0 / varX)
+            let! x' = Statistics.normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
+            let! y' = Statistics.normal (meanY + cov * (x' - meanX) / varX, sqrt <| varY - cov ** 2.0 / varX)
             return (x', y')
          }
       yield fst next
