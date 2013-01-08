@@ -290,10 +290,32 @@ let ``Validates Array.sample`` () =
    Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(8))
 
 [<Test>]
+let ``Validates Array.weightedSample`` () =
+   let array = Array.init 10 id
+   let weight = Array.init (Array.length array) (id >> float >> ((+) 1.0))
+   let builder, seed = getDefaultTester ()
+   let result, next = builder seed { return! Array.weightedSample 8 weight array }
+   Assert.That (next, Is.Not.EqualTo(seed))
+   Assert.That (Array.length result, Is.EqualTo(8))
+   Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
+   Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(8))
+
+[<Test>]
 let ``Validates Array.sampleWithReplacement`` () =
    let array = Array.init 5 id
    let builder, seed = getDefaultTester ()
    let result, next = builder seed { return! Array.sampleWithReplacement 8 array }
+   Assert.That (next, Is.Not.EqualTo(seed))
+   Assert.That (Array.length result, Is.EqualTo(8))
+   Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
+   Assert.That (Seq.length (Seq.distinct result), Is.Not.EqualTo(1))
+
+[<Test>]
+let ``Validates Array.weightedSampleWithReplacement`` () =
+   let array = Array.init 5 id
+   let weight = Array.init (Array.length array) (id >> float >> ((+) 1.0))
+   let builder, seed = getDefaultTester ()
+   let result, next = builder seed { return! Array.weightedSampleWithReplacement 8 weight array }
    Assert.That (next, Is.Not.EqualTo(seed))
    Assert.That (Array.length result, Is.EqualTo(8))
    Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)

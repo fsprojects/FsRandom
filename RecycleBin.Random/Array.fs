@@ -76,6 +76,44 @@ let sample n source =
             result.[index] <- source.[size - p - 1]
          result, s0
 
+let weightedSample n weight source =
+   let size = Array.length source
+   if n < 0 || size < n
+   then
+      ArgumentOutOfRangeException ("n", "`n' must be between 0 and the number of elements in `source`.") |> raise
+   elif Array.length weight <> size
+   then
+      invalidArg "weight" "`weight' must have the same length of `source'."
+   else
+      // Efraimidis and Spirakis (2006) Weighted random sampling with a reservoir (DOI: 10.1016/j.ipl.2005.11.003)
+      state {
+         let result = Array.zeroCreate n
+         Array.blit source 0 result 0 n
+         let! key = randomInit n (fun index ->
+            state {
+               let! u = ``(0, 1)``
+               return u ** (1.0 / weight.[index])
+            }
+         )
+         let index = ref n
+         while !index < size do
+            let thresholdIndex, threshold = Seq.zip (Seq.initInfinite id) key |> Seq.minBy snd
+            let! u = ``(0, 1)``
+            let x = log u / log threshold
+            let weightSum = ref 0.0
+            while !index < size && !weightSum < x do
+               weightSum := !weightSum + weight.[!index]
+               incr index
+            if !weightSum >= x
+            then
+               let index = !index - 1
+               let w = weight.[index]
+               let! r = Statistics.uniform (threshold ** w, 1.0)
+               key.[thresholdIndex] <- r ** (1.0 / w)
+               result.[thresholdIndex] <- source.[index]
+         return result
+      }
+
 let sampleWithReplacement n source =
    if n < 0
    then
@@ -89,4 +127,26 @@ let sampleWithReplacement n source =
             let u, s' = ``[0, 1)`` s0
             s0 <- s'
             result.[index] <- source.[int (u * size)]
+         result, s0
+
+let weightedSampleWithReplacement n weight source =
+   let size = Array.length source
+   if n < 0
+   then
+      ArgumentOutOfRangeException ("n", "`n' must not be negative.") |> raise
+   elif Array.length weight <> size
+   then
+      invalidArg "weight" "`weight' must have the same length of `source'."
+   else
+      fun s0 ->
+         let result = Array.zeroCreate n
+         let cdf = Array.accumulate (+) weight
+         let sum = cdf.[size - 1]
+         let mutable s0 = s0
+         for index = 0 to n - 1 do
+            let u, s' = ``[0, 1)`` s0
+            s0 <- s'
+            let p = sum * u
+            let resultIndex = Array.findIndex (fun x -> p < x) cdf
+            result.[index] <- source.[resultIndex]
          result, s0

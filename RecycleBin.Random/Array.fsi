@@ -37,9 +37,28 @@ val shuffleInPlace : array:'a [] -> State<PrngState<'s>, unit>
 val sample : n:int -> source:'a [] -> State<PrngState<'s>, 'a []>
 
 /// <summary>
+/// Picks up weighted random samples without replacement in the specified array.
+/// </summary>
+/// <remarks>
+/// Implements O(m log(n/m)) algorithm (Efraimidis &amp; Spirakis 2006).
+/// </remarks>
+/// <param name="n">The number of samples to pick up.</param>
+/// <param name="source">The source array.</param>
+/// <param name="weight">The sampling weight for each sample.</param>
+val weightedSample : n:int -> weight:float [] -> source:'a [] -> State<PrngState<'s>, 'a []>
+
+/// <summary>
 /// Picks up random samples with replacement in the specified array.
 /// </summary>
 /// <param name="n">The number of samples to pick up.</param>
 /// <param name="source">The source array.</param>
 /// <seealso cref="sample" />
 val sampleWithReplacement : n:int -> source:'a [] -> State<PrngState<'s>, 'a []>
+
+/// <summary>
+/// Picks up weighted random samples with replacement in the specified array.
+/// </summary>
+/// <param name="n">The number of samples to pick up.</param>
+/// <param name="source">The source array.</param>
+/// <param name="weight">The sampling weight for each sample.</param>
+val weightedSampleWithReplacement : n:int -> weight:float [] -> source:'a [] -> State<PrngState<'s>, 'a []>

@@ -16,6 +16,20 @@ let inline ensuresFiniteValue argument argumentName =
    then
       invalidArg argumentName (sprintf "`%s' must be a finite number." argumentName) |> raise
 
-let accumulate accumulation = function
-   | [] -> invalidArg "list" "Empty list."
-   | x :: xs -> List.scan accumulation x xs
+module List =
+   let accumulate accumulation = function
+      | [] -> invalidArg "list" "Empty list."
+      | x :: xs -> List.scan accumulation x xs
+
+module Array =
+   let accumulate accumulation array =
+      if Array.length array = 0
+      then
+         Array.empty
+      else
+         let size = Array.length array
+         let result = Array.zeroCreate size
+         result.[0] <- array.[0]
+         for index = 1 to size - 1 do
+            result.[index] <- accumulation result.[index - 1] array.[index]
+         result
