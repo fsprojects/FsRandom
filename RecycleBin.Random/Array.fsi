@@ -40,7 +40,7 @@ val sample : n:int -> source:'a [] -> State<PrngState<'s>, 'a []>
 /// Picks up weighted random samples without replacement in the specified array.
 /// </summary>
 /// <remarks>
-/// Implements O(m log(n/m)) algorithm (Efraimidis &amp; Spirakis 2006).
+/// Implements Efraimidis &amp; Spirakis's A-ExpJ algorithm (Efraimidis &amp; Spirakis 2006).
 /// </remarks>
 /// <param name="n">The number of samples to pick up.</param>
 /// <param name="source">The source array.</param>
