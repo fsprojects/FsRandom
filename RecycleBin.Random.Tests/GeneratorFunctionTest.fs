@@ -309,6 +309,16 @@ let ``Validates Array.randomCreate`` () =
    Assert.That (Array.forall ((=) head) result, Is.False)
 
 [<Test>]
+let ``Validates Array.randomInit`` () =
+   let builder, seed = getDefaultTester ()
+   let expected =
+      builder seed { return! Array.randomCreate 8 (normal (0.0, 1.0)) }
+      |> fst
+      |> Array.mapi (fun index z -> z + float index)
+   let actual = builder seed { return! Array.randomInit 8 (fun index -> normal (float index, 1.0)) } |> fst
+   Assert.That (actual, Is.EqualTo(expected))
+
+[<Test>]
 let ``Validates Array.shuffle`` () =
    let builder, seed = getDefaultTester ()
    let array = Array.init 8 id

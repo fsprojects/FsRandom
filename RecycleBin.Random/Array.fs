@@ -21,6 +21,20 @@ let randomCreate count (generator:State<PrngState<'s>, 'a>) =
             s0 <- s'
          result, s0
 
+let randomInit count (initializer:int -> State<PrngState<'s>, 'a>) =
+   if count < 0
+   then
+      ArgumentOutOfRangeException ("count", "`count' must not be negative.") |> raise
+   else
+      fun s0 ->
+         let result = Array.zeroCreate count
+         let mutable s0 = s0
+         for index = 0 to count - 1 do
+            let r, s' = initializer index s0
+            result.[index] <- r
+            s0 <- s'
+         result, s0
+
 let shuffle array =
    fun s0 ->
       let copiedArray = Array.copy array
