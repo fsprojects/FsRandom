@@ -1,6 +1,11 @@
 RecycleBin.Random ChangeLog
 ===========================
 
+Version 1.2.2.0
+---------------
+
+* Enhanced Array module (#22, #25, #26).
+
 Version 1.2.1.0
 ---------------
 
