@@ -87,18 +87,15 @@ let weightedSample n weight source =
    else
       // Efraimidis and Spirakis (2006) Weighted random sampling with a reservoir (DOI: 10.1016/j.ipl.2005.11.003)
       state {
-         let result = Array.zeroCreate n
-         Array.blit source 0 result 0 n
-         let! key = randomInit n (fun index ->
-            state {
-               let! u = ``(0, 1)``
-               return u ** (1.0 / weight.[index])
-            }
-         )
+         let result = ref BinarySearchTree.empty
+         for index = 0 to n - 1 do
+            let! u = ``[0, 1)``
+            let key = u ** (1.0 / weight.[index])
+            result := BinarySearchTree.insert key source.[index] !result
          let index = ref n
          while !index < size do
-            let thresholdIndex, threshold = Seq.zip (Seq.initInfinite id) key |> Seq.minBy snd
-            let! u = ``(0, 1)``
+            let threshold = BinarySearchTree.min !result |> fst
+            let! u = ``[0, 1)``
             let x = log u / log threshold
             let weightSum = ref 0.0
             while !index < size && !weightSum < x do
@@ -108,10 +105,11 @@ let weightedSample n weight source =
             then
                let index = !index - 1
                let w = weight.[index]
-               let! r = Statistics.uniform (threshold ** w, 1.0)
-               key.[thresholdIndex] <- r ** (1.0 / w)
-               result.[thresholdIndex] <- source.[index]
-         return result
+               let! u = ``[0, 1)``
+               let r = let t = threshold ** w in t + u * (1.0 - t)
+               let key = r ** (1.0 / w)
+               result := BinarySearchTree.removeMinimum !result |> BinarySearchTree.insert key source.[index]
+         return !result |> (BinarySearchTree.toSeq >> Seq.map snd >> Seq.toArray)
       }
 
 let sampleWithReplacement n source =
