@@ -1,7 +1,7 @@
-RecycleBin.Random
-=================
+FsRandom
+========
 
-RecycleBin.Random is a random number generator framework designed for F# language.
+FsRandom (formerly RecycleBin.Random) is a random number generator framework designed for F# language.
 It helps you to obtain a variety of random numbers to use more than ten predefined generators,
 and to define a new function to generate random numbers you want.
 
@@ -19,11 +19,11 @@ Also, user-defined functions can be implemented easily (see below).
 How to Install
 --------------
 
-RecycleBin.Random is [available on the NuGet Gallery](https://nuget.org/packages/RecycleBin.Random/).
-Use the following command to install RecycleBin.Random via NuGet.
+FsRandom is [available on the NuGet Gallery](https://nuget.org/packages/RecycleBin.Random/).
+Use the following command to install FsRandom via NuGet.
 
 ```
-Install-Package RecycleBin.Random
+Install-Package FsRandom
 ```
 
 [Visit the site](https://nuget.org/) for more information.
@@ -71,7 +71,7 @@ printfn "%f" z2
 ### Transforming random numbers
 
 Transformation of random numbers is a regular work.
-RecycleBin.Random defines `getRandomBy` function for the purpose.
+FsRandom defines `getRandomBy` function for the purpose.
 The following code shows how to use it.
 
 ```fsharp
@@ -149,13 +149,13 @@ printfn "%b" (r0 = r1)  // true
 
 This section explains how to construct random computation expressions such as `xorshift` and `systemrandom`.
 
-RecycleBin.Random has a random computation expression builder named `random`,
+FsRandom has a random computation expression builder named `random`,
 which enables users to construct a user-defined random computation expression builder.
 The `random` uses a pseudorandom number generating function, that is, a function
 which has a type of `Prng<'s> = 's -> uint64 * 's` where `'s` is a type of state seed.
 `Prng` is an actual random number generator which receives a random seed (`: 's`) and returns
 a random number in 64-bit resolution (`: uint64`) and a next state (`: 's`) in the random computation expression.
-As we saw above, RecycleBin.Random currently supports xorshift algorithm and `System.Random`.
+As we saw above, FsRandom currently supports xorshift algorithm and `System.Random`.
 
 As an example of user-defined `Prng`,
 let's implement [linear congruential generator](http://en.wikipedia.org/wiki/Linear_congruential_generator).
@@ -219,7 +219,7 @@ let z = fst <| generator seed
 printnf "%f" z
 ```
 
-Don't forget that RecycleBin.Random has a normal random number generator `normal`.
+Don't forget that FsRandom has a normal random number generator `normal`.
 
 Numerical Examples
 ------------------
@@ -262,7 +262,7 @@ the Gibbs sampler for bivariate normal distribution consists of iterating as the
 And it can be naturally translated into F# code as the following.
 
 ```fsharp
-open RecycleBin.Random.Statistics
+open FsRandom.Statistics
 let gibbsBinormal (meanX, meanY, varX, varY, cov) (_ : float, y : float) =
    random {
       let! x' = normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
