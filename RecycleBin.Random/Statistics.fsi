@@ -104,3 +104,14 @@ val dirichlet : alpha:float list -> State<PrngState<'s>, float list>
 /// <param name="weight">The list of probability.
 /// Each item is normalized in the function so that the sum of values can be less or greater than 1.</param>
 val multinomial : n:int * weight:float list -> State<PrngState<'s>, int list>
+
+module Seq =
+   /// <summary>
+   /// Makes infinite Markov chain.
+   /// </summary>
+   /// <param name="generator">A random function.</param>
+   /// <param name="builder">A random builder.</param>
+   /// <returns>
+   /// A Markov chain.
+   /// </returns>
+   val markovChain : generator:('a -> State<PrngState<'s>, 'a>) -> builder:RandomBuilder<'s> -> ('s -> 'a -> seq<'a>)

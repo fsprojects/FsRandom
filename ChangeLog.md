@@ -5,6 +5,7 @@ Version 2.0
 ---------------
 
 * RandomBuilder.Run returns a function.
+* Added Seq module (#27).
 * High resolution of random numbers (#31).
 
 Version 1.2.2.0

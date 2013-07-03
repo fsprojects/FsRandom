@@ -352,3 +352,11 @@ let multinomial (n, weight) =
             s <- s'
          Array.toList result, s
          
+module Seq =
+   let markovChain (generator:'a -> State<PrngState<'s>, 'a>) (builder:RandomBuilder<'s>) =
+      let rec loop seed previous = seq {
+         let r, next = builder { return! generator previous } <| seed
+         yield r
+         yield! loop next r
+      }
+      loop

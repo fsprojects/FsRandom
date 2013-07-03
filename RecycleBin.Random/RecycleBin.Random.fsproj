@@ -42,6 +42,8 @@
     <Compile Include="StateMonad.fs" />
     <Compile Include="RandomNumberGenerator.fsi" />
     <Compile Include="RandomNumberGenerator.fs" />
+    <Compile Include="Seq.fsi" />
+    <Compile Include="Seq.fs" />
     <Compile Include="Statistics.fsi" />
     <Compile Include="Statistics.fs" />
     <Compile Include="Array.fsi" />

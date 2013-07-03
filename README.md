@@ -221,24 +221,20 @@ Numerical Examples
 
 ```fsharp
 // Generates random points on [-1, 1] x [-1, 1].
-let rec randomPoints initialSeed =
-   seq {
-      let point, nextSeed =
-         xorshift {
-            let! x = Statistics.uniform (-1.0, 1.0)
-            let! y = Statistics.uniform (-1.0, 1.0)
-            return (x, y)
-         }
-         <| initialSeed
-      yield point
-      yield! randomPoints nextSeed
-   }
+let randomPointGenerator = state {
+   let! x = Statistics.uniform (-1.0, 1.0)
+   let! y = Statistics.uniform (-1.0, 1.0)
+   return (x, y)
+}
+// Function to generate a sequence
+let randomPoints = Seq.ofRandom randomPointGenerator
 // Weight of a point
 // If the distance from (0, 0) is equal to or less than 1 (in the unit circle),
 // the weight is 4 (because random points are distributed on [-1, 1] x [-1, 1]).
 let weight (x, y) = if x * x + y * y <= 1.0 then 4.0 else 0.0
 
-randomPoints (123456789u, 362436069u, 521288629u, 88675123u)
+// Generates 1,000,000 random points and estimates pi
+randomPoints xorshift (123456789u, 362436069u, 521288629u, 88675123u)
 |> Seq.take 1000000
 |> Seq.averageBy weight
 |> printfn "%f"
@@ -259,19 +255,14 @@ the Gibbs sampler for bivariate normal distribution consists of iterating as the
 And it can be naturally translated into F# code as the following.
 
 ```fsharp
-let rec binormal (meanX, meanY, varX, varY, cov as parameter) ((_, y), seed as state) =
-   seq {
-      let next =
-         xorshift {
-            // Pay attention to that `normal' takes not variance but standard deviation.
-            let! x' = Statistics.normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
-            let! y' = Statistics.normal (meanY + cov * (x' - meanX) / varX, sqrt <| varY - cov ** 2.0 / varX)
-            return (x', y')
-         }
-         <| seed
-      yield fst next
-      yield! binormal parameter next
+open RecycleBin.Random.Statistics
+let gibbsBinormal (meanX, meanY, varX, varY, cov) (_ : float, y : float) =
+   state {
+      let! x' = normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
+      let! y' = normal (meanY + cov * (x' - meanX) / varX, sqrt <| varY - cov ** 2.0 / varX)
+      return (x', y')
    }
+let binnormal parameter = Seq.markovChain (gibbsBinormal parameter)
 ```
 
 Note that the generating bivariate normal random number sequence is [autocorrelated](http://en.wikipedia.org/wiki/Autocorrelation).
