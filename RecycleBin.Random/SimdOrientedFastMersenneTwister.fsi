@@ -75,4 +75,4 @@ type StateVector =
 /// <remarks>
 /// SIMD is not supported.
 /// </remarks>
-val sfmt : (StateVector -> RandomBuilder<StateVector>)
+val sfmt : RandomBuilder<StateVector>

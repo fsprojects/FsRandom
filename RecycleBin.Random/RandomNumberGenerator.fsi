@@ -18,23 +18,22 @@ type RandomBuilder<'s> =
    /// <summary>
    /// Initializes a new instance.
    /// </summary>
-   new : initial:PrngState<'s> -> RandomBuilder<'s>
+   new : initial:Prng<'s> -> RandomBuilder<'s>
    /// <summary>
    /// Runs the random computation expression.
    /// </summary>
    /// <returns>
-   /// The result comprises a tuple with two elements.
-   /// The first element is the result of the random number computation.
-   /// The second element is the state after the computation.
+   /// A random number function.
+   /// It takes a seed and returns a tuple of a random number and a new seed.
    /// </returns>
-   member Run : m:State<PrngState<'s>, 'a> -> 'a * 's
+   member Run : m:State<PrngState<'s>, 'a> -> State<'s, 'a>
    
 /// <summary>
 /// Random number generator using user-specified random number generator.
 /// </summary>
 /// <param name="prng">A random number generator.</param>
 /// <param name="seed">A initial state to generate a random sequence.</param>
-val random : prng:Prng<'s> -> seed:'s -> RandomBuilder<'s>
+val random : prng:Prng<'s> -> RandomBuilder<'s>
    
 /// <summary>
 /// Random number generator using <see cref="System.Random" />.
@@ -42,12 +41,12 @@ val random : prng:Prng<'s> -> seed:'s -> RandomBuilder<'s>
 /// <remarks>
 /// You will get different result on each call because an instance of <see cref="System.Random" /> has state by itself.
 /// </remarks>
-val systemrandom : (Random -> RandomBuilder<Random>)
+val systemrandom : RandomBuilder<Random>
 
 /// <summary>
 /// Random number generator using Xorshift algorithm (Marsaglia 2003).
 /// </summary>
-val xorshift : (uint32 * uint32 * uint32 * uint32 -> RandomBuilder<uint32 * uint32 * uint32 * uint32>)
+val xorshift : RandomBuilder<uint32 * uint32 * uint32 * uint32>
 
 /// <summary>
 /// Generates a random number by <paramref name="generator" /> and returns the value.

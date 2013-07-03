@@ -21,9 +21,9 @@ let sample f seed = generate f seed |> Seq.take n |> Seq.toList |> (fun l -> Lis
 [<Literal>]
 let iteration = 1000
 let ks x = 1.0 - 2.0 * (Seq.init iteration (fun i -> let k = float (i + 1) in (if i % 2 = 0 then 1.0 else -1.0) * exp (-2.0 * k * k * x * x)) |> Seq.sum)
-let testContinuous (prng : 's -> RandomBuilder<'s>, seed) generator cdf =
+let testContinuous (prng : RandomBuilder<'s>, seed) generator cdf =
    let observed, next =
-      let f seed = prng seed { return! generator }
+      let f seed = prng { return! generator } <| seed
       in sample f seed
    Assert.That (next, Is.Not.EqualTo(seed))
    let empirical x = List.sumBy (fun t -> if t <= x then 1.0 / float n else 0.0) observed
@@ -32,9 +32,9 @@ let testContinuous (prng : 's -> RandomBuilder<'s>, seed) generator cdf =
    let d = observed |> List.collect (fun x -> [diff x; diff (x - epsilon)]) |> List.max
    Assert.That (ks (sqrt (float n) * d), Is.GreaterThanOrEqualTo(level))
 
-let testDiscrete (prng : 's -> RandomBuilder<'s>, seed) generator cdf parameterCount =
+let testDiscrete (prng : RandomBuilder<'s>, seed) generator cdf parameterCount =
    let observed, next =
-      let f seed = prng seed { return! generator }
+      let f seed = prng { return! generator } <| seed
       in sample f seed
    Assert.That (next, Is.Not.EqualTo(seed))
    let binCount = int <| ceil (2.0 * (float n ** 0.4))
@@ -54,9 +54,9 @@ let testDiscrete (prng : 's -> RandomBuilder<'s>, seed) generator cdf parameterC
       ChiSquare(float df).CumulativeDistribution (sum)
    Assert.That (p, Is.GreaterThanOrEqualTo(level))
 
-let testBinary (prng : 's -> RandomBuilder<'s>, seed) generator cdf probability =
+let testBinary (prng : RandomBuilder<'s>, seed) generator cdf probability =
    let observed, next =
-      let f seed = prng seed { return! generator }
+      let f seed = prng { return! generator } <| seed
       in sample f seed
    Assert.That (next, Is.Not.EqualTo(seed))
    let o0, o1 = observed |> List.partition ((=) 0) |> (fun (zero, one) -> float (List.length zero), float (List.length one))
@@ -283,7 +283,7 @@ let ``Validates flipCoin`` () =
 let ``Validates Array.sample`` () =
    let array = Array.init 10 id
    let builder, seed = getDefaultTester ()
-   let result, next = builder seed { return! Array.sample 8 array }
+   let result, next = builder { return! Array.sample 8 array } <| seed
    Assert.That (next, Is.Not.EqualTo(seed))
    Assert.That (Array.length result, Is.EqualTo(8))
    Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
@@ -294,7 +294,7 @@ let ``Validates Array.weightedSample`` () =
    let array = Array.init 10 id
    let weight = Array.init (Array.length array) (id >> float >> ((+) 1.0))
    let builder, seed = getDefaultTester ()
-   let result, next = builder seed { return! Array.weightedSample 8 weight array }
+   let result, next = builder { return! Array.weightedSample 8 weight array } <| seed
    Assert.That (next, Is.Not.EqualTo(seed))
    Assert.That (Array.length result, Is.EqualTo(8))
    Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
@@ -304,7 +304,7 @@ let ``Validates Array.weightedSample`` () =
 let ``Validates Array.sampleWithReplacement`` () =
    let array = Array.init 5 id
    let builder, seed = getDefaultTester ()
-   let result, next = builder seed { return! Array.sampleWithReplacement 8 array }
+   let result, next = builder { return! Array.sampleWithReplacement 8 array } <| seed
    Assert.That (next, Is.Not.EqualTo(seed))
    Assert.That (Array.length result, Is.EqualTo(8))
    Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
@@ -315,7 +315,7 @@ let ``Validates Array.weightedSampleWithReplacement`` () =
    let array = Array.init 5 id
    let weight = Array.init (Array.length array) (id >> float >> ((+) 1.0))
    let builder, seed = getDefaultTester ()
-   let result, next = builder seed { return! Array.weightedSampleWithReplacement 8 weight array }
+   let result, next = builder { return! Array.weightedSampleWithReplacement 8 weight array } <| seed
    Assert.That (next, Is.Not.EqualTo(seed))
    Assert.That (Array.length result, Is.EqualTo(8))
    Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
@@ -324,7 +324,7 @@ let ``Validates Array.weightedSampleWithReplacement`` () =
 [<Test>]
 let ``Validates Array.randomCreate`` () =
    let builder, seed = getDefaultTester ()
-   let result, next = builder seed { return! Array.randomCreate 8 ``[0, 1)`` }
+   let result, next = builder { return! Array.randomCreate 8 ``[0, 1)`` } <| seed
    Assert.That (next, Is.Not.EqualTo(seed))
    Assert.That (Array.length result, Is.EqualTo(8))
    let head = result.[0]
@@ -334,17 +334,17 @@ let ``Validates Array.randomCreate`` () =
 let ``Validates Array.randomInit`` () =
    let builder, seed = getDefaultTester ()
    let expected =
-      builder seed { return! Array.randomCreate 8 (normal (0.0, 1.0)) }
+      builder { return! Array.randomCreate 8 (normal (0.0, 1.0)) } <| seed
       |> fst
       |> Array.mapi (fun index z -> z + float index)
-   let actual = builder seed { return! Array.randomInit 8 (fun index -> normal (float index, 1.0)) } |> fst
+   let actual = builder { return! Array.randomInit 8 (fun index -> normal (float index, 1.0)) } <| seed |> fst
    Assert.That (actual, Is.EqualTo(expected))
 
 [<Test>]
 let ``Validates Array.shuffle`` () =
    let builder, seed = getDefaultTester ()
    let array = Array.init 8 id
-   let result, next = builder seed { return! Array.shuffle array }
+   let result, next = builder { return! Array.shuffle array } <| seed
    Assert.That (next, Is.Not.EqualTo(seed))
    Assert.That (Array.length result, Is.EqualTo(Array.length array))
    Assert.That (Array.zip array result |> Array.forall (fun (x, y) -> x = y), Is.False)
@@ -355,7 +355,7 @@ let ``Validates Array.shuffleInPlace`` () =
    let builder, seed = getDefaultTester ()
    let array = Array.init 8 id
    let copied = Array.copy array
-   let _, next = builder seed { do! Array.shuffleInPlace array }
+   let _, next = builder { do! Array.shuffleInPlace array } <| seed
    Assert.That (next, Is.Not.EqualTo(seed))
    Assert.That (Array.zip copied array |> Array.forall (fun (x, y) -> x = y), Is.False)
    Assert.That (Array.sort array, Is.EquivalentTo(copied))

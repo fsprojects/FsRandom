@@ -28,7 +28,7 @@ let ``Checks first 2,000 output`` () =
       raws, standards
    let actual =
       let seed = StateVector.Initialize [|0x123u; 0x234u; 0x345u; 0x456u|]
-      mersenne seed {
+      mersenne {
          let raws = Array.zeroCreate 1000
          for index = 0 to Array.length raws - 1 do
             let! u = raw
@@ -39,6 +39,7 @@ let ``Checks first 2,000 output`` () =
             standards.[index] <- (sprintf "%10.8f" u).Trim ()
          return raws, standards
       }
+      <| seed
       |> fst
    Assert.That (fst actual, Is.EquivalentTo(fst expected))
    Assert.That (snd actual, Is.EquivalentTo(snd expected))

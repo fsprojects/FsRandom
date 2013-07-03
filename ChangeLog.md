@@ -1,6 +1,11 @@
 RecycleBin.Random ChangeLog
 ===========================
 
+Version 2.0
+---------------
+
+* RandomBuilder.Run returns a function.
+
 Version 1.2.2.0
 ---------------
 

@@ -30,23 +30,25 @@ let test parameter resource =
    let actual =
       let seedByInt = StateVector.Initialize (parameter, 1234u)
       let randomByInt =
-         sfmt seedByInt {
+         sfmt {
             let raws = Array.zeroCreate 1000
             for index = 0 to Array.length raws - 1 do
                let! u = raw
                raws.[index] <- (sprintf "%10u" u).Trim ()
             return raws
          }
+         <| seedByInt
          |> fst
       let seedByArray = StateVector.Initialize (parameter, [|0x1234u; 0x5678u; 0x9ABCu; 0xDEF0u|])
       let randomByArray =
-         sfmt seedByArray {
+         sfmt {
             let raws = Array.zeroCreate 1000
             for index = 0 to Array.length raws - 1 do
                let! u = raw
                raws.[index] <- (sprintf "%10u" u).Trim ()
             return raws
          }
+         <| seedByArray
          |> fst
       randomByInt, randomByArray
    Assert.That (fst actual, Is.EquivalentTo(fst expected))

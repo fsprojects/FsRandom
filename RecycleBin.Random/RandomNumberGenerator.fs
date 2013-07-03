@@ -6,10 +6,10 @@ open RecycleBin.Random.StateMonad
 type Prng<'s> = 's -> uint32 * 's
 type PrngState<'s> = Prng<'s> * 's
 
-type RandomBuilder<'s> (initial:PrngState<'s>) =
+type RandomBuilder<'s> (prng:Prng<'s>) =
    inherit StateBuilder ()
-   member this.Run (m) = m initial |> (fun (random, (_, state) : PrngState<'s>) -> random, state)
-let random prng seed = RandomBuilder (prng, seed)
+   member this.Run (m) = fun (seed:'s) -> m (prng, seed) |> (fun (random, (_, state) : PrngState<'s>) -> random, state)
+let random prng = RandomBuilder (prng)
 
 let buffer = Array.zeroCreate sizeof<uint32>
 let systemrandomPrng (random : Random) = 

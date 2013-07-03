@@ -8,9 +8,9 @@ open NUnit.Framework
 [<Test>]
 let ``flipCoin can accept 0 (#17)`` () =
    let builder, seed = getDefaultTester ()
-   builder seed { return! flipCoin 0.0 } |> ignore
+   builder { return! flipCoin 0.0 } <| seed |> ignore
 
 [<Test>]
 let ``flipCoin can accept 1 (#17)`` () =
    let builder, seed = getDefaultTester ()
-   builder seed { return! flipCoin 1.0 } |> ignore
+   builder { return! flipCoin 1.0 } <| seed |> ignore
