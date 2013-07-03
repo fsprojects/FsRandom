@@ -120,7 +120,7 @@ let rec binaries initialSeed =
 Or, more precisely like the following:
 
 ```fsharp
-let binaries = Seq.ofRandom <| state { return! Statistics.bernoulli 0.5 } <| xorshift
+let binaries = Seq.ofRandom <| random { return! Statistics.bernoulli 0.5 } <| xorshift
 ```
 
 ### Using `System.Random`
@@ -151,9 +151,9 @@ This section explains how to construct random computation expressions such as `x
 RecycleBin.Random has a random computation expression builder named `random`,
 which enables users to construct a user-defined random computation expression builder.
 The `random` uses a pseudorandom number generating function, that is, a function
-which has a type of `Prng<'s> = 's -> uint32 * 's` where `'s` is a type of state seed.
+which has a type of `Prng<'s> = 's -> uint64 * 's` where `'s` is a type of state seed.
 `Prng` is an actual random number generator which receives a random seed (`: 's`) and returns
-a random number in 32-bit resolution (`: uint32`) and a next state (`: 's`) in the random computation expression.
+a random number in 64-bit resolution (`: uint64`) and a next state (`: 's`) in the random computation expression.
 As we saw above, RecycleBin.Random currently supports xorshift algorithm and `System.Random`.
 
 As an example of user-defined `Prng`,
@@ -161,25 +161,25 @@ let's implement [linear congruential generator](http://en.wikipedia.org/wiki/Lin
 First, we make a function of `Prng`.
 
 ```fsharp
-// linearPrng : uint32 * uint32 -> uint32 -> uint32 * uint32
+// linearPrng : uint64 * uint64 -> uint64 -> uint64 * uint64
 let linearPrng (a, c) x = x, a * x + c
 ```
 
 The first returned value is a random number and the second returned value is a next state.
 Note that modulus is not defined because `Prng` is required to return random numbers
-in 32-bit resolution (modulus = 2^32).
+in 64-bit resolution.
 
 Then, a new computation expression builder can be defined as the following.
 
 ```fsharp
-let linear (a, c) = random (linearPrng (a, c))
+let linear (a, c) = createRandomBuilder (linearPrng (a, c))
 ```
 
 Hereafter we can use the `linear` builder to generate random numbers.
 
 ```fsharp
-let seed = uint32 Environment.TickCount
-let myLinear = linear (1664525u, 1013904223u)  // Numerical Recipes
+let seed = uint64 Environment.TickCount
+let myLinear = linear (6364136223846793005uL, 1442695040888963407uL)  // from Wikipedia
 let generator = myLinear { return! Statistics.gamma (3.0, 1.0) }
 let u, nextSeed = generator seed
 ```
@@ -190,7 +190,7 @@ This section explains how to construct generator functions such like `normal` an
 
 Random number generator functions are just required to return (`PrngState<'s> -> 'a * PrngState<'s>`)
 where `'s` is a type of random seed and `'a` is a type of random number.
-`PrngState<'s>` is defined as `Prng<'s> * 's` and `Prng<'s>` is `'s -> uint32 * 's`.
+`PrngState<'s>` is defined as `Prng<'s> * 's` and `Prng<'s>` is `'s -> uint64 * 's`.
 The type looks too complex, but implementation is not difficult as you see soon.
 
 As an example of user-defined generator function,
@@ -204,7 +204,7 @@ approximates a standard normal random number.
 
 ```fsharp
 let approximatelyStandardNormal =
-   state {
+   random {
       let! values = Array.randomCreate 12 ``(0, 1)``  // ``(0, 1)`` is a standard random number generator in (0, 1)
       return Array.sum values - 6.0
    }
@@ -227,7 +227,7 @@ Numerical Examples
 
 ```fsharp
 // Generates random points on [-1, 1] x [-1, 1].
-let randomPointGenerator = state {
+let randomPointGenerator = random {
    let! x = Statistics.uniform (-1.0, 1.0)
    let! y = Statistics.uniform (-1.0, 1.0)
    return (x, y)
@@ -263,7 +263,7 @@ And it can be naturally translated into F# code as the following.
 ```fsharp
 open RecycleBin.Random.Statistics
 let gibbsBinormal (meanX, meanY, varX, varY, cov) (_ : float, y : float) =
-   state {
+   random {
       let! x' = normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
       let! y' = normal (meanY + cov * (x' - meanX) / varX, sqrt <| varY - cov ** 2.0 / varX)
       return (x', y')

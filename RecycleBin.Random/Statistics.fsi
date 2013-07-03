@@ -1,5 +1,7 @@
 ﻿module RecycleBin.Random.Statistics
 
+open RecycleBin.Random.StateMonad
+
 /// <summary>
 /// Returns a random number distributed uniformly in the range of [<paramref name="min" />, <paramref name="max" />].
 /// </summary>

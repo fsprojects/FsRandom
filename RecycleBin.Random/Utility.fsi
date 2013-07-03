@@ -1,5 +1,7 @@
 ﻿module RecycleBin.Random.Utility
 
+open RecycleBin.Random.StateMonad
+
 /// <summary>
 /// Returns a random Boolean value with the specified probability.
 /// </summary>

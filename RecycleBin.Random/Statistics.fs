@@ -1,6 +1,7 @@
 ﻿module RecycleBin.Random.Statistics
 
 open System
+open RecycleBin.Random.StateMonad
 
 [<Literal>]
 let pi = 3.1415926535897932384626433832795

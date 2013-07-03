@@ -6,16 +6,18 @@ open RecycleBin.Random.StateMonad
 type Prng<'s> = 's -> uint64 * 's
 type PrngState<'s> = Prng<'s> * 's
 
+let random = state
+
 type RandomBuilder<'s> (prng:Prng<'s>) =
    inherit StateBuilder ()
    member this.Run (m) = fun (seed:'s) -> m (prng, seed) |> (fun (random, (_, state) : PrngState<'s>) -> random, state)
-let random prng = RandomBuilder (prng)
+let createRandomBuilder prng = RandomBuilder (prng)
 
 let buffer = Array.zeroCreate sizeof<uint64>
 let systemrandomPrng (random : Random) = 
    random.NextBytes (buffer)
    BitConverter.ToUInt64 (buffer, 0), random
-let systemrandom = random systemrandomPrng
+let systemrandom = createRandomBuilder systemrandomPrng
    
 let inline xor128 (x:uint32, y:uint32, z:uint32, w:uint32) =
    let t = x ^^^ (x <<< 11)
@@ -25,7 +27,7 @@ let xorshiftPrng s =
    let lower, s = xor128 s
    let upper, s = xor128 s
    (uint64 upper <<< 32) ||| uint64 lower, s
-let xorshift = random xorshiftPrng
+let xorshift = createRandomBuilder xorshiftPrng
 
 let getRandom (generator : State<PrngState<'s>, 'a >) =
    getState |>> (fun s0 -> let r, s' = generator s0 in setState s' &>> returnState r)

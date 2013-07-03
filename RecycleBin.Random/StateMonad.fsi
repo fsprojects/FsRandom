@@ -1,5 +1,4 @@
-﻿[<AutoOpen>]
-module RecycleBin.Random.StateMonad
+﻿module RecycleBin.Random.StateMonad
 
 type State<'s, 'a> = 's -> 'a * 's
 

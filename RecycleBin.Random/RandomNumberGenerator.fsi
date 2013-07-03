@@ -11,6 +11,11 @@ type Prng<'s> = 's -> uint64 * 's
 type PrngState<'s> = Prng<'s> * 's
 
 /// <summary>
+/// Constructs a random number function.
+/// </summary>
+val random : StateBuilder
+
+/// <summary>
 /// Random number generator using user-specified random number generator.
 /// </summary>
 type RandomBuilder<'s> =
@@ -33,7 +38,7 @@ type RandomBuilder<'s> =
 /// </summary>
 /// <param name="prng">A random number generator.</param>
 /// <param name="seed">A initial state to generate a random sequence.</param>
-val random : prng:Prng<'s> -> RandomBuilder<'s>
+val createRandomBuilder : prng:Prng<'s> -> RandomBuilder<'s>
    
 /// <summary>
 /// Random number generator using <see cref="System.Random" />.

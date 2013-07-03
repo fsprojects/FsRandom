@@ -1,6 +1,7 @@
 ﻿module RecycleBin.Random.Array
 
 open System
+open RecycleBin.Random.StateMonad
 
 let swap i j (array:'a []) =
    let temp = array.[i]

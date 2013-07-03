@@ -1,5 +1,7 @@
 ﻿module RecycleBin.Random.Array
 
+open RecycleBin.Random.StateMonad
+
 /// <summary>
 /// Creates an array whose elements are randomly generated. 
 /// </summary>

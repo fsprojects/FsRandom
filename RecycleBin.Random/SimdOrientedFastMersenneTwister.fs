@@ -198,4 +198,4 @@ let sfmtPrng (s : StateVector) =
    let lower, s = sfmtImpl s
    let upper, s = sfmtImpl s
    (uint64 upper <<< 32) ||| uint64 lower, s
-let sfmt = random sfmtPrng
+let sfmt = createRandomBuilder sfmtPrng

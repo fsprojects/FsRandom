@@ -74,4 +74,4 @@ let mersennePrng (state : StateVector) =
    y <- y ^^^ (y >>> 43)
    // Creates a new instance of StateVector, but the internal vector refers to the same array to avoid cost of copying.
    y, StateVector(index + 1, state.Vector)
-let mersenne = random mersennePrng
+let mersenne = createRandomBuilder mersennePrng

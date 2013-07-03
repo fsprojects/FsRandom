@@ -1,5 +1,7 @@
 ﻿module RecycleBin.Random.Seq
 
+open RecycleBin.Random.StateMonad
+
 /// <summary>
 /// Makes infinite sequence of random numbers.
 /// </summary>
