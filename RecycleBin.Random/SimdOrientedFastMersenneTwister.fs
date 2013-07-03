@@ -185,8 +185,8 @@ let refresh (state : StateVector) =
       r1 <- r2
       r2 <- index
    StateVector (parameter, 0, vector)
-
-let sfmtPrng (state : StateVector) =
+   
+let sfmtImpl (state : StateVector) =
    let state = if state.Index >= state.Parameter.N32 then refresh state else state
    let index = state.Index
    let vector = state.Vector
@@ -194,4 +194,8 @@ let sfmtPrng (state : StateVector) =
    // Creates a new instance of StateVector, but the parameter and the internal vector
    // refers to the same array to avoid cost of copying.
    r, StateVector(state.Parameter, index + 1, vector)
+let sfmtPrng (s : StateVector) =
+   let lower, s = sfmtImpl s
+   let upper, s = sfmtImpl s
+   (uint64 upper <<< 32) ||| uint64 lower, s
 let sfmt = random sfmtPrng

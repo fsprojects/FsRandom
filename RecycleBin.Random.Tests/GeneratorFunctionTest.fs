@@ -8,7 +8,7 @@ open MathNet.Numerics.Distributions
 open MathNet.Numerics.Statistics
 open NUnit.Framework
 
-let n = 500
+let n = 1000
 let level = 0.01
 let rec generate f seed =
    seq {

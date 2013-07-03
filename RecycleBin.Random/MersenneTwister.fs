@@ -1,33 +1,33 @@
 ﻿module RecycleBin.Random.MersenneTwister
 
 [<Literal>]
-let N = 624
+let N = 312
 [<Literal>]
-let M = 397
+let M = 156
 [<Literal>]
-let MatrixA = 0x9908B0DFu
+let MatrixA = 0xB5026F5AA96619E9uL
 [<Literal>]
-let UpperMask = 0x80000000u
+let UpperMask = 0xFFFFFFFF80000000uL
 [<Literal>]
-let LowerMask = 0x7FFFFFFFu
+let LowerMask = 0x7FFFFFFFuL
 
 let initialize seed =
    let vector = Array.zeroCreate N
-   vector.[0] <- seed &&& 0xFFFFFFFFu
+   vector.[0] <- seed
    for index = 1 to N - 1 do
       let previous = vector.[index - 1]
-      vector.[index] <- 1812433253u * (previous ^^^ (previous >>> 30)) + uint32 index
+      vector.[index] <- 6364136223846793005uL * (previous ^^^ (previous >>> 62)) + uint64 index
    vector
 
-type StateVector (index : int, vector : uint32 []) =
-   static member Initialize (seed : uint32) =
+type StateVector (index : int, vector : uint64 []) =
+   static member Initialize (seed : uint64) =
       StateVector (N, initialize seed)
-   static member Initialize (seed : uint32 []) =
-      let vector = initialize 19650218u
+   static member Initialize (seed : uint64 []) =
+      let vector = initialize 19650218uL
       let mutable i = 1
       let mutable j = 0
       for k = max N seed.Length downto 1 do
-         vector.[i] <- (vector.[i] ^^^ ((vector.[i - 1] ^^^ (vector.[i - 1] >>> 30)) * 1664525u)) + seed.[j] + uint32 j
+         vector.[i] <- (vector.[i] ^^^ ((vector.[i - 1] ^^^ (vector.[i - 1] >>> 62)) * 3935559000370003845uL)) + seed.[j] + uint64 j
          i <- i + 1
          j <- j + 1
          if i >= N
@@ -39,13 +39,13 @@ type StateVector (index : int, vector : uint32 []) =
             j <- 0
          ()
       for k = N - 1 downto 1 do
-         vector.[i] <- (vector.[i] ^^^ ((vector.[i - 1] ^^^ (vector.[i - 1] >>> 30)) * 1566083941u)) - uint32 i
+         vector.[i] <- (vector.[i] ^^^ ((vector.[i - 1] ^^^ (vector.[i - 1] >>> 62)) * 2862933555777941757uL)) - uint64 i
          i <- i + 1
          if i >= N
          then
             vector.[0] <- vector.[N - 1]
             i <- 1
-      vector.[0] <- 0x80000000u
+      vector.[0] <- 1uL <<< 63
       StateVector (N, vector)
    member val Index = index with get
    member this.Item (index) = vector.[index]
@@ -53,7 +53,7 @@ type StateVector (index : int, vector : uint32 []) =
    
 let inline twist u l v =
    let y = (u &&& UpperMask) ||| (l &&& LowerMask)
-   let mag = if y &&& 1u = 0u then 0u else MatrixA  // mag01[y & 0x1]
+   let mag = if y &&& 1uL = 0uL then 0uL else MatrixA  // mag01[y & 0x1]
    v ^^^ (y >>> 1) ^^^ mag
 let refresh (state : StateVector) =
    let vector = Array.copy state.Vector
@@ -68,10 +68,10 @@ let mersennePrng (state : StateVector) =
    let state = if state.Index >= N then refresh state else state
    let index = state.Index
    let mutable y = state.[index]
-   y <- y ^^^ (y >>> 11)
-   y <- y ^^^ ((y <<< 7) &&& 0x9D2C5680u)
-   y <- y ^^^ ((y <<< 15) &&& 0xEFC60000u)
-   y <- y ^^^ (y >>> 18)
+   y <- y ^^^ ((y >>> 29) &&& 0x5555555555555555uL)
+   y <- y ^^^ ((y <<< 17) &&& 0x71D67FFFEDA60000uL)
+   y <- y ^^^ ((y <<< 37) &&& 0xFFF7EEE000000000uL)
+   y <- y ^^^ (y >>> 43)
    // Creates a new instance of StateVector, but the internal vector refers to the same array to avoid cost of copying.
    y, StateVector(index + 1, state.Vector)
 let mersenne = random mersennePrng

@@ -151,4 +151,7 @@
   <data name="SFMT_86243_out" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\SFMT.86243.out.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;shift_jis</value>
   </data>
+  <data name="mt19937_64_out" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\mt19937-64.out.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;shift_jis</value>
+  </data>
 </root>

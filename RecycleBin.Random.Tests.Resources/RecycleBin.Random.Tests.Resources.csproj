@@ -54,6 +54,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\mt19937-64.out.txt" />
     <Content Include="Resources\mt19937ar.out.txt" />
   </ItemGroup>
   <ItemGroup>

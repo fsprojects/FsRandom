@@ -7,7 +7,7 @@ open RecycleBin.Random.StateMonad
 /// <summary>
 /// Represents a pseudorandom number generator that supports 32-bit resolution.
 /// </summary>
-type Prng<'s> = 's -> uint32 * 's
+type Prng<'s> = 's -> uint64 * 's
 type PrngState<'s> = Prng<'s> * 's
 
 /// <summary>

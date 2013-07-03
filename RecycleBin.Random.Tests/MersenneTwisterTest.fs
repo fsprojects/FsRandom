@@ -9,7 +9,7 @@ open NUnit.Framework
 [<Test>]
 let ``Checks first 2,000 output`` () =
    let expected =
-      use reader = new StringReader (KnownRandomSequence.mt19937ar_out)
+      use reader = new StringReader (KnownRandomSequence.mt19937_64_out)
       reader.ReadLine () |> ignore
       let raws = Array.zeroCreate 1000
       for i = 0 to 199 do
@@ -27,12 +27,12 @@ let ``Checks first 2,000 output`` () =
             standards.[5 * i + j] <- values.[j]
       raws, standards
    let actual =
-      let seed = StateVector.Initialize [|0x123u; 0x234u; 0x345u; 0x456u|]
+      let seed = StateVector.Initialize [|0x12345uL; 0x23456uL; 0x34567uL; 0x45678uL|]
       mersenne {
          let raws = Array.zeroCreate 1000
          for index = 0 to Array.length raws - 1 do
             let! u = raw
-            raws.[index] <- (sprintf "%10u" u).Trim ()
+            raws.[index] <- (sprintf "%20u" u).Trim ()
          let standards = Array.zeroCreate 1000
          for index = 0 to Array.length standards - 1 do
             let! u = ``[0, 1)``
