@@ -117,6 +117,12 @@ let rec binaries initialSeed =
    }
 ```
 
+Or, more precisely like the following:
+
+```fsharp
+let binaries = Seq.ofRandom <| state { return! Statistics.bernoulli 0.5 } <| xorshift
+```
+
 ### Using `System.Random`
 
 The examples above uses `xorshift` expression to generate random numbers.
