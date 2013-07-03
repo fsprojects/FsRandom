@@ -2,6 +2,7 @@ bin/
 obj/
 *.suo
 
+packages/*/
 TestResults/
 publish/
 *.nupkg
