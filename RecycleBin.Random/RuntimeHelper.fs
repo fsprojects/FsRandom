@@ -16,6 +16,8 @@ let inline ensuresFiniteValue argument argumentName =
    then
       invalidArg argumentName (sprintf "`%s' must be a finite number." argumentName) |> raise
 
+let inline to64bit (lower:uint32) (upper:uint32) = (uint64 upper <<< 32) ||| uint64 lower
+
 module List =
    let accumulate accumulation = function
       | [] -> invalidArg "list" "Empty list."

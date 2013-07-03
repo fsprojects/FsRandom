@@ -26,7 +26,7 @@ let inline xor128 (x:uint32, y:uint32, z:uint32, w:uint32) =
 let xorshiftPrng s =
    let lower, s = xor128 s
    let upper, s = xor128 s
-   (uint64 upper <<< 32) ||| uint64 lower, s
+   to64bit lower upper, s
 let xorshift = createRandomBuilder xorshiftPrng
 
 let getRandom (generator : State<PrngState<'s>, 'a >) =
