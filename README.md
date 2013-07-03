@@ -10,6 +10,7 @@ Randoms Functions
 
 * **RandomNumberGenerator module** provides standard random number generators: <code>\`\`(0, 1)\`\`</code>, <code>\`\`[0, 1)\`\`</code>, <code>\`\`(0, 1]\`\`</code>, and <code>\`\`[0, 1]\`\`</code>.
 * **Statistics module** provides a variety of statistical distributions such like `uniform`, `normal` and `gamma`.
+* **Seq module** provides functions for generating random number sequences.
 * **Array module** provides functions for array operations like `shuffle`.
 * **Utility module** provides utility functions.
 
