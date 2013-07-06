@@ -269,7 +269,7 @@ let gibbsBinormal (meanX, meanY, varX, varY, cov) (_ : float, y : float) =
       let! y' = normal (meanY + cov * (x' - meanX) / varX, sqrt <| varY - cov ** 2.0 / varX)
       return (x', y')
    }
-let binnormal parameter = Seq.markovChain (gibbsBinormal parameter)
+let binormal parameter = Seq.markovChain (gibbsBinormal parameter)
 ```
 
 Note that the generating bivariate normal random number sequence is [autocorrelated](http://en.wikipedia.org/wiki/Autocorrelation).

@@ -4,11 +4,11 @@ open System.Reflection
 open System.Runtime.CompilerServices
 open System.Runtime.InteropServices
 
-[<assembly: AssemblyTitle("FsRand")>]
+[<assembly: AssemblyTitle("FsRandom")>]
 [<assembly: AssemblyDescription("Random number generating framework designed for F#.")>]
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("RecycleBin")>]
-[<assembly: AssemblyProduct("FsRand")>]
+[<assembly: AssemblyProduct("FsRandom")>]
 [<assembly: AssemblyCopyright("Copyright © RecycleBin 2013")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
