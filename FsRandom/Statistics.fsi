@@ -51,6 +51,12 @@ val beta : alpha:float * beta:float -> State<PrngState<'s>, float>
 /// <param name="rate">The rate parameter (equals to its mean^(-1)).</param>
 val exponential : rate:float -> State<PrngState<'s>, float>
 /// <summary>
+/// Returns a random number distributed Weibull.
+/// </summary>
+/// <param name="shape">The shape parameter.</param>
+/// <param name="scale">The scale parameter.</param>
+val weibull : shape:float * scale:float -> State<PrngState<'s>, float>
+/// <summary>
 /// Returns a random number distributed cauchy.
 /// </summary>
 /// <param name="location">The location parameter.</param>

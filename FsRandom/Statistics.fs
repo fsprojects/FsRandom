@@ -190,6 +190,20 @@ let exponential rate =
          let u, s' = ``(0, 1)`` s0
          in -log u / rate, s'
 
+let weibull (shape, scale) =
+   ensuresFiniteValue shape "shape"
+   ensuresFiniteValue scale "scale"
+   if shape <= 0.0 then
+      ArgumentOutOfRangeException ("shape", "`shape' must be positive.") |> raise
+   elif scale <= 0.0 then
+      ArgumentOutOfRangeException ("scale", "`scale' must be positive.") |> raise
+   else
+      random {
+         let! u = ``(0, 1)``
+         let r = (-log u) ** (1.0 / shape)
+         return r * scale
+      }
+
 let cauchy (location, scale) =
    ensuresFiniteValue location "location"
    ensuresFiniteValue scale "scale"

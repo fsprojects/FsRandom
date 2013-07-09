@@ -130,6 +130,12 @@ let testExponential tester rate =
    let cdf = cdfExponential rate
    testContinuous tester generator cdf
    
+let cdfWeibull (shape, scale) = Weibull(shape, scale).CumulativeDistribution
+let testWeibull tester parameter =
+   let generator = weibull parameter
+   let cdf = cdfWeibull parameter
+   testContinuous tester generator cdf
+   
 let cdfBeta (a, b) = Beta(a, b).CumulativeDistribution
 let testBeta tester parameter =
    let generator = beta parameter
@@ -230,6 +236,10 @@ let ``Validates gamma (shape is integer)`` () =
 [<Test>]
 let ``Validates exponential`` () =
    testExponential (getDefaultTester ()) (1.5)
+
+[<Test>]
+let ``Validates weibull`` () =
+   testWeibull (getDefaultTester ()) (6.1, 1.4)
 
 [<Test>]
 let ``Validates beta`` () =
