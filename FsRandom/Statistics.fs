@@ -204,6 +204,17 @@ let weibull (shape, scale) =
          return r * scale
       }
 
+let gumbel (location, scale) =
+   ensuresFiniteValue location "location"
+   ensuresFiniteValue scale "scale"
+   if scale <= 0.0 then
+      ArgumentOutOfRangeException ("scale", "`scale' must be positive.") |> raise
+   else
+      random {
+         let! u = ``(0, 1)``
+         return location - scale * log (-log u)
+      }
+
 let cauchy (location, scale) =
    ensuresFiniteValue location "location"
    ensuresFiniteValue scale "scale"

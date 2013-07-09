@@ -57,6 +57,12 @@ val exponential : rate:float -> State<PrngState<'s>, float>
 /// <param name="scale">The scale parameter.</param>
 val weibull : shape:float * scale:float -> State<PrngState<'s>, float>
 /// <summary>
+/// Returns a random number distributed Gumbel.
+/// </summary>
+/// <param name="location">The location parameter.</param>
+/// <param name="scale">The scale parameter.</param>
+val gumbel : location:float * scale:float -> State<PrngState<'s>, float>
+/// <summary>
 /// Returns a random number distributed cauchy.
 /// </summary>
 /// <param name="location">The location parameter.</param>

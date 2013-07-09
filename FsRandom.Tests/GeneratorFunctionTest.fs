@@ -136,6 +136,12 @@ let testWeibull tester parameter =
    let cdf = cdfWeibull parameter
    testContinuous tester generator cdf
    
+let cdfGumbel (location, scale) = fun x -> exp (-exp (-(x - location) / scale))
+let testGumbel tester parameter =
+   let generator = gumbel parameter
+   let cdf = cdfGumbel parameter
+   testContinuous tester generator cdf
+   
 let cdfBeta (a, b) = Beta(a, b).CumulativeDistribution
 let testBeta tester parameter =
    let generator = beta parameter
@@ -240,6 +246,10 @@ let ``Validates exponential`` () =
 [<Test>]
 let ``Validates weibull`` () =
    testWeibull (getDefaultTester ()) (6.1, 1.4)
+
+[<Test>]
+let ``Validates gumbel`` () =
+   testGumbel (getDefaultTester ()) (-3.0, 2.3)
 
 [<Test>]
 let ``Validates beta`` () =
