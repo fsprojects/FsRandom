@@ -19,7 +19,7 @@ Also, user-defined functions can be implemented easily (see below).
 How to Install
 --------------
 
-FsRandom is [available on the NuGet Gallery](https://nuget.org/packages/RecycleBin.Random/).
+FsRandom is [available on the NuGet Gallery](https://nuget.org/packages/FsRandom/).
 Use the following command to install FsRandom via NuGet.
 
 ```
