@@ -198,11 +198,10 @@ let weibull (shape, scale) =
    elif scale <= 0.0 then
       ArgumentOutOfRangeException ("scale", "`scale' must be positive.") |> raise
    else
-      random {
-         let! u = ``(0, 1)``
+      fun s0 ->
+         let u, s' = ``(0, 1)`` s0
          let r = (-log u) ** (1.0 / shape)
-         return r * scale
-      }
+         r * scale, s'
 
 let gumbel (location, scale) =
    ensuresFiniteValue location "location"
@@ -210,10 +209,9 @@ let gumbel (location, scale) =
    if scale <= 0.0 then
       ArgumentOutOfRangeException ("scale", "`scale' must be positive.") |> raise
    else
-      random {
-         let! u = ``(0, 1)``
-         return location - scale * log (-log u)
-      }
+      fun s0 ->
+         let u, s' = ``(0, 1)`` s0
+         location - scale * log (-log u), s'
 
 let cauchy (location, scale) =
    ensuresFiniteValue location "location"
