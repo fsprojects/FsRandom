@@ -119,6 +119,7 @@ val dirichlet : alpha:float list -> State<PrngState<'s>, float list>
 /// Each item is normalized in the function so that the sum of values can be less or greater than 1.</param>
 val multinomial : n:int * weight:float list -> State<PrngState<'s>, int list>
 
+[<RequireQualifiedAccess>]
 module Seq =
    /// <summary>
    /// Makes infinite Markov chain.

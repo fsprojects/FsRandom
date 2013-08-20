@@ -1,4 +1,5 @@
-﻿module FsRandom.Array
+﻿[<RequireQualifiedAccess>]
+module FsRandom.Array
 
 open FsRandom.StateMonad
 
