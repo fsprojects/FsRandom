@@ -14,7 +14,7 @@ let nugetToolPath = % ".nuget" % "NuGet.exe"
 let buildDir = % "Build"
 let deployDir = % "Deploy"
 
-let mainSolution = % "FsRandom.sln"
+let mainSolution = % "FsRandom" % "FsRandom.fsproj"
 let projectName = "FsRandom"
 let zipName = deployDir % "FsRandom.zip"
 
