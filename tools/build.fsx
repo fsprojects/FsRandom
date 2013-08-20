@@ -174,5 +174,5 @@ Target "Deploy" (fun () ->
 =?> ("NuGet", not buildParams.NoNuGet)
 ==> "Deploy"
 
-let deploy = not buildParams.NoZip && not buildParams.NoNuGet
+let deploy = not buildParams.NoZip || not buildParams.NoNuGet
 Run <| if deploy then "Deploy" else "Build"
