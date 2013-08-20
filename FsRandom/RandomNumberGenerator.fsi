@@ -66,6 +66,10 @@ val getRandom : generator:State<PrngState<'s>, 'a> -> State<PrngState<'s>, 'a>
 val getRandomBy : transformation:('a -> 'b) -> generator:State<PrngState<'s>, 'a> -> State<PrngState<'s>, 'b>
 
 /// <summary>
+/// Returns a random 64-bit number.
+/// </summary>
+val rawBits : State<PrngState<'s>, uint64>
+/// <summary>
 /// Returns a random number in the range of (0, 1).
 /// </summary>
 val ``(0, 1)`` : State<PrngState<'s>, float>

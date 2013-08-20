@@ -34,6 +34,7 @@ let getRandom (generator : State<PrngState<'s>, 'a >) =
 let getRandomBy f (generator : State<PrngState<'s>, 'a >) =
    getState |>> (fun s0 -> let r, s' = generator s0 in setState s' &>> returnState (f r))
 
+let rawBits ((f, s0) : PrngState<'s>) = let r, s' = f s0 in r, (f, s')
 [<Literal>]
 let ``1 / 2^52`` = 2.22044604925031308084726333618e-16
 [<Literal>]
