@@ -28,6 +28,15 @@ Install-Package FsRandom
 
 [Visit the site](https://nuget.org/) for more information.
 
+How to Build
+------------
+
+Run:
+
+```
+fsi tools\build.fsx --no-deploy
+```
+
 How to Use
 ----------
 
