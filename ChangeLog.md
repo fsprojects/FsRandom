@@ -1,6 +1,12 @@
 FsRandom ChangeLog
 ==================
 
+Version 1.0.1
+-------------
+
+* Enhance speed of Poisson generator.
+* Add rawBits generator function.
+
 Version 1.0.0.0
 ---------------
 
