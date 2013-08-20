@@ -6,10 +6,10 @@
       <title>FsRandom</title>
       <authors>RecycleBin</authors>
       <owners>kos59125</owners>
-      <licenseUrl>https://github.com/kos59125/RecycleBin.Random/blob/master/LICENSE</licenseUrl>
-      <projectUrl>https://github.com/kos59125/RecycleBin.Random</projectUrl>
+      <licenseUrl>https://github.com/kos59125/FsRandom/blob/master/LICENSE</licenseUrl>
+      <projectUrl>https://github.com/kos59125/FsRandom</projectUrl>
       <requireLicenseAcceptance>true</requireLicenseAcceptance>
-      <description>Random number generating framework designed for F# (formerly RecycleBin.Random). It includes a variety of random number generating functions such as uniform, normal, gamma, and Poisson. Visit the project site for more information. https://github.com/kos59125/RecycleBin.Random</description>
+      <description>Random number generating framework designed for F# (formerly RecycleBin.Random). It includes a variety of random number generating functions such as uniform, normal, gamma, and Poisson. Visit the project site for more information. https://github.com/kos59125/FsRandom</description>
       <summary>Random number generating framework designed for F#.</summary>
       <copyright>Copyright &#xA9; 2013 RecycleBin</copyright>
       <references>
