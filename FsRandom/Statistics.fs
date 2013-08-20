@@ -3,11 +3,6 @@
 open System
 open FsRandom.StateMonad
 
-[<Literal>]
-let pi = 3.1415926535897932384626433832795
-[<Literal>]
-let ``2pi`` = 6.283185307179586476925286766559
-
 let uniform (min, max) =
    ensuresFiniteValue min "min"
    ensuresFiniteValue max "max"
@@ -276,30 +271,34 @@ let poisson lambda =
    then
       ArgumentOutOfRangeException ("lambda", "`lambda' must be positive.") |> raise
    else
-      let expLambda = exp lambda
-      if isInfinity expLambda
-      then
-         fun s0 ->
-            let count = ref (-1)
-            let mutable state = s0
-            let mutable t = lambda
-            while t > 0.0 do
-               incr count
-               let u, s' = ``(0, 1)`` state
-               state <- s'
-               t <- t + log u
-            !count, state
-      else
-         fun s0 ->
-            let count = ref (-1)
-            let mutable state = s0
-            let mutable t = expLambda
-            while t > 1.0 do
-               incr count
-               let u, s' = ``(0, 1)`` state
-               state <- s'
-               t <- t * u
-            !count, state
+      let c = 1.0 / lambda
+      let m = int lambda
+      let m' = float m
+      let d = exp <| -lambda + m' * log lambda - loggamma (m' + 1.0)
+      fun s0 ->
+         let xu = ref m
+         let xl = ref m
+         let mutable pu = d
+         let mutable pl = d
+         let mutable u, s' = ``[0, 1)`` s0
+         let mutable v = u - pu
+         let mutable result = if v <= 0.0 then Some (!xu) else None
+         while result.IsNone do
+            u <- v
+            if !xl > 0 then
+               pl <- pl * c * float !xl
+               decr xl
+               v <- u - pl
+               if v > 0.0 then
+                  u <- v
+               else
+                  result <- Some (!xl)
+            if result.IsNone then
+               incr xu
+               pu <- pu * lambda / float !xu
+               v <- u - pu
+               result <- if v <= 0.0 then Some (!xu) else None
+         result.Value, s'
 
 let geometric probability =
    ensuresFiniteValue probability "probability"
