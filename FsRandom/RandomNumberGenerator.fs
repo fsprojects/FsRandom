@@ -5,6 +5,7 @@ open FsRandom.StateMonad
 
 type Prng<'s> = 's -> uint64 * 's
 type PrngState<'s> = Prng<'s> * 's
+type GeneratorFunction<'s, 'a> = State<PrngState<'s>, 'a>
 
 let random = state
 
@@ -29,9 +30,9 @@ let xorshiftPrng s =
    to64bit lower upper, s
 let xorshift = createRandomBuilder xorshiftPrng
 
-let getRandom (generator : State<PrngState<'s>, 'a >) =
+let getRandom (generator:GeneratorFunction<'s, 'a>) =
    getState |>> (fun s0 -> let r, s' = generator s0 in setState s' &>> returnState r)
-let getRandomBy f (generator : State<PrngState<'s>, 'a >) =
+let getRandomBy f (generator:GeneratorFunction<'s, 'a>) =
    getState |>> (fun s0 -> let r, s' = generator s0 in setState s' &>> returnState (f r))
 
 let rawBits ((f, s0) : PrngState<'s>) = let r, s' = f s0 in r, (f, s')

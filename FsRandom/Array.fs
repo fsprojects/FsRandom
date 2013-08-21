@@ -8,7 +8,7 @@ let swap i j (array:'a []) =
    array.[i] <- array.[j]
    array.[j] <- temp
 
-let randomCreate count (generator:State<PrngState<'s>, 'a>) =
+let randomCreate count (generator:GeneratorFunction<'s, 'a>) =
    if count < 0
    then
       ArgumentOutOfRangeException ("count", "`count' must not be negative.") |> raise
@@ -22,7 +22,7 @@ let randomCreate count (generator:State<PrngState<'s>, 'a>) =
             s0 <- s'
          result, s0
 
-let randomInit count (initializer:int -> State<PrngState<'s>, 'a>) =
+let randomInit count (initializer:int -> GeneratorFunction<'s, 'a>) =
    if count < 0
    then
       ArgumentOutOfRangeException ("count", "`count' must not be negative.") |> raise

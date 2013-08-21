@@ -376,7 +376,7 @@ let multinomial (n, weight) =
          Array.toList result, s
          
 module Seq =
-   let markovChain (generator:'a -> State<PrngState<'s>, 'a>) (builder:RandomBuilder<'s>) =
+   let markovChain (generator:'a -> GeneratorFunction<'s, 'a>) (builder:RandomBuilder<'s>) =
       let rec loop seed previous = seq {
          let r, next = builder { return! generator previous } <| seed
          yield r

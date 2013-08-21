@@ -7,4 +7,4 @@ open FsRandom.StateMonad
 /// </summary>
 /// <param name="probability">The probability of success.</param>
 /// <seealso cref="Statistics.bernoulli" />
-val flipCoin : probability:float -> State<PrngState<'s>, bool>
+val flipCoin : probability:float -> GeneratorFunction<'s, bool>
