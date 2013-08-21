@@ -5,7 +5,7 @@ open System
 open FsRandom.StateMonad
 
 /// <summary>
-/// Represents a pseudorandom number generator that supports 32-bit resolution.
+/// Represents a pseudorandom number generator that supports 64-bit resolution.
 /// </summary>
 type Prng<'s> = 's -> uint64 * 's
 type PrngState<'s> = Prng<'s> * 's
