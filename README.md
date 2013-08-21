@@ -130,7 +130,7 @@ let rec binaries initialSeed =
 Or, more precisely like the following:
 
 ```fsharp
-let binaries = Seq.ofRandom <| random { return! Statistics.bernoulli 0.5 } <| xorshift
+let binaries = Seq.ofRandom (Statistics.bernoulli 0.5) xorshift
 ```
 
 ### Using `System.Random`
@@ -213,11 +213,10 @@ Therefore, if we subtract 6 from the sum of 12 standard random numbers, the resu
 approximates a standard normal random number.
 
 ```fsharp
-let approximatelyStandardNormal =
-   random {
-      let! values = Array.randomCreate 12 ``(0, 1)``  // ``(0, 1)`` is a standard random number generator in (0, 1)
-      return Array.sum values - 6.0
-   }
+let approximatelyStandardNormal = random {
+   let! values = Array.randomCreate 12 ``(0, 1)``  // ``(0, 1)`` is a standard random number generator in (0, 1)
+   return Array.sum values - 6.0
+}
 ```
 
 The `approximatelyStandardNormal` can be used in the generating process as the following.
@@ -272,12 +271,11 @@ And it can be naturally translated into F# code as the following.
 
 ```fsharp
 open FsRandom.Statistics
-let gibbsBinormal (meanX, meanY, varX, varY, cov) (_ : float, y : float) =
-   random {
-      let! x' = normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
-      let! y' = normal (meanY + cov * (x' - meanX) / varX, sqrt <| varY - cov ** 2.0 / varX)
-      return (x', y')
-   }
+let gibbsBinormal (meanX, meanY, varX, varY, cov) (_ : float, y : float) = random {
+   let! x' = normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
+   let! y' = normal (meanY + cov * (x' - meanX) / varX, sqrt <| varY - cov ** 2.0 / varX)
+   return (x', y')
+}
 let binormal parameter = Seq.markovChain (gibbsBinormal parameter)
 ```
 
