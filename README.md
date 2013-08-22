@@ -19,6 +19,8 @@ Also, user-defined functions can be implemented easily (see below).
 How to Install
 --------------
 
+### Install from NuGet
+
 FsRandom is [available on the NuGet Gallery](https://nuget.org/packages/FsRandom/).
 Use the following command to install FsRandom via NuGet.
 
@@ -28,13 +30,12 @@ Install-Package FsRandom
 
 [Visit the site](https://nuget.org/) for more information.
 
-How to Build
-------------
+### Build from source code
 
 Run:
 
 ```
-fsi tools\build.fsx --no-deploy
+fsi tools\build.fsx --debug --no-deploy
 ```
 
 How to Use
