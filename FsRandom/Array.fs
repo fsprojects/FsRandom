@@ -76,7 +76,7 @@ let weightedSample n weight source =
       invalidArg "weight" "`weight' must have the same length of `source'."
    else
       // Efraimidis and Spirakis (2006) Weighted random sampling with a reservoir (DOI: 10.1016/j.ipl.2005.11.003)
-      state {
+      random {
          let result = ref BinarySearchTree.empty
          for index = 0 to n - 1 do
             let! u = ``[0, 1)``
