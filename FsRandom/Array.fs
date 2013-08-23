@@ -8,10 +8,9 @@ let swap i j (array:'a []) =
    array.[i] <- array.[j]
    array.[j] <- temp
 
-let randomCreate count (generator:GeneratorFunction<'s, 'a>) =
-   if count < 0
-   then
-      ArgumentOutOfRangeException ("count", "`count' must not be negative.") |> raise
+let randomCreate count (generator:GeneratorFunction<_, _>) =
+   if count < 0 then
+      outOfRange "count" "`count' must not be negative."
    else
       fun s0 ->
          let result = Array.zeroCreate count
@@ -22,10 +21,9 @@ let randomCreate count (generator:GeneratorFunction<'s, 'a>) =
             s0 <- s'
          result, s0
 
-let randomInit count (initializer:int -> GeneratorFunction<'s, 'a>) =
-   if count < 0
-   then
-      ArgumentOutOfRangeException ("count", "`count' must not be negative.") |> raise
+let randomInit count (initializer:int -> GeneratorFunction<_, _>) =
+   if count < 0 then
+      outOfRange "count" "`count' must not be negative."
    else
       fun s0 ->
          let result = Array.zeroCreate count
@@ -35,17 +33,6 @@ let randomInit count (initializer:int -> GeneratorFunction<'s, 'a>) =
             result.[index] <- r
             s0 <- s'
          result, s0
-
-let shuffle array =
-   fun s0 ->
-      let copiedArray = Array.copy array
-      let mutable s0 = s0
-      for index = Array.length copiedArray - 1 downto 1 do
-         let u, s' = ``[0, 1)`` s0
-         s0 <- s'
-         let randomIndex = int <| u * float (index + 1)
-         swap index randomIndex copiedArray
-      copiedArray, s0
 
 let shuffleInPlace array =
    fun s0 ->
@@ -57,11 +44,16 @@ let shuffleInPlace array =
          swap index randomIndex array
       (), s0
 
+let shuffle array =
+   fun s0 ->
+      let copiedArray = Array.copy array
+      let _, s' = shuffleInPlace copiedArray s0
+      copiedArray, s'
+
 let sample n source =
    let size = Array.length source
-   if n < 0 || size < n
-   then
-      ArgumentOutOfRangeException ("n", "`n' must be between 0 and the number of elements in `source`.") |> raise
+   if n < 0 || size < n then
+      outOfRange "n" "`n' must be between 0 and the number of elements in `source`."
    else
       fun s0 ->
          let result = Array.zeroCreate n
@@ -79,11 +71,9 @@ let sample n source =
 
 let weightedSample n weight source =
    let size = Array.length source
-   if n < 0 || size < n
-   then
-      ArgumentOutOfRangeException ("n", "`n' must be between 0 and the number of elements in `source`.") |> raise
-   elif Array.length weight <> size
-   then
+   if n < 0 || size < n then
+      outOfRange "n" "`n' must be between 0 and the number of elements in `source`."
+   elif Array.length weight <> size then
       invalidArg "weight" "`weight' must have the same length of `source'."
    else
       // Efraimidis and Spirakis (2006) Weighted random sampling with a reservoir (DOI: 10.1016/j.ipl.2005.11.003)
@@ -102,8 +92,7 @@ let weightedSample n weight source =
             while !index < size && !weightSum < x do
                weightSum := !weightSum + weight.[!index]
                incr index
-            if !weightSum >= x
-            then
+            if !weightSum >= x then
                let index = !index - 1
                let w = weight.[index]
                let! u = ``[0, 1)``
@@ -114,9 +103,8 @@ let weightedSample n weight source =
       }
 
 let sampleWithReplacement n source =
-   if n < 0
-   then
-      ArgumentOutOfRangeException ("n", "`n' must not be negative.") |> raise
+   if n < 0 then
+      outOfRange "n" "`n' must not be negative."
    else
       fun s0 ->
          let result = Array.zeroCreate n
@@ -130,11 +118,9 @@ let sampleWithReplacement n source =
 
 let weightedSampleWithReplacement n weight source =
    let size = Array.length source
-   if n < 0
-   then
-      ArgumentOutOfRangeException ("n", "`n' must not be negative.") |> raise
-   elif Array.length weight <> size
-   then
+   if n < 0 then
+      outOfRange "n" "`n' must not be negative."
+   elif Array.length weight <> size then
       invalidArg "weight" "`weight' must have the same length of `source'."
    else
       fun s0 ->

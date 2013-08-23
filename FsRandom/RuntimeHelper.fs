@@ -1,7 +1,11 @@
 ﻿[<AutoOpen>]
 module internal FsRandom.RuntimeHelper
 
+open System
 open Microsoft.FSharp.Core.LanguagePrimitives
+
+let inline outOfRange (paramName:string) (message:string) =
+   ArgumentOutOfRangeException (paramName, message) |> raise
 
 let inline isNaN (value : ^a when ^a : (static member IsNaN : ^a -> bool)) =
    (^a : (static member IsNaN : ^a -> bool) value)
@@ -9,11 +13,10 @@ let inline isNaN (value : ^a when ^a : (static member IsNaN : ^a -> bool)) =
 let inline isInfinity (value : ^a when ^a : (static member IsInfinity : ^a -> bool)) =
    (^a : (static member IsInfinity : ^a -> bool) value)
 
-let inline isInt (x : 'a) = x % (GenericOne : 'a) = (GenericZero : 'a)
+let inline isInt x = x % GenericOne = GenericZero
 
 let inline ensuresFiniteValue argument argumentName =
-   if isNaN argument || isInfinity argument
-   then
+   if isNaN argument || isInfinity argument then
       invalidArg argumentName (sprintf "`%s' must be a finite number." argumentName) |> raise
 
 let inline to64bit (lower:uint32) (upper:uint32) = (uint64 upper <<< 32) ||| uint64 lower
@@ -25,8 +28,7 @@ module List =
 
 module Array =
    let accumulate accumulation array =
-      if Array.length array = 0
-      then
+      if Array.length array = 0 then
          Array.empty
       else
          let size = Array.length array

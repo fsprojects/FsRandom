@@ -30,19 +30,24 @@ let xorshiftPrng s =
    to64bit lower upper, s
 let xorshift = createRandomBuilder xorshiftPrng
 
-let getRandom (generator:GeneratorFunction<'s, 'a>) =
-   getState |>> (fun s0 -> let r, s' = generator s0 in setState s' &>> returnState r)
-let getRandomBy f (generator:GeneratorFunction<'s, 'a>) =
-   getState |>> (fun s0 -> let r, s' = generator s0 in setState s' &>> returnState (f r))
+let inline getRandom (generator:GeneratorFunction<_, _>) =
+   fun s0 -> generator s0
+let inline getRandomBy f (generator:GeneratorFunction<_, _>) =
+   fun s0 -> let r, s' = generator s0 in f r, s'
+let inline getRandomBy2 f (g1:GeneratorFunction<_, _>) (g2:GeneratorFunction<_, _>) =
+   fun s0 ->
+      let r1, s1 = g1 s0
+      let r2, s2 = g2 s1
+      f r1 r2, s2
 
-let rawBits ((f, s0) : PrngState<'s>) = let r, s' = f s0 in r, (f, s')
+let rawBits ((f, s0) : PrngState<_>) = let r, s' = f s0 in r, (f, s')
 [<Literal>]
 let ``1 / 2^52`` = 2.22044604925031308084726333618e-16
 [<Literal>]
 let ``1 / 2^53`` = 1.11022302462515654042363166809e-16
 [<Literal>]
 let ``1 / (2^53 - 1)`` = 1.1102230246251566636831481e-16
-let ``(0, 1)`` ((f, s0) : PrngState<'s>) = let r, s' = f s0 in (float (r >>> 12) + 0.5) * ``1 / 2^52``, (f, s')
-let ``[0, 1)`` ((f, s0) : PrngState<'s>) = let r, s' = f s0 in float (r >>> 11) * ``1 / 2^53``, (f, s')
-let ``(0, 1]`` ((f, s0) : PrngState<'s>) = let r, s' = f s0 in (float (r >>> 12) + 1.0) * ``1 / 2^52``, (f, s')
-let ``[0, 1]`` ((f, s0) : PrngState<'s>) = let r, s' = f s0 in float (r >>> 11) * ``1 / (2^53 - 1)``, (f, s')
+let ``(0, 1)`` ((f, s0) : PrngState<_>) = let r, s' = f s0 in (float (r >>> 12) + 0.5) * ``1 / 2^52``, (f, s')
+let ``[0, 1)`` ((f, s0) : PrngState<_>) = let r, s' = f s0 in float (r >>> 11) * ``1 / 2^53``, (f, s')
+let ``(0, 1]`` ((f, s0) : PrngState<_>) = let r, s' = f s0 in (float (r >>> 12) + 1.0) * ``1 / 2^52``, (f, s')
+let ``[0, 1]`` ((f, s0) : PrngState<_>) = let r, s' = f s0 in float (r >>> 11) * ``1 / (2^53 - 1)``, (f, s')

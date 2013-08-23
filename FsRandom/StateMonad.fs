@@ -18,8 +18,7 @@ type StateBuilder () =
    member this.Zero () = fun x -> (), x
    member this.Delay (f) = returnState () |>> f
    member this.While (condition, m) =
-      if condition ()
-      then
+      if condition () then
          m |>> (fun () -> this.While (condition, m))
       else
          this.Zero ()

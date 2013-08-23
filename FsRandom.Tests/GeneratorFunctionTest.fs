@@ -366,6 +366,7 @@ let ``Validates Array.shuffle`` () =
    let array = Array.init 8 id
    let result, next = builder { return! Array.shuffle array } <| seed
    Assert.That (next, Is.Not.EqualTo(seed))
+   Assert.That (Object.ReferenceEquals (result, array), Is.False)
    Assert.That (Array.length result, Is.EqualTo(Array.length array))
    Assert.That (Array.zip array result |> Array.forall (fun (x, y) -> x = y), Is.False)
    Assert.That (Array.sort result, Is.EquivalentTo(array))

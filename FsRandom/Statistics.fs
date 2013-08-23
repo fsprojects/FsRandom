@@ -6,74 +6,58 @@ open FsRandom.StateMonad
 let uniform (min, max) =
    ensuresFiniteValue min "min"
    ensuresFiniteValue max "max"
-   if min > max
-   then
-      ArgumentOutOfRangeException ("min", "Invalid range.") |> raise
+   if min > max then
+      outOfRange "min" "Invalid range."
    else
-      if isInfinity (max - min)
-      then
+      if isInfinity (max - min) then
+         let middle = (min + max) / 2.0
+         let halfLength = middle - min
          fun s0 ->
-            let middle = (min + max) / 2.0
-            let halfLength = middle - min
             let u, s' = ``[0, 1]`` s0
-            if u < 0.5
-            then
+            if u < 0.5 then
                min + 2.0 * u * halfLength, s'
             else
                middle + (2.0 * u - 1.0) * halfLength, s'
       else
-         fun s0 ->
-            let length = max - min
-            let u, s' = ``[0, 1]`` s0
-            min + u * length, s'
+         let length = max - min
+         let transform u =  min + u * length
+         getRandomBy transform ``[0, 1]``
 
 let loguniform (min, max) =
    ensuresFiniteValue min "min"
    ensuresFiniteValue max "max"
-   if min <= 0.0 || min > max
-   then
-      ArgumentOutOfRangeException ("min", "Invalid range.") |> raise
+   if min <= 0.0 || min > max then
+      outOfRange "min" "Invalid range."
    else
-      fun s0 ->
-         let u, s' = uniform (log min, log max) s0
-         exp u, s'
+      getRandomBy exp (uniform (log min, log max))
 
 let triangular (min, max, mode) =
    ensuresFiniteValue min "min"
    ensuresFiniteValue max "max"
    ensuresFiniteValue mode "mode"
-   if mode < min || max < mode
-   then
-      ArgumentOutOfRangeException ("mode", "Invalid range.") |> raise
+   if mode < min || max < mode then
+      outOfRange "mode" "Invalid range."
    else
-      fun s0 ->
-         let u, s' = uniform (min, max) s0
-         if u < mode
-         then
-            min + sqrt ((u - min) * (mode - min)), s'
-         else
-            max - sqrt ((max - u) * (max - mode)), s'
+      let left u = min + sqrt ((u - min) * (mode - min))
+      let right u = max - sqrt ((max - u) * (max - mode))
+      let transform u = if u < mode then left u else right u
+      getRandomBy transform (uniform (min, max))
 
 // Box-Muller's transformation.
 let normal (mean, sd) =
    ensuresFiniteValue mean "mean"
    ensuresFiniteValue sd "sd"
-   if sd <= 0.0
-   then
-      ArgumentOutOfRangeException ("sd", "`sd' must be positive.") |> raise
+   if sd <= 0.0 then
+      outOfRange "sd" "`sd' must be positive."
    else
-      fun s0 ->
-         let u1, s1 = ``(0, 1)`` s0
-         let u2, s' = ``(0, 1)`` s1
+      let transform u1 u2 =
          let r = sqrt <| -2.0 * log u1
          let theta = ``2pi`` * u2
          let z = r * cos theta
-         mean + z * sd, s'
+         mean + z * sd
+      getRandomBy2 transform ``(0, 1)`` ``(0, 1)``
 
-let lognormal (mu, sigma) =
-   fun s0 ->
-      let z, s' = normal (mu, sigma) s0
-      exp z, s'
+let lognormal p = getRandomBy exp (normal p)
       
 // random number distributed gamma for alpha < 1 (Best 1983).
 let gammaSmall alpha s0 =
@@ -88,18 +72,15 @@ let gammaSmall alpha s0 =
       let u2, s' = ``(0, 1)`` s1
       state <- s'
       let v = c2 * u1
-      if v <= 1.0
-      then
+      if v <= 1.0 then
          let x = c1 * v ** c3
-         if u2 <= (2.0 - x) / (2.0 + x) || u2 <= exp (-x)
-         then
+         if u2 <= (2.0 - x) / (2.0 + x) || u2 <= exp (-x) then
             result <- x
             incomplete := false
       else
          let x = -log (c1 * c3 * (c2 - v));
          let y = x / c1;
-         if u2 * (alpha + y - alpha * y) <= 1.0 || u2 <= y ** (alpha - 1.0)
-         then
+         if u2 * (alpha + y - alpha * y) <= 1.0 || u2 <= y ** (alpha - 1.0) then
             result <- x
             incomplete := false
    result, state
@@ -115,13 +96,11 @@ let gammaLarge alpha s0 =
       let z, s' = normal (0.0, 1.0) state
       state <- s'
       let t = 1.0 + c2 * z;
-      if t > 0.0
-      then
+      if t > 0.0 then
          let v = pown t 3;
          let u, s' = ``(0, 1)`` state
          state <- s'
-         if u < 1.0 - 0.0331 * pown z 4 || log u < 0.5 * z * z + c1 * (1.0 - v + log v)
-         then
+         if u < 1.0 - 0.0331 * pown z 4 || log u < 0.5 * z * z + c1 * (1.0 - v + log v) then
             result <- c1 * v
             incomplete := false
    result, state
@@ -138,138 +117,104 @@ let gammaInt alpha s0 =
 let gamma (shape, scale) =
    ensuresFiniteValue shape "shape"
    ensuresFiniteValue scale "scale"
-   if shape <= 0.0
-   then
-      ArgumentOutOfRangeException ("shape", "`scale' must be positive.") |> raise
-   elif scale <= 0.0
-   then
-      ArgumentOutOfRangeException ("scale", "`scale' must be positive.") |> raise
+   if shape <= 0.0 then
+      outOfRange "shape" "`scale' must be positive."
+   elif scale <= 0.0 then
+      outOfRange "scale" "`scale' must be positive."
    else
-      if isInt shape
-      then
-         fun s0 ->
-            let r, s' = gammaInt (int shape) s0
-            in scale * r, s'
-      elif shape < 1.0
-      then
-         fun s0 ->
-            let r, s' = gammaSmall shape s0
-            in scale * r, s'
+      let get = getRandomBy ((*) scale)
+      if isInt shape then
+         get (gammaInt (int shape))
+      elif shape < 1.0 then
+         get (gammaSmall shape)
       else
-         fun s0 ->
-            let r, s' = gammaLarge shape s0
-            in scale * r, s'
+         get (gammaLarge shape)
 
 let beta (alpha, beta) =
    ensuresFiniteValue alpha "alpha"
    ensuresFiniteValue beta "beta"
-   if alpha <= 0.0
-   then
-      ArgumentOutOfRangeException ("alpha", "`alpha' must be positive.") |> raise
-   elif beta <= 0.0
-   then
-      ArgumentOutOfRangeException ("beta", "`beta' must be positive.") |> raise
+   if alpha <= 0.0 then
+      outOfRange "alpha" "`alpha' must be positive."
+   elif beta <= 0.0 then
+      outOfRange "beta" "`beta' must be positive."
    else
-      fun s0 ->
-         let y1, s1 = gamma (alpha, 1.0) s0
-         let y2, s' = gamma (beta, 1.0) s1
-         y1 / (y1 + y2), s'
+      let transform y1 y2 = y1 / (y1 + y2)
+      getRandomBy2 transform (gamma (alpha, 1.0)) (gamma (beta, 1.0))
 
 let exponential rate =
    ensuresFiniteValue rate "rate"
-   if rate <= 0.0
-   then
-      ArgumentOutOfRangeException ("rate", "`rate' must be positive.") |> raise
+   if rate <= 0.0 then
+      outOfRange "rate" "`rate' must be positive."
    else
-      fun s0 ->
-         let u, s' = ``(0, 1)`` s0
-         in -log u / rate, s'
+      let transform u = -log u / rate
+      getRandomBy transform ``(0, 1)``
 
 let weibull (shape, scale) =
    ensuresFiniteValue shape "shape"
    ensuresFiniteValue scale "scale"
    if shape <= 0.0 then
-      ArgumentOutOfRangeException ("shape", "`shape' must be positive.") |> raise
+      outOfRange "shape" "`shape' must be positive."
    elif scale <= 0.0 then
-      ArgumentOutOfRangeException ("scale", "`scale' must be positive.") |> raise
+      outOfRange "scale" "`scale' must be positive."
    else
-      fun s0 ->
-         let u, s' = ``(0, 1)`` s0
-         let r = (-log u) ** (1.0 / shape)
-         r * scale, s'
+      let transform u = let r = (-log u) ** (1.0 / shape) in r * scale
+      getRandomBy transform ``(0, 1)``
 
 let gumbel (location, scale) =
    ensuresFiniteValue location "location"
    ensuresFiniteValue scale "scale"
    if scale <= 0.0 then
-      ArgumentOutOfRangeException ("scale", "`scale' must be positive.") |> raise
+      outOfRange "scale" "`scale' must be positive."
    else
-      fun s0 ->
-         let u, s' = ``(0, 1)`` s0
-         location - scale * log (-log u), s'
+      let transform u = location - scale * log (-log u)
+      getRandomBy transform ``(0, 1)``
 
 let cauchy (location, scale) =
    ensuresFiniteValue location "location"
    ensuresFiniteValue scale "scale"
-   if scale <= 0.0
-   then
-      ArgumentOutOfRangeException ("scale", "`scale' must be positive.") |> raise
+   if scale <= 0.0 then
+      outOfRange "scale" "`scale' must be positive."
    else
-      fun s0 ->
-         let u, s' = ``(0, 1)`` s0
-         location + scale * tan (pi * (u - 0.5)), s'
+      let transform u = location + scale * tan (pi * (u - 0.5))
+      getRandomBy transform ``(0, 1)``
 
 let chisquare df =
-   if df <= 0
-   then
-      ArgumentOutOfRangeException ("degreeOfFreedom", "`degreeOfFreedom' must be positive.") |> raise
+   if df <= 0 then
+      outOfRange "degreeOfFreedom" "`degreeOfFreedom' must be positive."
    else
-      if df = 1
-      then
-         fun s0 ->
-            let u, s1 = ``[0, 1)`` s0
-            let y, s' = gamma (1.5, 2.0) s1
-            in 2.0 * y * u * u, s'
+      if df = 1 then
+         let transform u y = 2.0 * y * u * u
+         getRandomBy2 transform ``[0, 1)`` (gamma (1.5, 2.0))
       else
          gamma (float df / 2.0, 2.0)
 
 let t df =
-   if df <= 0
-   then
-      ArgumentOutOfRangeException ("degreeOfFreedom", "`degreeOfFreedom' must be positive.") |> raise
+   if df <= 0 then
+      outOfRange "degreeOfFreedom" "`degreeOfFreedom' must be positive."
    else
-      if df = 1
-      then
+      if df = 1 then
          cauchy (0.0, 1.0)
-      elif df = 2
-      then
-         fun s0 ->
-            let z, s1 = normal (0.0, 1.0) s0
-            let w, s' = exponential 1.0 s1
-            z / sqrt w, s'
+      elif df = 2 then
+         let transform z w = z / sqrt w
+         getRandomBy2 transform (normal (0.0, 1.0)) (exponential 1.0)
       else
-         fun s0 ->
-            let r = float df / 2.0
-            let d = sqrt r
-            let z, s1 = normal (0.0, 1.0) s0
-            let w, s' = gamma (r, 1.0) s1
-            d * z / sqrt w, s'
+         let r = float df / 2.0
+         let d = sqrt r
+         let transform z w = d * z / sqrt w
+         getRandomBy2 transform (normal (0.0, 1.0)) (gamma (r, 1.0))
 
 let uniformDiscrete (min, max) =
-   if min > max
-   then
-      ArgumentOutOfRangeException ("min", "Invalid range.") |> raise
+   if min > max then
+      outOfRange "min" "Invalid range."
    else
-      fun s0 ->
-         let u, s' = ``[0, 1)`` s0
-         let range = int64 max - int64 min + 1L
-         min + int (u * float range), s'
+      let range = float <| int64 max - int64 min + 1L
+      let transform u = min + int (u * range)
+      getRandomBy transform ``[0, 1)``
 
 let poisson lambda =
    ensuresFiniteValue lambda "lambda"
-   if lambda <= 0.0
-   then
-      ArgumentOutOfRangeException ("lambda", "`lambda' must be positive.") |> raise
+   if lambda <= 0.0 then
+      outOfRange "lambda" "`lambda' must be positive."
    else
       let c = 1.0 / lambda
       let m = int lambda
@@ -302,32 +247,27 @@ let poisson lambda =
 
 let geometric probability =
    ensuresFiniteValue probability "probability"
-   if probability <= 0.0 || 1.0 < probability
-   then
-      ArgumentOutOfRangeException ("probability", "`probability' must be in the range of (0, 1].") |> raise
+   if probability <= 0.0 || 1.0 < probability then
+      outOfRange "probability" "`probability' must be in the range of (0, 1]."
    else
-      fun s0 ->
-         let u, s' = ``(0, 1)`` s0
-         in -u / log (1.0 - probability) |> ceil |> int, s'
+      let z = log (1.0 - probability)
+      let transform u = int <| ceil (-u / z)
+      getRandomBy transform ``(0, 1)``
 
 let bernoulli probability =
    ensuresFiniteValue probability "probability"
-   if probability <= 0.0 || 1.0 <= probability
-   then
-      ArgumentOutOfRangeException ("probability", "`probability' must be in the range of (0, 1).") |> raise
+   if probability <= 0.0 || 1.0 <= probability then
+      outOfRange "probability" "`probability' must be in the range of (0, 1)."
    else
-      fun s0 ->
-         let u, s' = ``[0, 1]`` s0
-         (if u <= probability then 1 else 0), s'
+      let transform u = if u <= probability then 1 else 0
+      getRandomBy transform ``[0, 1]``
 
 let binomial (n, probability) =
    ensuresFiniteValue probability "probability"
-   if n <= 0
-   then
-      ArgumentOutOfRangeException ("n", "`n' must be positive.") |> raise
-   elif probability <= 0.0 || 1.0 <= probability
-   then
-      ArgumentOutOfRangeException ("probability", "`probability' must be in the range of (0, 1).") |> raise
+   if n <= 0 then
+      outOfRange "n" "`n' must be positive."
+   elif probability <= 0.0 || 1.0 <= probability then
+      outOfRange "probability" "`probability' must be in the range of (0, 1)."
    else
       fun s0 ->
          let count = ref 0
@@ -340,31 +280,26 @@ let binomial (n, probability) =
 
 let dirichlet alpha =
    let k = List.length alpha
-   if k < 2
-   then
+   if k < 2 then
       invalidArg "alpha" "`alpha' must contain two or more values."
-   elif List.exists (fun x -> isNaN x || isInfinity x || x <= 0.0) alpha
-   then
-      ArgumentOutOfRangeException ("alpha", "All elements in `alpha' must be positive.") |> raise
+   elif List.exists (fun x -> isNaN x || isInfinity x || x <= 0.0) alpha then
+      outOfRange "alpha" "All elements in `alpha' must be positive."
    else
       fun s0 ->
          let y, sum, s' = List.foldBack (fun a (xs, sum, s) -> let x, s' = gamma (a, 1.0) s in x :: xs, sum + x, s') alpha ([], 0.0, s0)
          List.map (fun y' -> y' / sum) y, s'
 
 let multinomial (n, weight) =
-   if n <= 0
-   then
-      ArgumentOutOfRangeException ("n", "`n' must be positive.") |> raise
+   if n <= 0 then
+      outOfRange "n" "`n' must be positive."
    let k = List.length weight
-   if k < 2
-   then
+   if k < 2 then
       invalidArg "weight" "`weight' must contain two or more values."
-   elif List.exists (fun x -> isNaN x || isInfinity x || x <= 0.0) weight
-   then
-      ArgumentOutOfRangeException ("probability", "All elements in `weight' must be positive.") |> raise
+   elif List.exists (fun x -> isNaN x || isInfinity x || x <= 0.0) weight then
+      outOfRange "probability" "All elements in `weight' must be positive."
    else
+      let cdf, sum = List.fold (fun (xs, sum) x -> let s = sum + x in xs @ [s], s) ([], 0.0) weight
       fun s0 ->
-         let cdf, sum = List.fold (fun (xs, sum) x -> let s = sum + x in xs @ [s], s) ([], 0.0) weight
          let result = Array.zeroCreate k
          let mutable s = s0
          for loop = 1 to n do
@@ -376,7 +311,7 @@ let multinomial (n, weight) =
          Array.toList result, s
          
 module Seq =
-   let markovChain (generator:'a -> GeneratorFunction<'s, 'a>) (builder:RandomBuilder<'s>) =
+   let markovChain (generator:'a -> GeneratorFunction<_, _>) (builder:RandomBuilder<_>) =
       let rec loop seed previous = seq {
          let r, next = builder { return! generator previous } <| seed
          yield r

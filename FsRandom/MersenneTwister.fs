@@ -30,19 +30,16 @@ type StateVector (index : int, vector : uint64 []) =
          vector.[i] <- (vector.[i] ^^^ ((vector.[i - 1] ^^^ (vector.[i - 1] >>> 62)) * 3935559000370003845uL)) + seed.[j] + uint64 j
          i <- i + 1
          j <- j + 1
-         if i >= N
-         then
+         if i >= N then
             vector.[0] <- vector.[N - 1]
             i <- 1
-         if j >= seed.Length
-         then
+         if j >= seed.Length then
             j <- 0
          ()
       for k = N - 1 downto 1 do
          vector.[i] <- (vector.[i] ^^^ ((vector.[i - 1] ^^^ (vector.[i - 1] >>> 62)) * 2862933555777941757uL)) - uint64 i
          i <- i + 1
-         if i >= N
-         then
+         if i >= N then
             vector.[0] <- vector.[N - 1]
             i <- 1
       vector.[0] <- 1uL <<< 63
