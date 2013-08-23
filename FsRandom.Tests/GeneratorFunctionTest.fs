@@ -300,6 +300,16 @@ let ``Validates flipCoin`` () =
    testFlipCoin (getDefaultTester ()) (0.2)
 
 [<Test>]
+let ``Validates choose`` () =
+   let n = 4
+   let builder, seed = getDefaultTester ()
+   let result, next = builder { return! Utility.choose 10 n } <| seed
+   Assert.That (next, Is.Not.EqualTo(seed))
+   Assert.That (List.length result, Is.EqualTo(n))
+   Assert.That (List.forall (fun x -> List.exists ((=) x) [0..9]) result, Is.True)
+   Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(n))
+
+[<Test>]
 let ``Validates Array.sample`` () =
    let array = Array.init 10 id
    let builder, seed = getDefaultTester ()
