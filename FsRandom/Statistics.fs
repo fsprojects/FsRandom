@@ -1,7 +1,6 @@
 ﻿module FsRandom.Statistics
 
 open System
-open FsRandom.StateMonad
 
 let uniform (min, max) =
    ensuresFiniteValue min "min"

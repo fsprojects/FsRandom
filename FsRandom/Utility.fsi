@@ -1,7 +1,5 @@
 ﻿module FsRandom.Utility
 
-open FsRandom.StateMonad
-
 /// <summary>
 /// Returns a random Boolean value with the specified probability.
 /// </summary>

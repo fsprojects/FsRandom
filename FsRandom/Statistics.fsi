@@ -1,7 +1,5 @@
 ﻿module FsRandom.Statistics
 
-open FsRandom.StateMonad
-
 /// <summary>
 /// Returns a random number distributed uniformly in the range of [<paramref name="min" />, <paramref name="max" />].
 /// </summary>

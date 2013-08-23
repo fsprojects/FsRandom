@@ -1,8 +1,6 @@
 ﻿[<RequireQualifiedAccess>]
 module FsRandom.Array
 
-open FsRandom.StateMonad
-
 /// <summary>
 /// Creates an array whose elements are randomly generated. 
 /// </summary>

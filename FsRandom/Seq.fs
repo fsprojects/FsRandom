@@ -1,7 +1,5 @@
 ﻿module FsRandom.Seq
 
-open FsRandom.StateMonad
-
 let ofRandom (generator:GeneratorFunction<_, _>) (builder:RandomBuilder<_>) =
    let f = builder { return! generator }
    let rec loop seed = seq {

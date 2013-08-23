@@ -1,8 +1,6 @@
 ﻿[<RequireQualifiedAccess>]
 module FsRandom.Seq
 
-open FsRandom.StateMonad
-
 /// <summary>
 /// Makes infinite sequence of random numbers.
 /// </summary>

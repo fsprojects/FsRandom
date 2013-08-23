@@ -1,7 +1,6 @@
 ﻿module FsRandom.Array
 
 open System
-open FsRandom.StateMonad
 
 let swap i j (array:'a []) =
    let temp = array.[i]
