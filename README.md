@@ -1,7 +1,7 @@
 FsRandom
 ========
 
-FsRandom (formerly RecycleBin.Random) is a random number generator framework designed for F# language.
+FsRandom (formerly RecycleBin.Random) is a (purely-functional) random number generator framework designed for F# language.
 It helps you to obtain a variety of random numbers to use more than ten predefined generators,
 and to define a new function to generate random numbers you want.
 
@@ -44,34 +44,30 @@ How to Use
 ### First random number
 
 Let's try to get a first random number `z` ~ N(0, 1).
-
-We need to define an initial random seed first.
-It is a tuple composed of four 32-bit unsigned integers (`uint32`)
-because we're going to use xorshift algorithm to generate random numbers here.
-
-```fsharp
-let initialSeed = 123456789u, 362436069u, 521288629u, 88675123u
-```
-
-Because we want a random number `z` ~ N(0, 1),
-we should use `normal` random number generator in the Statistics module with parameters `(0.0, 1.0)`.
+It is easy to do with `normal` random number generator in the Statistics module.
+To give the specific parameter, say the mean of 0 and the variance of 1, do:
 
 ```fsharp
 let generator = Statistics.normal (0.0, 1.0)
 ```
 
-Then, we can use the generator and get the result.
+The generator function is only able to use with a pseudo-random number generator (PRNG).
+The PRNG constructs a computation expression to generate random numbers.
+The computation expression is a function which takes a random seed and returns a random number and a new seed for the next call.
+It is important to keep the new state because it is used when we generate a new random number.
+
+Here for example, we choose xorshift PRNG, which is implemented in FsRandom.
+We need to define an initial random seed first for xorshift algorithm
+(of course, another algorithm is available rather than xorshift, as described later).
+It is a tuple composed of four 32-bit unsigned integers (`uint32`).
 
 ```fsharp
+let initialSeed = 123456789u, 362436069u, 521288629u, 88675123u
 let z, nextSeed = xorshift { return! generator } <| initialSeed
 printfn "%f" z
 ```
 
-The random number generating computation expression (`xorshift` here) takes a random seed
-and returns a tuple with a random number that we request (~ N(0, 1) here) and a new state after the generation of the random number.
-It is important to keep the new state because it is used when we generate a new random number.
-
-So we should use `nextSeed` to generate a new random number ~ N(0, 1) as the following.
+We should use `nextSeed` to generate a new random number ~ N(0, 1) as the following.
 
 ```fsharp
 let z2, _ = xorshift { return! generator } <| nextSeed
