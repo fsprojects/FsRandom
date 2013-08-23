@@ -31,7 +31,7 @@ let ``Checks first 2,000 output`` () =
       mersenne {
          let raws = Array.zeroCreate 1000
          for index = 0 to Array.length raws - 1 do
-            let! u = raw
+            let! u = rawBits
             raws.[index] <- (sprintf "%20u" u).Trim ()
          let standards = Array.zeroCreate 1000
          for index = 0 to Array.length standards - 1 do

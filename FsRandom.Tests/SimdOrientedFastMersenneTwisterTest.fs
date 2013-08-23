@@ -33,7 +33,7 @@ let test parameter resource =
          sfmt {
             let raws = Array.zeroCreate 1000
             for index = 0 to Array.length raws / 2 - 1 do
-               let! u = raw
+               let! u = rawBits
                raws.[2 * index] <- (sprintf "%10u" (uint32 (u &&& 0xFFFFFFFFFFFFFFFFuL))).Trim ()
                raws.[2 * index + 1] <- (sprintf "%10u" (uint32 ((u >>> 32) &&& 0xFFFFFFFFFFFFFFFFuL))).Trim ()
             return raws
@@ -45,7 +45,7 @@ let test parameter resource =
          sfmt {
             let raws = Array.zeroCreate 1000
             for index = 0 to Array.length raws / 2 - 1 do
-               let! u = raw
+               let! u = rawBits
                raws.[2 * index] <- (sprintf "%10u" (uint32 (u &&& 0xFFFFFFFFFFFFFFFFuL))).Trim ()
                raws.[2 * index + 1] <- (sprintf "%10u" (uint32 ((u >>> 32) &&& 0xFFFFFFFFFFFFFFFFuL))).Trim ()
             return raws
