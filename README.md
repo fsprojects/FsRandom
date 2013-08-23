@@ -120,12 +120,11 @@ and it illustrates how we can generate a number of random numbers.
 
 ```fsharp
 let generator = xorshift { return! Statistics.bernoulli 0.5 }
-let rec binaries initialSeed =
-   seq {
-      let binary, nextSeed = generator initialSeed
-      yield binary
-      yield! binaries nextSeed  // recursively generating binaries.
-   }
+let rec binaries initialSeed = seq {
+   let binary, nextSeed = generator initialSeed
+   yield binary
+   yield! binaries nextSeed  // recursively generating binaries.
+}
 ```
 
 Or, more precisely like the following:
@@ -199,10 +198,10 @@ let u, nextSeed = generator seed
 
 This section explains how to construct generator functions such like `normal` and `uniform`.
 
-Random number generator functions are just required to return (`PrngState<'s> -> 'a * PrngState<'s>`)
+The type of generator function is `GeneratorFunction<'s, 'a>`,
 where `'s` is a type of random seed and `'a` is a type of random number.
-`PrngState<'s>` is defined as `Prng<'s> * 's` and `Prng<'s>` is `'s -> uint64 * 's`.
-The type looks too complex, but implementation is not difficult as you see soon.
+`'s` should be generic whenever we define new generator functions,
+since it is determined by random number generators.
 
 As an example of user-defined generator function,
 let's construct a random number generator to produce an *approximate*
@@ -242,17 +241,18 @@ let randomPointGenerator = random {
    let! y = Statistics.uniform (-1.0, 1.0)
    return (x, y)
 }
-// Function to generate a sequence
-let randomPoints = Seq.ofRandom randomPointGenerator
 // Weight of a point
 // If the distance from (0, 0) is equal to or less than 1 (in the unit circle),
 // the weight is 4 (because random points are distributed on [-1, 1] x [-1, 1]).
 let weight (x, y) = if x * x + y * y <= 1.0 then 4.0 else 0.0
+// Function to generate a sequence
+let values = Seq.ofRandom (getRandomBy weight randomPointGenerator)
 
-// Generates 1,000,000 random points and estimates pi
-randomPoints xorshift (123456789u, 362436069u, 521288629u, 88675123u)
+// Monte Carlo integration
+// Generates 1,000,000 random values and the average becomes estimator of pi
+values xorshift (123456789u, 362436069u, 521288629u, 88675123u)
 |> Seq.take 1000000
-|> Seq.averageBy weight
+|> Seq.average
 |> printfn "%f"
 ```
 
