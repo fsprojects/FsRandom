@@ -184,10 +184,10 @@ let linear (a, c) = createRandomBuilder (linearPrng (a, c))
 Hereafter we can use the `linear` builder to generate random numbers.
 
 ```fsharp
-let seed = uint64 Environment.TickCount
+let seed = uint64 System.Environment.TickCount
 let myLinear = linear (6364136223846793005uL, 1442695040888963407uL)  // from Wikipedia
 let generator = myLinear { return! Statistics.gamma (3.0, 1.0) }
-let u, nextSeed = generator seed
+let y, nextSeed = generator seed
 ```
 
 #### Generator function
@@ -220,7 +220,7 @@ The `approximatelyStandardNormal` can be used in the generating process as the f
 ```fsharp
 let generator = xorshift { return! approximatelyStandardNormal }
 let z = fst <| generator seed
-printnf "%f" z
+printfn "%f" z
 ```
 
 Don't forget that FsRandom has a normal random number generator `normal`.

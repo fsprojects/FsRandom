@@ -21,6 +21,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{F2FD43BB
 		FsRandom.nuspec = FsRandom.nuspec
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{F9F25ACF-679E-48B4-82C6-7200C9245320}"
+	ProjectSection(SolutionItems) = preProject
+		examples\FirstRandomNumber.fsx = examples\FirstRandomNumber.fsx
+		examples\GeneratorFunction.fsx = examples\GeneratorFunction.fsx
+		examples\GibbsSampler.fsx = examples\GibbsSampler.fsx
+		examples\MonteCarlo.fsx = examples\MonteCarlo.fsx
+		examples\PRNG.fsx = examples\PRNG.fsx
+		examples\Sequence.fsx = examples\Sequence.fsx
+		examples\SystemRandom.fsx = examples\SystemRandom.fsx
+		examples\Transform.fsx = examples\Transform.fsx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
