@@ -1,6 +1,12 @@
 FsRandom ChangeLog
 ==================
 
+Version 1.0.2
+-------------
+
+* Add GeneratorFunction type abbreviation.
+* Add choose function (#34).
+
 Version 1.0.1
 -------------
 
