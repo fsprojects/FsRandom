@@ -48,9 +48,10 @@ It is easy to do with `normal` random number generator in the Statistics module.
 To give the specific parameter, say the mean of 0 and the variance of 1, do:
 
 ```fsharp
-let generator = Statistics.normal (0.0, 1.0)
+let generator<'s> : GeneratorFunction<'s, _> = Statistics.normal (0.0, 1.0)
 ```
 
+`'s` is a random state type described below.
 The generator function is only able to use with a pseudo-random number generator (PRNG).
 The PRNG constructs a computation expression to generate random numbers.
 The computation expression is a function which takes a random seed and returns a random number and a new seed for the next call.
@@ -168,7 +169,7 @@ First, we make a function of `Prng`.
 
 ```fsharp
 // linearPrng : uint64 * uint64 -> uint64 -> uint64 * uint64
-let linearPrng (a, c) x = x, a * x + c
+let linearPrng (a, c) (x:uint64) = x, a * x + c
 ```
 
 The first returned value is a random number and the second returned value is a next state.
@@ -209,7 +210,7 @@ Therefore, if we subtract 6 from the sum of 12 standard random numbers, the resu
 approximates a standard normal random number.
 
 ```fsharp
-let approximatelyStandardNormal = random {
+let approximatelyStandardNormal<'s> : GeneratorFunction<'s, _> = random {
    let! values = Array.randomCreate 12 ``(0, 1)``  // ``(0, 1)`` is a standard random number generator in (0, 1)
    return Array.sum values - 6.0
 }
@@ -219,7 +220,7 @@ The `approximatelyStandardNormal` can be used in the generating process as the f
 
 ```fsharp
 let generator = xorshift { return! approximatelyStandardNormal }
-let z = fst <| generator seed
+let z = fst <| generator initialSeed
 printfn "%f" z
 ```
 
