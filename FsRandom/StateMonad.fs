@@ -16,7 +16,7 @@ type StateBuilder () =
    member this.Return (x) = returnState x
    member this.ReturnFrom (m : State<'s, 'a>) = m
    member this.Zero () = fun x -> (), x
-   member this.Delay (f:unit -> State<_, _>) = f ()
+   member this.Delay (f) = returnState () |>> f
    member this.While (condition, m) =
       if condition () then
          m |>> (fun () -> this.While (condition, m))
