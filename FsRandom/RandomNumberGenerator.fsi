@@ -15,34 +15,16 @@ type PrngState<'s> = Prng<'s> * 's
 type GeneratorFunction<'s, 'a> = State<PrngState<'s>, 'a>
 
 /// <summary>
+/// Constructs a random state.
+/// </summary>
+/// <param name="prng">The PRNG.</param>
+/// <param name="seed">The random seed.</param>
+val createState : prng:Prng<'s> -> seed:'s -> PrngState<'s>
+
+/// <summary>
 /// Constructs a random number function.
 /// </summary>
 val random : StateBuilder
-
-/// <summary>
-/// Random number generator using user-specified random number generator.
-/// </summary>
-type RandomBuilder<'s> =
-   inherit StateBuilder
-   /// <summary>
-   /// Initializes a new instance.
-   /// </summary>
-   new : initial:Prng<'s> -> RandomBuilder<'s>
-   /// <summary>
-   /// Runs the random computation expression.
-   /// </summary>
-   /// <returns>
-   /// A random number function.
-   /// It takes a seed and returns a tuple of a random number and a new seed.
-   /// </returns>
-   member Run : m:GeneratorFunction<'s, 'a> -> State<'s, 'a>
-   
-/// <summary>
-/// Random number generator using user-specified random number generator.
-/// </summary>
-/// <param name="prng">A random number generator.</param>
-/// <param name="seed">A initial state to generate a random sequence.</param>
-val createRandomBuilder : prng:Prng<'s> -> RandomBuilder<'s>
    
 /// <summary>
 /// Random number generator using <see cref="System.Random" />.
@@ -50,31 +32,11 @@ val createRandomBuilder : prng:Prng<'s> -> RandomBuilder<'s>
 /// <remarks>
 /// You will get different result on each call because an instance of <see cref="System.Random" /> has state by itself.
 /// </remarks>
-val systemrandom : RandomBuilder<Random>
-
+val systemrandom : Prng<Random>
 /// <summary>
 /// Random number generator using Xorshift algorithm (Marsaglia 2003).
 /// </summary>
-val xorshift : RandomBuilder<uint32 * uint32 * uint32 * uint32>
-
-/// <summary>
-/// Generates a random number by <paramref name="generator" /> and returns the value.
-/// </summary>
-/// <param name="generator">The random number generator.</param>
-val inline getRandom : generator:GeneratorFunction<'s, 'a> -> GeneratorFunction<'s, 'a>
-/// <summary>
-/// Generates a random number by <paramref name="generator" /> and returns a transformed value by <paramref name="transformation" /> function.
-/// </summary>
-/// <param name="transformation">The function to transform a random value.</param>
-/// <param name="generator">The random number generator.</param>
-val inline getRandomBy : transformation:('a -> 'b) -> generator:GeneratorFunction<'s, 'a> -> GeneratorFunction<'s, 'b>
-/// <summary>
-/// Generates a random number by using two random numbers.
-/// </summary>
-/// <param name="transformation">The function to transform two random values into one.</param>
-/// <param name="generator1">The first random number generator.</param>
-/// <param name="generator2">The second random number generator.</param>
-val inline getRandomBy2 : transformation:('a1 -> 'a2 -> 'b) -> generator1:GeneratorFunction<'s, 'a1> -> generator2:GeneratorFunction<'s, 'a2> -> GeneratorFunction<'s, 'b>
+val xorshift : Prng<uint32 * uint32 * uint32 * uint32>
 
 /// <summary>
 /// Returns a random 64-bit number.

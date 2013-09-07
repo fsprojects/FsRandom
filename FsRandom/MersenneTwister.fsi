@@ -19,4 +19,4 @@ type StateVector =
 /// <summary>
 /// Random number generator using Mersenne Twister algorithm (Matsumoto &amp; Nishimura 1998).
 /// </summary>
-val mersenne : RandomBuilder<StateVector>
+val mersenne : Prng<StateVector>

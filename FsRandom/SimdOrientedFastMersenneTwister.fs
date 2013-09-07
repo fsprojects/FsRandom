@@ -192,8 +192,7 @@ let sfmtImpl (state : StateVector) =
    // Creates a new instance of StateVector, but the parameter and the internal vector
    // refers to the same array to avoid cost of copying.
    r, StateVector(state.Parameter, index + 1, vector)
-let sfmtPrng (s : StateVector) =
+let sfmt (s : StateVector) =
    let lower, s = sfmtImpl s
    let upper, s = sfmtImpl s
    to64bit lower upper, s
-let sfmt = createRandomBuilder sfmtPrng

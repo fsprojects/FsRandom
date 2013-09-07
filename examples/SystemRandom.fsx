@@ -3,5 +3,7 @@
 open FsRandom
 
 let r0 = System.Random ()
-let u, r1 = systemrandom { return! Statistics.gamma (2.0, 1.0) } <| r0
-printfn "%b" (r0 = r1)  // true
+let s = createState systemrandom r0
+
+printfn "%f" <| Random.get ``[0, 1)`` s
+printfn "%f" <| Random.get ``[0, 1)`` s
