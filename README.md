@@ -255,15 +255,17 @@ values xorshift (123456789u, 362436069u, 521288629u, 88675123u)
 
 ### Generating bivariate normal random numbers using Gibbs sampler
 
-To sample from bivariate normal distribution N2([meanX, meanY]^t, [[varX, cov]^t, [cov, varY]^t]) (^t denotes transposition),
+To sample from bivariate normal distribution
+![n2](http://chart.apis.google.com/chart?cht=tx&chl=N_{2}%5cleft%28%5cbegin{bmatrix}%5cmu_{X}%5c%5c%5cmu_{Y}%5cend{bmatrix},%5c,%5cbegin{bmatrix}%5csigma_{X}^{2}%26%5csigma_{XY}%5c%5c%5csigma_{XY}%26%5csigma_{Y}^{2}%5cend{bmatrix}%5cright%29),
 we will construct a Gibbs sample.
 Because the density function f(x, y) is propotional to f(x | y) * f(y) and
-f(x | y) is propotinal to p(meanX + (cov / varY) * (y - meanY), varX - cov^2 / varY)
+f(x | y) is propotinal to
+![p](http://chart.apis.google.com/chart?cht=tx&chl=p%5cleft%28%5cmu_{X}%2b%5cfrac{%5csigma_{XY}}{%5csigma_{Y}^{2}}%28y-%5cmu_{Y}%29,%5c,%5csigma_{X}^{2}-%5cfrac{%5csigma_{XY}^{2}}{%5csigma_{Y}^{2}}%5cright%29)
 where p is a univariate normal density function,
 the Gibbs sampler for bivariate normal distribution consists of iterating as the following:
 
-1. Draw x[t + 1] ~ N(meanX + (cov / varY) * (y[t] - meanY), varX - cov^2 / varY)
-2. Draw y[t + 1] ~ N(meanY + (cov / varX) * (x[t + 1] - meanX), varY - cov^2 / varX)
+1. Draw ![draw_x](http://chart.apis.google.com/chart?cht=tx&chl=x_{t%2b1}%5csim+N%5cleft%28%5cmu_{X}%2b%5cfrac{%5csigma_{XY}}{%5csigma_{Y}^{2}}%28y_{t}-%5cmu_{Y}%29,%5c,%5csigma_{X}^{2}-%5cfrac{%5csigma_{XY}^{2}}{%5csigma_{Y}^{2}}%5cright%29)
+2. Draw ![draw_y](http://chart.apis.google.com/chart?cht=tx&chl=y_{t%2b1}%5csim+N%5cleft%28%5cmu_{Y}%2b%5cfrac{%5csigma_{XY}}{%5csigma_{X}^{2}}%28x_{t%2b1}-%5cmu_{X}%29,%5c,%5csigma_{Y}^{2}-%5cfrac{%5csigma_{XY}^{2}}{%5csigma_{X}^{2}}%5cright%29)
 
 And it can be naturally translated into F# code as the following.
 
