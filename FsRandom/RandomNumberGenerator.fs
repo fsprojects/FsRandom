@@ -4,10 +4,16 @@ open System
 open FsRandom.StateMonad
 
 type Prng<'s> = 's -> uint64 * 's
-type PrngState<'s> = Prng<'s> * 's
-type GeneratorFunction<'s, 'a> = State<PrngState<'s>, 'a>
+type PrngState =
+   abstract Next64Bits : unit -> uint64 * PrngState
+type GeneratorFunction<'a> = State<PrngState, 'a>
 
-let createState (prng:Prng<'s>) (seed:'s) = prng, seed
+let rec createState (prng:Prng<'s>) (seed:'s) = {
+   new PrngState with
+      member __.Next64Bits () =
+         let r, next = prng seed
+         r, createState prng next
+}
 
 let random = state
 
@@ -25,14 +31,14 @@ let xorshift s =
    let upper, s = xor128 s
    to64bit lower upper, s
 
-let rawBits ((f, s0) : PrngState<_>) = let r, s' = f s0 in r, (f, s')
+let rawBits (s:PrngState) = s.Next64Bits ()
 [<Literal>]
 let ``1 / 2^52`` = 2.22044604925031308084726333618e-16
 [<Literal>]
 let ``1 / 2^53`` = 1.11022302462515654042363166809e-16
 [<Literal>]
 let ``1 / (2^53 - 1)`` = 1.1102230246251566636831481e-16
-let ``(0, 1)`` ((f, s0) : PrngState<_>) = let r, s' = f s0 in (float (r >>> 12) + 0.5) * ``1 / 2^52``, (f, s')
-let ``[0, 1)`` ((f, s0) : PrngState<_>) = let r, s' = f s0 in float (r >>> 11) * ``1 / 2^53``, (f, s')
-let ``(0, 1]`` ((f, s0) : PrngState<_>) = let r, s' = f s0 in (float (r >>> 12) + 1.0) * ``1 / 2^52``, (f, s')
-let ``[0, 1]`` ((f, s0) : PrngState<_>) = let r, s' = f s0 in float (r >>> 11) * ``1 / (2^53 - 1)``, (f, s')
+let ``(0, 1)`` (s0:PrngState) = let r, s' = s0.Next64Bits () in (float (r >>> 12) + 0.5) * ``1 / 2^52``, s'
+let ``[0, 1)`` (s0:PrngState) = let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / 2^53``, s'
+let ``(0, 1]`` (s0:PrngState) = let r, s' = s0.Next64Bits () in (float (r >>> 12) + 1.0) * ``1 / 2^52``, s'
+let ``[0, 1]`` (s0:PrngState) = let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / (2^53 - 1)``, s'

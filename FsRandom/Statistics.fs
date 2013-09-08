@@ -310,7 +310,7 @@ let multinomial (n, weight) =
          Array.toList result, s
          
 module Seq =
-   let markovChain (generator:_ -> GeneratorFunction<_, _>) =
+   let markovChain (generator:_ -> GeneratorFunction<_>) =
       let f = uncurry (generator >> Random.next)
       let rec loop current = seq {
          let next = f current

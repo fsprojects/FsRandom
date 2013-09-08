@@ -11,18 +11,19 @@ type Prng<'s> = 's -> uint64 * 's
 /// <summary>
 /// Represents a random state.
 /// </summary>
-type PrngState<'s> = Prng<'s> * 's
+type PrngState =
+   abstract Next64Bits : unit -> uint64 * PrngState
 /// <summary>
 /// Generates random numbers.
 /// </summary>
-type GeneratorFunction<'s, 'a> = State<PrngState<'s>, 'a>
+type GeneratorFunction<'a> = State<PrngState, 'a>
 
 /// <summary>
 /// Constructs a random state.
 /// </summary>
 /// <param name="prng">The PRNG.</param>
 /// <param name="seed">The random seed.</param>
-val createState : prng:Prng<'s> -> seed:'s -> PrngState<'s>
+val createState : prng:Prng<'s> -> seed:'s -> PrngState
 
 /// <summary>
 /// Constructs a random number function.
@@ -44,20 +45,20 @@ val xorshift : Prng<uint32 * uint32 * uint32 * uint32>
 /// <summary>
 /// Returns a random 64-bit number.
 /// </summary>
-val rawBits : GeneratorFunction<'s, uint64>
+val rawBits : GeneratorFunction<uint64>
 /// <summary>
 /// Returns a random number in the range of (0, 1).
 /// </summary>
-val ``(0, 1)`` : GeneratorFunction<'s, float>
+val ``(0, 1)`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of [0, 1).
 /// </summary>
-val ``[0, 1)`` : GeneratorFunction<'s, float>
+val ``[0, 1)`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of (0, 1].
 /// </summary>
-val ``(0, 1]`` : GeneratorFunction<'s, float>
+val ``(0, 1]`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of [0, 1].
 /// </summary>
-val ``[0, 1]`` : GeneratorFunction<'s, float>
+val ``[0, 1]`` : GeneratorFunction<float>
