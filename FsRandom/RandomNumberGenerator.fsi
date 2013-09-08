@@ -8,6 +8,9 @@ open FsRandom.StateMonad
 /// Represents a pseudorandom number generator that supports 64-bit resolution.
 /// </summary>
 type Prng<'s> = 's -> uint64 * 's
+/// <summary>
+/// Represents a random state.
+/// </summary>
 type PrngState<'s> = Prng<'s> * 's
 /// <summary>
 /// Generates random numbers.
