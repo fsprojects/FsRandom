@@ -9,4 +9,4 @@ module FsRandom.Seq
 /// <returns>
 /// A function which takes a seed and returns infinite sequence of random numbers.
 /// </returns>
-val ofRandom : generator:GeneratorFunction<'s, 'a> -> builder:RandomBuilder<'s> -> ('s -> seq<'a>)
+val ofRandom : generator:GeneratorFunction<'s, 'a> -> (PrngState<'s> -> seq<'a>)

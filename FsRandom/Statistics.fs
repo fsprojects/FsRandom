@@ -20,7 +20,7 @@ let uniform (min, max) =
       else
          let length = max - min
          let transform u =  min + u * length
-         getRandomBy transform ``[0, 1]``
+         Random.transformBy transform ``[0, 1]``
 
 let loguniform (min, max) =
    ensuresFiniteValue min "min"
@@ -28,7 +28,7 @@ let loguniform (min, max) =
    if min <= 0.0 || min > max then
       outOfRange "min" "Invalid range."
    else
-      getRandomBy exp (uniform (log min, log max))
+      Random.transformBy exp (uniform (log min, log max))
 
 let triangular (min, max, mode) =
    ensuresFiniteValue min "min"
@@ -40,7 +40,7 @@ let triangular (min, max, mode) =
       let left u = min + sqrt ((u - min) * (mode - min))
       let right u = max - sqrt ((max - u) * (max - mode))
       let transform u = if u < mode then left u else right u
-      getRandomBy transform (uniform (min, max))
+      Random.transformBy transform (uniform (min, max))
 
 // Box-Muller's transformation.
 let normal (mean, sd) =
@@ -54,9 +54,9 @@ let normal (mean, sd) =
          let theta = ``2pi`` * u2
          let z = r * cos theta
          mean + z * sd
-      getRandomBy2 transform ``(0, 1)`` ``(0, 1)``
+      Random.transformBy2 transform ``(0, 1)`` ``(0, 1)``
 
-let lognormal p = getRandomBy exp (normal p)
+let lognormal p = Random.transformBy exp (normal p)
       
 // random number distributed gamma for alpha < 1 (Best 1983).
 let gammaSmall alpha s0 =
@@ -121,7 +121,7 @@ let gamma (shape, scale) =
    elif scale <= 0.0 then
       outOfRange "scale" "`scale' must be positive."
    else
-      let get = getRandomBy ((*) scale)
+      let get = Random.transformBy ((*) scale)
       if isInt shape then
          get (gammaInt (int shape))
       elif shape < 1.0 then
@@ -138,7 +138,7 @@ let beta (alpha, beta) =
       outOfRange "beta" "`beta' must be positive."
    else
       let transform y1 y2 = y1 / (y1 + y2)
-      getRandomBy2 transform (gamma (alpha, 1.0)) (gamma (beta, 1.0))
+      Random.transformBy2 transform (gamma (alpha, 1.0)) (gamma (beta, 1.0))
 
 let exponential rate =
    ensuresFiniteValue rate "rate"
@@ -146,7 +146,7 @@ let exponential rate =
       outOfRange "rate" "`rate' must be positive."
    else
       let transform u = -log u / rate
-      getRandomBy transform ``(0, 1)``
+      Random.transformBy transform ``(0, 1)``
 
 let weibull (shape, scale) =
    ensuresFiniteValue shape "shape"
@@ -157,7 +157,7 @@ let weibull (shape, scale) =
       outOfRange "scale" "`scale' must be positive."
    else
       let transform u = let r = (-log u) ** (1.0 / shape) in r * scale
-      getRandomBy transform ``(0, 1)``
+      Random.transformBy transform ``(0, 1)``
 
 let gumbel (location, scale) =
    ensuresFiniteValue location "location"
@@ -166,7 +166,7 @@ let gumbel (location, scale) =
       outOfRange "scale" "`scale' must be positive."
    else
       let transform u = location - scale * log (-log u)
-      getRandomBy transform ``(0, 1)``
+      Random.transformBy transform ``(0, 1)``
 
 let cauchy (location, scale) =
    ensuresFiniteValue location "location"
@@ -175,7 +175,7 @@ let cauchy (location, scale) =
       outOfRange "scale" "`scale' must be positive."
    else
       let transform u = location + scale * tan (pi * (u - 0.5))
-      getRandomBy transform ``(0, 1)``
+      Random.transformBy transform ``(0, 1)``
 
 let chisquare df =
    if df <= 0 then
@@ -183,7 +183,7 @@ let chisquare df =
    else
       if df = 1 then
          let transform u y = 2.0 * y * u * u
-         getRandomBy2 transform ``[0, 1)`` (gamma (1.5, 2.0))
+         Random.transformBy2 transform ``[0, 1)`` (gamma (1.5, 2.0))
       else
          gamma (float df / 2.0, 2.0)
 
@@ -195,12 +195,12 @@ let t df =
          cauchy (0.0, 1.0)
       elif df = 2 then
          let transform z w = z / sqrt w
-         getRandomBy2 transform (normal (0.0, 1.0)) (exponential 1.0)
+         Random.transformBy2 transform (normal (0.0, 1.0)) (exponential 1.0)
       else
          let r = float df / 2.0
          let d = sqrt r
          let transform z w = d * z / sqrt w
-         getRandomBy2 transform (normal (0.0, 1.0)) (gamma (r, 1.0))
+         Random.transformBy2 transform (normal (0.0, 1.0)) (gamma (r, 1.0))
 
 let uniformDiscrete (min, max) =
    if min > max then
@@ -208,7 +208,7 @@ let uniformDiscrete (min, max) =
    else
       let range = float <| int64 max - int64 min + 1L
       let transform u = min + int (u * range)
-      getRandomBy transform ``[0, 1)``
+      Random.transformBy transform ``[0, 1)``
 
 let poisson lambda =
    ensuresFiniteValue lambda "lambda"
@@ -251,7 +251,7 @@ let geometric probability =
    else
       let z = log (1.0 - probability)
       let transform u = int <| ceil (-u / z)
-      getRandomBy transform ``(0, 1)``
+      Random.transformBy transform ``(0, 1)``
 
 let bernoulli probability =
    ensuresFiniteValue probability "probability"
@@ -259,7 +259,7 @@ let bernoulli probability =
       outOfRange "probability" "`probability' must be in the range of (0, 1)."
    else
       let transform u = if u <= probability then 1 else 0
-      getRandomBy transform ``[0, 1]``
+      Random.transformBy transform ``[0, 1]``
 
 let binomial (n, probability) =
    ensuresFiniteValue probability "probability"
@@ -310,10 +310,11 @@ let multinomial (n, weight) =
          Array.toList result, s
          
 module Seq =
-   let markovChain (generator:'a -> GeneratorFunction<_, _>) (builder:RandomBuilder<_>) =
-      let rec loop seed previous = seq {
-         let r, next = builder { return! generator previous } <| seed
-         yield r
-         yield! loop next r
+   let markovChain (generator:_ -> GeneratorFunction<_, _>) =
+      let f = uncurry (generator >> Random.next)
+      let rec loop current = seq {
+         let next = f current
+         yield fst next
+         yield! loop next
       }
-      loop
+      curry loop

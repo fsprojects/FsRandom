@@ -3,24 +3,22 @@
 open FsRandom
 
 let seed = 123456789u, 362436069u, 521288629u, 88675123u
+let state = createState xorshift seed
 
 let plusOne x = x + 1.0
-xorshift {
-   return! getRandomBy plusOne <| Statistics.uniform (0.0, 1.0)
-} <| seed
-|> fst
+Random.transformBy plusOne <| Statistics.uniform (0.0, 1.0)
+|> Random.get
+<| state
 |> printfn "%f"
 
-xorshift {
-   let! u = getRandom <| Statistics.uniform (0.0, 1.0)
-   return plusOne u
-} <| seed
-|> fst
+Random.identity <| Statistics.uniform (0.0, 1.0)
+|> Random.get
+<| state
+|> plusOne
 |> printfn "%f"
 
-xorshift {
-   let! u = Statistics.uniform (0.0, 1.0)
-   return plusOne u
-} <| seed
-|> fst
+Statistics.uniform (0.0, 1.0)
+|> Random.get
+<| state
+|> plusOne
 |> printfn "%f"

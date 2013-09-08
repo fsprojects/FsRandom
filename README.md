@@ -9,6 +9,7 @@ Randoms Functions
 -----------------
 
 * **RandomNumberGenerator module** provides standard random number generators: <code>\`\`(0, 1)\`\`</code>, <code>\`\`[0, 1)\`\`</code>, <code>\`\`(0, 1]\`\`</code>, and <code>\`\`[0, 1]\`\`</code>.
+* **Random module** manipulates random numbers.
 * **Statistics module** provides a variety of statistical distributions such like `uniform`, `normal` and `gamma`.
 * **Seq module** provides functions for generating random number sequences.
 * **Array module** provides functions for array operations like `shuffle`.
@@ -60,32 +61,43 @@ It is important to keep the new state because it is used when we generate a new 
 Here for example, we choose xorshift PRNG, which is implemented in FsRandom.
 We need to define an initial random seed first for xorshift algorithm
 (of course, another algorithm is available rather than xorshift, as described later).
-It is a tuple composed of four 32-bit unsigned integers (`uint32`).
+It is a tuple composed of four 32-bit unsigned integers.
+And then, we should combine the PRNG and the seed using `createState` function.
 
 ```fsharp
-let initialSeed = 123456789u, 362436069u, 521288629u, 88675123u
-let z, nextSeed = xorshift { return! generator } <| initialSeed
+let seed = 123456789u, 362436069u, 521288629u, 88675123u
+let state = createState xorshift seed
+```
+
+Now we can retrieve a random number using `Random.get` function.
+
+```
+let z = Random.get generator state
 printfn "%f" z
 ```
 
-We should use `nextSeed` to generate a new random number ~ N(0, 1) as the following.
+Since `Random.get` returns a stateless function,
+if you do the code above, the same thing occurs.
+To generate a new random number,
+we need to get next state using `Random.next` instead of `Random.get`:
 
 ```fsharp
-let z2, _ = xorshift { return! generator } <| nextSeed
+let _, nextState = Random.next generator state
+let z2 = Random.get generator nextState
 printfn "%f" z2
 ```
 
 ### Transforming random numbers
 
 Transformation of random numbers is a regular work.
-FsRandom defines `getRandomBy` function for the purpose.
+FsRandom defines `Random.transformBy` function for the purpose.
 The following code shows how to use it.
 
 ```fsharp
 let plusOne x = x + 1.0
-xorshift {
-   return! getRandomBy plusOne <| Statistics.uniform (0.0, 1.0)
-}
+Random.transformBy plusOne <| Statistics.uniform (0.0, 1.0)
+|> Random.get
+<| state
 ```
 
 `plusOne` is a function that takes an argument and adds one to it.
@@ -95,17 +107,17 @@ So `x` finally becomes a uniform random number between 1 and 2.
 The both following codes return the same results as above.
 
 ``` fsharp
-xorshift {
-   let! u = getRandom <| Statistics.uniform (0.0, 1.0)
-   return plusOne u
-}
+Random.identity <| Statistics.uniform (0.0, 1.0)
+|> Random.get
+<| state
+|> plusOne
 ```
 
 ```fsharp
-xorshift {
-   let! u = Statistics.uniform (0.0, 1.0)
-   return plusOne u
-}
+Statistics.uniform (0.0, 1.0)
+|> Random.get
+<| state
+|> plusOne
 ```
 
 ### Random number sequence
@@ -116,37 +128,36 @@ using Bernoulli random number generator,
 and it illustrates how we can generate a number of random numbers.
 
 ```fsharp
-let generator = xorshift { return! Statistics.bernoulli 0.5 }
-let rec binaries initialSeed = seq {
-   let binary, nextSeed = generator initialSeed
+let rec binaries initialState = seq {
+   let binary, nextState = Random.next (Statistics.bernoulli 0.5) initialState
    yield binary
-   yield! binaries nextSeed  // recursively generating binaries.
+   yield! binaries nextState // recursively generating binaries.
 }
 ```
 
 Or, more precisely like the following:
 
 ```fsharp
-let binaries = Seq.ofRandom (Statistics.bernoulli 0.5) xorshift
+let binaries state = Seq.ofRandom (Statistics.bernoulli<'a> 0.5) state
 ```
 
 ### Using `System.Random`
 
-The examples above uses `xorshift` expression to generate random numbers.
+The examples above uses `xorshift` to generate random numbers.
 The familliar `System.Random` (and its subclasses) is available in the workflow.
 Just use `systemrandom` instead of `xorshift`.
 
 ```fsharp
 let r0 = System.Random ()
-let u, r1 = systemrandom { return! Statistics.gamma (2.0, 1.0) } <| r0
+let s = createState systemrandom r0
 ```
 
-Because an instance of `System.Random` keeps a state by itself,
-to tell the truth, the second returned state value (`r1` here) by `systemrandom`
-is the same reference as the instance passed in the call (`r0`).
+Because `System.Random` is a stateful object,
+unlike `xorshift`, we will get different result on each call.
 
 ```fsharp
-printfn "%b" (r0 = r1)  // true
+let u1 = Random.get generator s
+let u2 = Random.get generator s
 ```
 
 ### Constructing a user-defined random number generator
@@ -168,27 +179,19 @@ let's implement [linear congruential generator](http://en.wikipedia.org/wiki/Lin
 First, we make a function of `Prng`.
 
 ```fsharp
-// linearPrng : uint64 * uint64 -> uint64 -> uint64 * uint64
-let linearPrng (a, c) (x:uint64) = x, a * x + c
+// Coefficients are cited from Wikipedi
+let linear x = x, 6364136223846793005uL * x + 1442695040888963407uL
 ```
 
 The first returned value is a random number and the second returned value is a next state.
 Note that modulus is not defined because `Prng` is required to return random numbers
 in 64-bit resolution.
 
-Then, a new computation expression builder can be defined as the following.
-
-```fsharp
-let linear (a, c) = createRandomBuilder (linearPrng (a, c))
-```
-
 Hereafter we can use the `linear` builder to generate random numbers.
 
 ```fsharp
-let seed = uint64 System.Environment.TickCount
-let myLinear = linear (6364136223846793005uL, 1442695040888963407uL)  // from Wikipedia
-let generator = myLinear { return! Statistics.gamma (3.0, 1.0) }
-let y, nextSeed = generator seed
+let linearState = createState linear 0x123456789ABCDEFuL
+Random.get generator linearState
 ```
 
 #### Generator function
@@ -219,9 +222,7 @@ let approximatelyStandardNormal<'s> : GeneratorFunction<'s, _> = random {
 The `approximatelyStandardNormal` can be used in the generating process as the following.
 
 ```fsharp
-let generator = xorshift { return! approximatelyStandardNormal }
-let z = fst <| generator initialSeed
-printfn "%f" z
+Random.get approximatelyStandardNormal state
 ```
 
 Don't forget that FsRandom has a normal random number generator `normal`.
@@ -243,11 +244,11 @@ let randomPointGenerator = random {
 // the weight is 4 (because random points are distributed on [-1, 1] x [-1, 1]).
 let weight (x, y) = if x * x + y * y <= 1.0 then 4.0 else 0.0
 // Function to generate a sequence
-let values = Seq.ofRandom (getRandomBy weight randomPointGenerator)
+let values = Seq.ofRandom (Random.transformBy weight randomPointGenerator)
 
 // Monte Carlo integration
 // Generates 1,000,000 random values and the average becomes estimator of pi
-values xorshift (123456789u, 362436069u, 521288629u, 88675123u)
+values state
 |> Seq.take 1000000
 |> Seq.average
 |> printfn "%f"
