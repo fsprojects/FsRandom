@@ -8,7 +8,7 @@ let flipCoin probability =
       outOfRange "probability" "`probability' must be in the range of [0, 1]."
    else
       let transform u = u < probability
-      getRandomBy transform ``[0, 1)``
+      Random.transformBy transform ``[0, 1)``
 
 let choose m n =
    if m <= 0 then

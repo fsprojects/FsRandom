@@ -61,7 +61,7 @@ let refresh (state : StateVector) =
    vector.[N - 1] <- twist vector.[N - 1] vector.[0] vector.[M - 1]
    StateVector (0, vector)
 
-let mersennePrng (state : StateVector) =
+let mersenne (state : StateVector) =
    let state = if state.Index >= N then refresh state else state
    let index = state.Index
    let mutable y = state.[index]
@@ -71,4 +71,3 @@ let mersennePrng (state : StateVector) =
    y <- y ^^^ (y >>> 43)
    // Creates a new instance of StateVector, but the internal vector refers to the same array to avoid cost of copying.
    y, StateVector(index + 1, state.Vector)
-let mersenne = createRandomBuilder mersennePrng

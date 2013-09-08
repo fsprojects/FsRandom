@@ -4,6 +4,9 @@ module internal FsRandom.RuntimeHelper
 open System
 open Microsoft.FSharp.Core.LanguagePrimitives
 
+let inline curry f x y = f (x, y)
+let inline uncurry f (x, y) = f x y
+
 let inline outOfRange (paramName:string) (message:string) =
    ArgumentOutOfRangeException (paramName, message) |> raise
 
