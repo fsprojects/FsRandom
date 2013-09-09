@@ -36,7 +36,7 @@ val inline zip : generator1:GeneratorFunction<'s, 'a1> -> generator2:GeneratorFu
 /// <summary>
 /// Merges three random streams into one.
 /// </summary>
-val inline zip3 : generator1:GeneratorFunction<'s, 'a1> -> generator2:GeneratorFunction<'s, 'a2> -> generator2:GeneratorFunction<'s, 'a3> -> GeneratorFunction<'s, 'a1 * 'a2 * 'a3>
+val inline zip3 : generator1:GeneratorFunction<'s, 'a1> -> generator2:GeneratorFunction<'s, 'a2> -> generator3:GeneratorFunction<'s, 'a3> -> GeneratorFunction<'s, 'a1 * 'a2 * 'a3>
 /// <summary>
 /// Merges random stream list into one.
 /// </summary>

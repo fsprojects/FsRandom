@@ -1,4 +1,4 @@
-﻿module FsRandom.Tests.Issues
+﻿module FsRandom.Issues
 
 open FsRandom
 open FsRandom.Utility

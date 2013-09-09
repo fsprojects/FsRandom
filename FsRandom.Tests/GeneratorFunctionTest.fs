@@ -1,4 +1,4 @@
-﻿module FsRandom.Tests.GeneratorFunctionTest
+﻿module FsRandom.GeneratorFunctionTest
 
 open System
 open FsRandom
