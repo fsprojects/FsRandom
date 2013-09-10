@@ -1,9 +1,7 @@
 ﻿module FsRandom.Random
 
-open FsRandom.StateMonad
-
-let inline next (generator:GeneratorFunction<_, _>) = runState generator
-let inline get (generator:GeneratorFunction<_, _>) = evaluateState generator
+let inline next (generator:GeneratorFunction<_, _>) = runRandom generator
+let inline get (generator:GeneratorFunction<_, _>) = evaluateRandom generator
 
 let inline identity (generator:GeneratorFunction<_, _>) = generator
 let inline transformBy f (generator:GeneratorFunction<_, _>) =
@@ -27,4 +25,4 @@ let inline zip3 (g1:GeneratorFunction<_, _>) (g2:GeneratorFunction<_, _>) (g3:Ge
       (r1, r2, r3), s
 let inline merge (gs:GeneratorFunction<_, _> list) =
    let inline cons x xs = x :: xs
-   List.foldBack (transformBy2 cons) gs (returnState [])
+   List.foldBack (transformBy2 cons) gs (returnRandom [])

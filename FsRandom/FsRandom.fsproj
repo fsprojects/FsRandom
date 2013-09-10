@@ -39,8 +39,6 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="RuntimeHelper.fs" />
     <Compile Include="Math.fs" />
-    <Compile Include="StateMonad.fsi" />
-    <Compile Include="StateMonad.fs" />
     <Compile Include="RandomNumberGenerator.fsi" />
     <Compile Include="RandomNumberGenerator.fs" />
     <Compile Include="Random.fsi" />
