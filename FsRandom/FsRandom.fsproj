@@ -47,12 +47,12 @@
     <Compile Include="Random.fs" />
     <Compile Include="Seq.fsi" />
     <Compile Include="Seq.fs" />
-    <Compile Include="Statistics.fsi" />
-    <Compile Include="Statistics.fs" />
     <Compile Include="Array.fsi" />
     <Compile Include="Array.fs" />
     <Compile Include="Array2D.fsi" />
     <Compile Include="Array2D.fs" />
+    <Compile Include="Statistics.fsi" />
+    <Compile Include="Statistics.fs" />
     <Compile Include="Utility.fsi" />
     <Compile Include="Utility.fs" />
     <Compile Include="MersenneTwister.fsi" />
