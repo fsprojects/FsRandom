@@ -47,6 +47,7 @@
     <Compile Include="SimdOrientedFastMersenneTwisterTest.fs" />
     <Compile Include="GeneratorFunctionTest.fs" />
     <Compile Include="RandomTest.fs" />
+    <Compile Include="Array2DTest.fs" />
     <Compile Include="Issues.fs" />
     <None Include="App.config" />
     <None Include="packages.config" />
