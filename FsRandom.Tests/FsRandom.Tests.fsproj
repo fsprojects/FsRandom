@@ -46,6 +46,9 @@
     <Compile Include="MersenneTwisterTest.fs" />
     <Compile Include="SimdOrientedFastMersenneTwisterTest.fs" />
     <Compile Include="GeneratorFunctionTest.fs" />
+    <Compile Include="RandomTest.fs" />
+    <Compile Include="ArrayTest.fs" />
+    <Compile Include="Array2DTest.fs" />
     <Compile Include="Issues.fs" />
     <None Include="App.config" />
     <None Include="packages.config" />
@@ -54,6 +57,10 @@
     <Content Include="App_Readme\MathNet.Numerics.authors.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="FsUnit.NUnit">
+      <HintPath>..\packages\FsUnit.1.2.1.0\Lib\Net40\FsUnit.NUnit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MathNet.Numerics">
       <HintPath>..\packages\MathNet.Numerics.2.3.0\lib\net40\MathNet.Numerics.dll</HintPath>
       <Private>True</Private>

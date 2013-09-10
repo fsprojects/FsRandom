@@ -1,6 +1,11 @@
 ﻿module FsRandom.Utility
 
-open System
+open Microsoft.FSharp.Core.LanguagePrimitives
+
+let inline randomSign s0 =
+   let r, s' = rawBits s0
+   let sign = if r &&& 1uL = 0uL then GenericOne else -GenericOne
+   sign, s'
 
 let flipCoin probability =
    ensuresFiniteValue probability "probability"

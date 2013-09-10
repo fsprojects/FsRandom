@@ -1,12 +1,11 @@
 ﻿module FsRandom.RandomNumberGenerator
 
 open System
-open FsRandom.StateMonad
 
 type Prng<'s> = 's -> uint64 * 's
 type PrngState =
    abstract Next64Bits : unit -> uint64 * PrngState
-type GeneratorFunction<'a> = State<PrngState, 'a>
+type GeneratorFunction<'a> = PrngState -> 'a * PrngState
 
 let rec createState (prng:Prng<'s>) (seed:'s) = {
    new PrngState with
@@ -15,7 +14,31 @@ let rec createState (prng:Prng<'s>) (seed:'s) = {
          r, createState prng next
 }
 
-let random = state
+let inline bindRandom (m:GeneratorFunction<_>) (f:_ -> GeneratorFunction<_>) = fun s0 -> let v, s' = m s0 in f v s'
+let inline returnRandom x = fun (s:PrngState) -> x, s
+let inline runRandom (m:GeneratorFunction<_>) x = m x
+let inline evaluateRandom (m:GeneratorFunction<_>) x = m x |> fst
+let inline executeRandom (m:GeneratorFunction<_>) x = m x |> snd
+
+let inline (|>>) m f = bindRandom m f
+let inline (&>>) m b = bindRandom m (fun _ -> b)
+
+type RandomBuilder () =
+   member this.Bind (m, f:'a->GeneratorFunction<_>) = m |>> f
+   member this.Combine (a:GeneratorFunction<_>, b:GeneratorFunction<_>) = a &>> b
+   member this.Return (x):GeneratorFunction<_> = returnRandom x
+   member this.ReturnFrom (m : GeneratorFunction<'a>) = m
+   member this.Zero () = fun (x:PrngState) -> (), x
+   member this.Delay (f):GeneratorFunction<_> = returnRandom () |>> f
+   member this.While (condition, m) =
+      if condition () then
+         m |>> (fun () -> this.While (condition, m))
+      else
+         this.Zero ()
+   member this.For (source : seq<'a>, f) =
+      use e = source.GetEnumerator ()
+      this.While (e.MoveNext, this.Delay (fun () -> f e.Current))
+let random = RandomBuilder ()
 
 let buffer = Array.zeroCreate sizeof<uint64>
 let systemrandom (random : Random) = 

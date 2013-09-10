@@ -1,4 +1,4 @@
-﻿module FsRandom.Tests.GeneratorFunctionTest
+﻿module FsRandom.GeneratorFunctionTest
 
 open System
 open FsRandom
@@ -193,6 +193,18 @@ let testDirichlet tester parameter =
 let testMultinomial tester parameter =
    Assert.Inconclusive ("Not implemented.")
 
+let testRandomSignInt tester =
+   let p = 0.5
+   let generator = Random.transformBy (fun s -> if s > 0 then 1 else -1) Utility.randomSign
+   let cdf = cdfBernoulli p
+   testBinary tester generator cdf p
+
+let testRandomSignFloat tester =
+   let p = 0.5
+   let generator = Random.transformBy (fun s -> if s > 0.0 then 1 else -1) Utility.randomSign
+   let cdf = cdfBernoulli p
+   testBinary tester generator cdf p
+
 let testFlipCoin tester p =
    let generator = Random.transformBy (fun b -> if b then 1 else 0) <| Utility.flipCoin p
    let cdf = cdfBernoulli p
@@ -285,6 +297,14 @@ let ``Validates dirichlet`` () =
 [<Test>]
 let ``Validates multinomial`` () =
     testMultinomial (getDefaultTester ()) [1.0; 2.0; 2.5; 0.5]
+
+[<Test>]
+let ``Validates randomSign (int)`` () =
+   testRandomSignInt (getDefaultTester ())
+
+[<Test>]
+let ``Validates randomSign (float)`` () =
+   testRandomSignFloat (getDefaultTester ())
 
 [<Test>]
 let ``Validates flipCoin`` () =

@@ -28,3 +28,16 @@ val inline transformBy : transformation:('a -> 'b) -> generator:GeneratorFunctio
 /// <param name="generator1">The first random number generator.</param>
 /// <param name="generator2">The second random number generator.</param>
 val inline transformBy2 : transformation:('a1 -> 'a2 -> 'b) -> generator1:GeneratorFunction<'a1> -> generator2:GeneratorFunction<'a2> -> GeneratorFunction<'b>
+
+/// <summary>
+/// Merges two random streams into one.
+/// </summary>
+val inline zip : generator1:GeneratorFunction<'a1> -> generator2:GeneratorFunction<'a2> -> GeneratorFunction<'a1 * 'a2>
+/// <summary>
+/// Merges three random streams into one.
+/// </summary>
+val inline zip3 : generator1:GeneratorFunction<'a1> -> generator2:GeneratorFunction<'a2> -> generator3:GeneratorFunction<'a3> -> GeneratorFunction<'a1 * 'a2 * 'a3>
+/// <summary>
+/// Merges random stream list into one.
+/// </summary>
+val inline merge : generators:GeneratorFunction<'a> list -> GeneratorFunction<'a list>
