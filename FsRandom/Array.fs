@@ -33,6 +33,18 @@ let randomInit count (initializer:int -> GeneratorFunction<_, _>) =
             s0 <- s'
          result, s0
 
+let randomFill (array:'a []) targetIndex count (generator:GeneratorFunction<_, 'a>) =
+   if count < 0 then
+      outOfRange "count" "`count' must not be negative."
+   else
+      fun s0 ->
+         let mutable s0 = s0
+         for index = targetIndex to targetIndex + count - 1 do
+            let r, s' = generator s0
+            array.[index] <- r
+            s0 <- s'
+         (), s0
+
 let shuffleInPlace array =
    fun s0 ->
       let mutable s0 = s0
