@@ -1,7 +1,9 @@
 ﻿module FsRandom.Random
 
-let inline next (generator:GeneratorFunction<_, _>) = runRandom generator
-let inline get (generator:GeneratorFunction<_, _>) = evaluateRandom generator
+let inline next prng (generator:GeneratorFunction<_, _>) =
+   curry (runRandom generator >> fun (r, (_, s)) -> r, s) prng
+let inline get prng (generator:GeneratorFunction<_, _>) =
+   curry (evaluateRandom generator) prng
 
 let inline identity (generator:GeneratorFunction<_, _>) = generator
 let inline transformBy f (generator:GeneratorFunction<_, _>) =

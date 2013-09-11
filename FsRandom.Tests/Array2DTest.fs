@@ -7,7 +7,7 @@ open NUnit.Framework
 let ``Validates randomCreate`` () =
    let tester = getDefaultTester ()
    let expected =
-      Random.get
+      getRandom
       <| random {
          let r = Array2D.zeroCreate 3 2
          for i = 0 to 2 do
@@ -17,7 +17,7 @@ let ``Validates randomCreate`` () =
          return r
       }
       <| tester
-   let actual = Random.get (Array2D.randomCreate 3 2 ``[0, 1)``) tester
+   let actual = getRandom (Array2D.randomCreate 3 2 ``[0, 1)``) tester
    actual.GetLength (0) |> should equal 3
    actual.GetLength (1) |> should equal 2
    actual |> should equal expected
@@ -26,7 +26,7 @@ let ``Validates randomCreate`` () =
 let ``Validates randomCreateBased`` () =
    let tester = getDefaultTester ()
    let expected =
-      Random.get
+      getRandom
       <| random {
          let r = Array2D.zeroCreateBased 4 1 3 2
          for i = 4 to 6 do
@@ -36,7 +36,7 @@ let ``Validates randomCreateBased`` () =
          return r
       }
       <| tester
-   let actual = Random.get (Array2D.randomCreateBased 4 1 3 2 ``[0, 1)``) tester
+   let actual = getRandom (Array2D.randomCreateBased 4 1 3 2 ``[0, 1)``) tester
    actual.GetLength (0) |> should equal 3
    actual.GetLength (1) |> should equal 2
    actual |> should equal expected
@@ -46,7 +46,7 @@ let ``Validates randomInit`` () =
    let tester = getDefaultTester ()
    let f i j u = float i + float j * u
    let expected =
-      Random.get
+      getRandom
       <| random {
          let r = Array2D.zeroCreate 3 2
          for i = 0 to 2 do
@@ -57,7 +57,7 @@ let ``Validates randomInit`` () =
       }
       <| tester
    let actual =
-      Random.get
+      getRandom
       <| Array2D.randomInit 3 2 (fun i j -> Random.transformBy (f i j) ``[0, 1)``)
       <| tester
    actual.GetLength (0) |> should equal 3
@@ -69,7 +69,7 @@ let ``Validates randomInitBased`` () =
    let tester = getDefaultTester ()
    let f i j u = float i + float j * u
    let expected =
-      Random.get
+      getRandom
       <| random {
          let r = Array2D.zeroCreateBased 4 1 3 2
          for i = 4 to 6 do
@@ -80,7 +80,7 @@ let ``Validates randomInitBased`` () =
       }
       <| tester
    let actual =
-      Random.get
+      getRandom
       <| Array2D.randomInitBased 4 1 3 2 (fun i j -> Random.transformBy (f i j) ``[0, 1)``)
       <| tester
    actual.GetLength (0) |> should equal 3

@@ -16,13 +16,6 @@ type PrngState<'s> = Prng<'s> * 's
 /// </summary>
 type GeneratorFunction<'s, 'a> = PrngState<'s> -> 'a * PrngState<'s>
 
-/// <summary>
-/// Constructs a random state.
-/// </summary>
-/// <param name="prng">The PRNG.</param>
-/// <param name="seed">The random seed.</param>
-val createState : prng:Prng<'s> -> seed:'s -> PrngState<'s>
-
 val inline internal ( |>> ) : m:GeneratorFunction<'s, 'a> -> f:('a -> GeneratorFunction<'s, 'b>) -> GeneratorFunction<'s, 'b>
 val inline internal ( &>> ) : m:GeneratorFunction<'s, 'a> -> b:GeneratorFunction<'s, 'b> -> GeneratorFunction<'s, 'b>
 val inline internal bindRandom : m:GeneratorFunction<'s, 'a> -> f:('a -> GeneratorFunction<'s, 'b>) -> GeneratorFunction<'s, 'b>

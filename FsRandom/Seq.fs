@@ -1,7 +1,7 @@
 ﻿module FsRandom.Seq
 
-let ofRandom (generator:GeneratorFunction<_, _>) =
-   let f = Random.next generator
+let ofRandom prng (generator:GeneratorFunction<_, _>) =
+   let f = Random.next prng generator
    let rec loop seed = seq {
       let r, next = f seed
       yield r

@@ -122,9 +122,9 @@ module Seq =
    /// <summary>
    /// Makes infinite Markov chain.
    /// </summary>
+   /// <param name="prng">A PRNG.</param>
    /// <param name="generator">A random function.</param>
-   /// <param name="builder">A random builder.</param>
    /// <returns>
    /// A Markov chain.
    /// </returns>
-   val markovChain : generator:('a -> GeneratorFunction<'s, 'a>) -> ('a -> PrngState<'s> -> seq<'a>)
+   val markovChain : prng:Prng<'s> -> generator:('a -> GeneratorFunction<'s, 'a>) -> ('a -> 's -> seq<'a>)
