@@ -39,7 +39,8 @@ let test parameter resource =
                raws.[2 * index + 1] <- (sprintf "%10u" (uint32 ((u >>> 32) &&& 0xFFFFFFFFFFFFFFFFuL))).Trim ()
             return raws
          }
-         <| createState sfmt seedByInt
+         <| sfmt
+         <| seedByInt
       let seedByArray = StateVector.Initialize (parameter, [|0x1234u; 0x5678u; 0x9ABCu; 0xDEF0u|])
       let randomByArray =
          Random.get
@@ -51,7 +52,8 @@ let test parameter resource =
                raws.[2 * index + 1] <- (sprintf "%10u" (uint32 ((u >>> 32) &&& 0xFFFFFFFFFFFFFFFFuL))).Trim ()
             return raws
          }
-         <| createState sfmt seedByArray
+         <| sfmt
+         <| seedByArray
       randomByInt, randomByArray
    Assert.That (fst actual, Is.EquivalentTo(fst expected))
    Assert.That (snd actual, Is.EquivalentTo(snd expected))

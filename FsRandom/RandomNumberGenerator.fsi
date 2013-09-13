@@ -11,6 +11,7 @@ type Prng<'s> = 's -> uint64 * 's
 /// Represents a random state.
 /// </summary>
 type PrngState =
+   abstract Seed : obj with get
    abstract Next64Bits : unit -> uint64 * PrngState
 /// <summary>
 /// Generates random numbers.
@@ -28,8 +29,6 @@ val inline internal ( |>> ) : m:GeneratorFunction<'a> -> f:('a -> GeneratorFunct
 val inline internal ( &>> ) : m:GeneratorFunction<'a> -> b:GeneratorFunction<'b> -> GeneratorFunction<'b>
 val inline internal bindRandom : m:GeneratorFunction<'a> -> f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b>
 val inline internal returnRandom : a:'a -> GeneratorFunction<'a>
-//val inline internal getRandom : GeneratorFunction<'s>
-//val inline internal setRandom : state:PrngState -> GeneratorFunction<unit>
 val inline internal runRandom : GeneratorFunction<'a> -> PrngState -> 'a * PrngState
 val inline internal evaluateRandom : GeneratorFunction<'a> -> PrngState -> 'a
 val inline internal executeRandom : GeneratorFunction<'a> -> PrngState -> PrngState

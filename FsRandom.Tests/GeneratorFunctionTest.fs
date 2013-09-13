@@ -314,7 +314,7 @@ let ``Validates flipCoin`` () =
 let ``Validates choose`` () =
    let n = 4
    let tester = getDefaultTester ()
-   let result, next = Random.next (Utility.choose 10 n) tester
+   let result, next = nextRandom (Utility.choose 10 n) tester
    Assert.That (next, Is.Not.EqualTo(tester))
    Assert.That (List.length result, Is.EqualTo(n))
    Assert.That (List.forall (fun x -> List.exists ((=) x) [0..9]) result, Is.True)

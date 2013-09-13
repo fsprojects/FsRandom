@@ -1,9 +1,9 @@
 ﻿module FsRandom.Random
 
-let inline next (generator:GeneratorFunction<_>) =
-   runRandom generator
+let inline next generator : Prng<'s> -> 's -> 'a * 's =
+   curry (uncurry createState >> runRandom generator >> fun (r, s) -> r, unbox s.Seed)
 let inline get (generator:GeneratorFunction<_>) =
-   evaluateRandom generator
+   curry (uncurry createState >> evaluateRandom generator)
 
 let inline identity (generator:GeneratorFunction<_>) = generator
 let inline transformBy f (generator:GeneratorFunction<_>) =

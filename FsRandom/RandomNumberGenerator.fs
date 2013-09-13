@@ -4,11 +4,13 @@ open System
 
 type Prng<'s> = 's -> uint64 * 's
 type PrngState =
+   abstract Seed : obj with get
    abstract Next64Bits : unit -> uint64 * PrngState
 type GeneratorFunction<'a> = PrngState -> 'a * PrngState
 
 let rec createState (prng:Prng<'s>) (seed:'s) = {
    new PrngState with
+      member __.Seed with get () = box seed
       member __.Next64Bits () =
          let r, next = prng seed
          r, createState prng next
@@ -16,6 +18,7 @@ let rec createState (prng:Prng<'s>) (seed:'s) = {
 
 let inline bindRandom (m:GeneratorFunction<_>) (f:_ -> GeneratorFunction<_>) = fun s0 -> let v, s' = m s0 in f v s'
 let inline returnRandom x = fun (s:PrngState) -> x, s
+let inline getSeed (s:PrngState) = unbox s.Seed, s
 let inline runRandom (m:GeneratorFunction<_>) x = m x
 let inline evaluateRandom (m:GeneratorFunction<_>) x = m x |> fst
 let inline executeRandom (m:GeneratorFunction<_>) x = m x |> snd

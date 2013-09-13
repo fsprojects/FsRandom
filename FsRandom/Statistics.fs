@@ -311,10 +311,10 @@ let multinomial (n, weight) =
          
 module Seq =
    let markovChain (generator:_ -> GeneratorFunction<_>) =
-      let f = uncurry (generator >> Random.next)
-      let rec loop current = seq {
-         let next = f current
-         yield fst next
-         yield! loop next
+      let f = runRandom << generator
+      let rec loop previous seed = seq {
+         let r, next = f previous seed
+         yield r
+         yield! loop r next
       }
-      curry loop
+      curry (uncurry createState >> flip loop)
