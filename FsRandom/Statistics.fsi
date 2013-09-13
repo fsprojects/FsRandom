@@ -123,7 +123,6 @@ module Seq =
    /// Makes infinite Markov chain.
    /// </summary>
    /// <param name="generator">A random function.</param>
-   /// <param name="builder">A random builder.</param>
    /// <returns>
    /// A Markov chain.
    /// </returns>

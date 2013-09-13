@@ -6,6 +6,7 @@ open Microsoft.FSharp.Core.LanguagePrimitives
 
 let inline curry f x y = f (x, y)
 let inline uncurry f (x, y) = f x y
+let inline flip f x y = f y x
 
 let inline outOfRange (paramName:string) (message:string) =
    ArgumentOutOfRangeException (paramName, message) |> raise
