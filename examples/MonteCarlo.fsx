@@ -3,7 +3,6 @@
 open FsRandom
 
 let seed = 123456789u, 362436069u, 521288629u, 88675123u
-let state = createState xorshift seed
 
 // Generates random points on [-1, 1] x [-1, 1].
 let randomPointGenerator = random {
@@ -20,7 +19,7 @@ let values = Seq.ofRandom (Random.transformBy weight randomPointGenerator)
 
 // Monte Carlo integration
 // Generates 1,000,000 random values and the average becomes estimator of pi
-values state
+values xorshift seed
 |> Seq.take 1000000
 |> Seq.average
 |> printfn "%f"
