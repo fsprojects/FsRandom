@@ -27,7 +27,7 @@ let trimmedMean p (s:seq<TimeSpan>) =
       | 0, acc -> acc
       | _, [] -> failwith "empty list"
       | c, xs -> trim (c - 1, (List.tail >> init) xs)
-   let total = trim (int (float n * p), all) |> List.fold (+) TimeSpan.Zero
+   let total = trim (int (float n * p), List.sort all) |> List.fold (+) TimeSpan.Zero
    TimeSpan.FromTicks (int64 (float total.Ticks / float n))
 
 let r = Random ()
