@@ -4,6 +4,12 @@ open FsUnit
 open NUnit.Framework
 
 [<Test>]
+let ``Validates singleton`` () =
+   let tester = getDefaultTester ()
+   Random.get (Random.singleton 42) tester |> should equal 42
+   Random.get (Random.singleton "foo") tester |> should equal "foo"
+
+[<Test>]
 let ``Validates identity`` () =
    let tester = getDefaultTester ()
    let expected = Random.get ``[0, 1)`` tester

@@ -3,6 +3,7 @@
 let inline next (generator:GeneratorFunction<_, _>) = runRandom generator
 let inline get (generator:GeneratorFunction<_, _>) = evaluateRandom generator
 
+let inline singleton x = returnRandom x
 let inline identity (generator:GeneratorFunction<_, _>) = generator
 let inline transformBy f (generator:GeneratorFunction<_, _>) =
    fun s0 -> let r, s' = generator s0 in f r, s'

@@ -11,6 +11,11 @@ val inline next : generator:GeneratorFunction<'s, 'a> -> (PrngState<'s> -> 'a * 
 val inline get : generator:GeneratorFunction<'s, 'a> -> (PrngState<'s> -> 'a)
 
 /// <summary>
+/// Always returns the specified value.
+/// </summary>
+/// <param name="x">The value.</param>
+val inline singleton : x:'a -> GeneratorFunction<'s, 'a>
+/// <summary>
 /// Generates a random number by <paramref name="generator" /> and returns the value.
 /// </summary>
 /// <param name="generator">The random number generator.</param>
