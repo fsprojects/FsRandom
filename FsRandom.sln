@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{F2FD43BB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{F9F25ACF-679E-48B4-82C6-7200C9245320}"
 	ProjectSection(SolutionItems) = preProject
+		examples\Benchmark.fsx = examples\Benchmark.fsx
 		examples\FirstRandomNumber.fsx = examples\FirstRandomNumber.fsx
 		examples\GeneratorFunction.fsx = examples\GeneratorFunction.fsx
 		examples\GibbsSampler.fsx = examples\GibbsSampler.fsx

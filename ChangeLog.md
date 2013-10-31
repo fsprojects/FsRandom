@@ -1,6 +1,13 @@
 FsRandom ChangeLog
 ==================
 
+Version 1.1
+-----------
+
+* API change (#35).
+* Add Array2D module (#38).
+* Add useful functions.
+
 Version 1.0.2
 -------------
 

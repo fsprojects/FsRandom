@@ -1,10 +1,11 @@
 ﻿module FsRandom.Seq
 
 let ofRandom (generator:GeneratorFunction<_>) =
-   let f = runRandom generator
-   let rec loop seed = seq {
-      let r, next = f seed
-      yield r
-      yield! loop next
+   let f = Random.next generator
+   fun s0 -> seq {
+      let s = ref s0
+      while true do
+         let r, s' = f !s
+         yield r
+         s := s'
    }
-   curry (uncurry createState >> loop)

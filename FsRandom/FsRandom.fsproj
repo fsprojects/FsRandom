@@ -51,6 +51,8 @@
     <Compile Include="Array2D.fs" />
     <Compile Include="Statistics.fsi" />
     <Compile Include="Statistics.fs" />
+    <Compile Include="String.fsi" />
+    <Compile Include="String.fs" />
     <Compile Include="Utility.fsi" />
     <Compile Include="Utility.fs" />
     <Compile Include="MersenneTwister.fsi" />

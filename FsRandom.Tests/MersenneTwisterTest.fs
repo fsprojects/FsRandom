@@ -40,7 +40,6 @@ let ``Checks first 2,000 output`` () =
             standards.[index] <- (sprintf "%10.8f" u).Trim ()
          return raws, standards
       }
-      <| mersenne
-      <| seed
+      <| createState mersenne seed
    Assert.That (fst actual, Is.EquivalentTo(fst expected))
    Assert.That (snd actual, Is.EquivalentTo(snd expected))

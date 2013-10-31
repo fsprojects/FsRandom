@@ -126,4 +126,4 @@ module Seq =
    /// <returns>
    /// A Markov chain.
    /// </returns>
-   val markovChain : generator:('a -> GeneratorFunction<'a>) -> (Prng<'s> -> 's -> 'a -> seq<'a>)
+   val markovChain : generator:('a -> GeneratorFunction<'a>) -> ('a -> PrngState -> seq<'a>)

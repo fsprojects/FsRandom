@@ -22,7 +22,7 @@ let sample f seed = generate f seed |> Seq.take n |> Seq.toList |> (fun l -> Lis
 let iteration = 1000
 let ks x = 1.0 - 2.0 * (Seq.init iteration (fun i -> let k = float (i + 1) in (if i % 2 = 0 then 1.0 else -1.0) * exp (-2.0 * k * k * x * x)) |> Seq.sum)
 let testContinuous tester generator cdf =
-   let observed = seqRandom generator tester |> Seq.take n |> Seq.toList
+   let observed = Seq.ofRandom generator tester |> Seq.take n |> Seq.toList
    let empirical x = List.sumBy (fun t -> if t <= x then 1.0 / float n else 0.0) observed
    let epsilon = List.sort observed |> Seq.pairwise |> Seq.map (fun (a, b) -> b - a) |> Seq.min |> ((*) 0.1)
    let diff x = empirical x - cdf x |> abs
@@ -30,7 +30,7 @@ let testContinuous tester generator cdf =
    Assert.That (ks (sqrt (float n) * d), Is.GreaterThanOrEqualTo(level))
 
 let testDiscrete tester generator cdf parameterCount =
-   let observed = seqRandom generator tester |> Seq.take n |> Seq.toList
+   let observed = Seq.ofRandom generator tester |> Seq.take n |> Seq.toList
    let binCount = int <| ceil (2.0 * (float n ** 0.4))
    let histogram = Histogram(List.map float observed, binCount)
    let p =
@@ -49,7 +49,7 @@ let testDiscrete tester generator cdf parameterCount =
    Assert.That (p, Is.GreaterThanOrEqualTo(level))
 
 let testBinary tester generator cdf probability =
-   let observed = seqRandom generator tester |> Seq.take n |> Seq.toList
+   let observed = Seq.ofRandom generator tester |> Seq.take n |> Seq.toList
    let o0, o1 = observed |> List.partition ((=) 0) |> (fun (zero, one) -> float (List.length zero), float (List.length one))
    let e0, e1 = let one = float n * probability in (float n - one, one)
    let chisq = (o0 - e0) ** 2.0 / e0 + (o1 - e1) ** 2.0 / e1
@@ -314,7 +314,7 @@ let ``Validates flipCoin`` () =
 let ``Validates choose`` () =
    let n = 4
    let tester = getDefaultTester ()
-   let result, next = nextRandom (Utility.choose 10 n) tester
+   let result, next = Random.next (Utility.choose 10 n) tester
    Assert.That (next, Is.Not.EqualTo(tester))
    Assert.That (List.length result, Is.EqualTo(n))
    Assert.That (List.forall (fun x -> List.exists ((=) x) [0..9]) result, Is.True)

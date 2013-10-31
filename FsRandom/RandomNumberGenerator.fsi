@@ -11,7 +11,6 @@ type Prng<'s> = 's -> uint64 * 's
 /// Represents a random state.
 /// </summary>
 type PrngState =
-   abstract Seed : obj with get
    abstract Next64Bits : unit -> uint64 * PrngState
 /// <summary>
 /// Generates random numbers.
