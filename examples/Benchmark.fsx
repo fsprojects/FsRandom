@@ -52,6 +52,14 @@ let ds3 =
       yield! loop ()
    }
    loop ()
+let ds4 =
+   seq {
+      while true do
+         let u1 = r.Next ()
+         let u2 = r.Next ()
+         let r = (uint64 u1 <<< 26) ||| (uint64 (u2 &&& 0b00000011111111111111111111111111))
+         yield (float r + 0.5) * ``1 / 2^52``
+   }
 
 let n = 5000000
 let round = 10
@@ -66,4 +74,5 @@ benchmark fs |> printfn "Seq.ofRandom*\t%A"
 benchmark ds1 |> printfn "Recursion^\t%A"
 benchmark ds2 |> printfn "Imperative^\t%A"
 benchmark ds3 |> printfn "Recursion*\t%A"
+benchmark ds4 |> printfn "Imperative*\t%A"
 printfn "*, 53-bit resolution; ^, 31-bit resolution"

@@ -2,9 +2,10 @@
 
 let ofRandom (generator:GeneratorFunction<_, _>) =
    let f = Random.next generator
-   let rec loop seed = seq {
-      let r, next = f seed
-      yield r
-      yield! loop next
+   fun s0 -> seq {
+      let s = ref s0
+      while true do
+         let r, s' = f !s
+         yield r
+         s := s'
    }
-   loop
