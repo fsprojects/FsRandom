@@ -24,4 +24,4 @@ val randomAlphanumeric : (int -> GeneratorFunction<'s, string>)
 /// <summary>
 /// Concatenates random strings into one random string.
 /// </summary>
-val randomConcat :(GeneratorFunction<'s, string> list -> GeneratorFunction<'s, string>)
+val randomConcat : (string -> GeneratorFunction<'s, string> list -> GeneratorFunction<'s, string>)

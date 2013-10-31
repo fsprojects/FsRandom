@@ -68,16 +68,18 @@ let ``Validates randomConcat`` () =
    let tester = getDefaultTester ()
    let suffix = ".png"
    let generators = [String.randomByString "AB" 3; String.randomNumeric 5; Random.singleton suffix]
-   let actual = Random.get (String.randomConcat generators) tester
-   String.length actual |> should equal (3 + 5 + String.length suffix)
+   let actual = Random.get (String.randomConcat "x" generators) tester
+   String.length actual |> should equal (3 + 5 + String.length suffix + 2)
+   actual.[3] |> should equal 'x'
+   actual.[9] |> should equal 'x'
    actual
    |> fun s -> s.Substring (0, 3)
    |> String.forall (fun c -> c = 'A' || c = 'B')
    |> should be True
    actual
-   |> fun s -> s.Substring (3, 5)
+   |> fun s -> s.Substring (4, 5)
    |> String.forall (fun c -> '0' <= c && c <= '9')
    |> should be True
    actual
-   |> fun s -> s.Substring (8)
+   |> fun s -> s.Substring (10)
    |> should equal ".png"
