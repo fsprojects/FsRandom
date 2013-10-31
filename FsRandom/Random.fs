@@ -21,3 +21,4 @@ let inline transformBy3 f (g1:GeneratorFunction<_, _>) (g2:GeneratorFunction<_, 
 let inline zip g1 g2 = transformBy2 tuple g1 g2
 let inline zip3 g1 g2 g3 = transformBy3 tuple3 g1 g2 g3
 let inline merge gs = List.foldBack (transformBy2 cons) gs (returnRandom [])
+let inline mergeWith f gs = merge gs |> transformBy f

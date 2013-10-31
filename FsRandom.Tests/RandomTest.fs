@@ -76,3 +76,19 @@ let ``Validates merge`` () =
       <| tester
    let actual = Random.get (Random.merge <| List.init 3 (fun _ -> ``[0, 1)``)) tester
    actual |> should equal expected
+
+[<Test>]
+let ``Validates mergeWith`` () =
+   let tester = getDefaultTester ()
+   let f = List.reduce (+)
+   let expected =
+      Random.get
+      <| random {
+         let! u1 = ``[0, 1)``
+         let! u2 = ``[0, 1)``
+         let! u3 = ``[0, 1)``
+         return f [u1; u2; u3]
+      }
+      <| tester
+   let actual = Random.get (Random.mergeWith f <| List.init 3 (fun _ -> ``[0, 1)``)) tester
+   actual |> should equal expected

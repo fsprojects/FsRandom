@@ -49,3 +49,7 @@ val inline zip3 : generator1:GeneratorFunction<'s, 'a1> -> generator2:GeneratorF
 /// Merges random stream list into one.
 /// </summary>
 val inline merge : generators:GeneratorFunction<'s, 'a> list -> GeneratorFunction<'s, 'a list>
+/// <summary>
+/// Merges random stream list into one and then apply the specified function.
+/// </summary>
+val inline mergeWith : f:('a list -> 'b) -> (GeneratorFunction<'s, 'a> list -> GeneratorFunction<'s, 'b>)
