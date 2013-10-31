@@ -16,3 +16,4 @@ let randomAscii length = randomStringByCharArray ascii length
 let randomNumeric length = randomStringByCharArray digit length
 let randomAlphabet length = randomStringByCharArray alphabet length
 let randomAlphanumeric length = randomStringByCharArray alphanumeric length
+let randomConcat randomStringGenerators = Random.mergeWith (String.concat "") randomStringGenerators
