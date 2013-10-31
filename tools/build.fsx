@@ -21,6 +21,7 @@ let zipName = deployDir % "FsRandom.zip"
 type BuildParameter = {
    Help : bool
    Debug : bool
+   Deploy : bool
    CleanDeploy : bool
    NoZip : bool
    NoNuGet : bool
@@ -31,10 +32,10 @@ let buildParams =
       | [] -> acc
       | "-h" :: _ | "--help" :: _ -> { acc with Help = true }  // don't care other arguments
       | "--debug" :: args -> loop { acc with Debug = true } args
+      | "--deploy" :: args -> loop { acc with Deploy = true } args
       | "--clean-deploy" :: args -> loop { acc with CleanDeploy = true } args
       | "--no-zip" :: args -> loop { acc with NoZip = true } args
       | "--no-nuget" :: args -> loop { acc with NoNuGet = true } args
-      | "--no-deploy" :: args -> loop { acc with NoZip = true; NoNuGet = true } args
       | "--key" :: path :: args -> loop { acc with Key = Some (path) } args
       | arg :: _ ->
          eprintfn "Unknown parameter: %s" arg
@@ -42,6 +43,7 @@ let buildParams =
    let defaultBuildParam = {
       Help = false
       Debug = false
+      Deploy = false
       CleanDeploy = false
       NoZip = false
       NoNuGet = false
@@ -60,10 +62,11 @@ fsi.exe build.fsx [<options>]
 # Options
 -h | --help       Show this help
 --debug           Debug build
+--deploy          Create a zip archive and a NuGet package
+                  See --no-zip and --no-nuget
 --clean-deploy    Clean up deploy directory before build
 --no-zip          Do not create zip archive
 --no-nuget        Do not build NuGet package
---no-deploy       Same as --no-zip --no-nuget
 --key <key_path>  Sign assembly with the specified key"""
    exit 0
 
@@ -174,5 +177,5 @@ Target "Deploy" (fun () ->
 =?> ("NuGet", not buildParams.NoNuGet)
 ==> "Deploy"
 
-let deploy = not buildParams.NoZip || not buildParams.NoNuGet
+let deploy = buildParams.Deploy && (not buildParams.NoZip || not buildParams.NoNuGet)
 Run <| if deploy then "Deploy" else "Build"

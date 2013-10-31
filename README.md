@@ -36,7 +36,7 @@ Install-Package FsRandom
 Run:
 
 ```
-fsi tools\build.fsx --debug --no-deploy
+fsi tools\build.fsx --debug
 ```
 
 How to Use
