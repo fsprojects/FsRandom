@@ -1,13 +1,13 @@
 ﻿module FsRandom.Utility
 
+
 /// <summary>
-/// Returns a random Boolean value with the specified probability.
+/// Returns +1 or -1 randomly.
 /// </summary>
-/// <param name="probability">The probability of success.</param>
-/// <seealso cref="Statistics.bernoulli" />
-val inline randomSign : GeneratorFunction<(^a)>
-   when ^a : (static member One : ^a)
-   and ^a : (static member (~-) : ^a -> ^a)
+val randomSign : GeneratorFunction<int>
+//val inline randomSign : GeneratorFunction<(^a)>
+//   when ^a : (static member One : ^a)
+//   and ^a : (static member (~-) : ^a -> ^a)
 
 /// <summary>
 /// Returns a random Boolean value with the specified probability.

@@ -4,6 +4,7 @@ open FsRandom
 open FsRandom.Statistics
 
 let seed = 123456789u, 362436069u, 521288629u, 88675123u
+let state = createState xorshift seed
 
 let gibbsBinormal (meanX, meanY, varX, varY, cov) (_ : float, y : float) = random {
    let! x' = normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
@@ -25,7 +26,7 @@ module Seq =
 let parameter = (0.0, 0.0, 1.0, 1.0, 0.7)
 let initialPoint = (0.0, 0.0)
 let sampler =
-   binormal parameter xorshift seed initialPoint
+   binormal parameter initialPoint state
    |> Seq.skip 100  // burn-in
    |> Seq.takeBy 20  // to avoid autocorrelation
 

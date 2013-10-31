@@ -8,15 +8,16 @@ let randomCreate rowCount columnCount (generator:GeneratorFunction<_>) =
    elif columnCount < 0 then
       outOfRange "columnCount" "`columnCount' must not be negative."
    else
-      fun s0 ->
+      GF (fun s0 ->
          let result = Array2D.zeroCreate rowCount columnCount
          let mutable s0 = s0
          for i = 0 to rowCount - 1 do
             for j = 0 to columnCount - 1 do
-               let r, s' = generator s0
+               let r, s' = Random.next generator s0
                result.[i, j] <- r
                s0 <- s'
          result, s0
+      )
 
 let randomCreateBased rowBase columnBase rowCount columnCount (generator:GeneratorFunction<_>) =
    if rowCount < 0 then
@@ -24,15 +25,16 @@ let randomCreateBased rowBase columnBase rowCount columnCount (generator:Generat
    elif columnCount < 0 then
       outOfRange "columnCount" "`columnCount' must not be negative."
    else
-      fun s0 ->
+      GF (fun s0 ->
          let result = Array2D.zeroCreateBased rowBase columnBase rowCount columnCount
          let mutable s0 = s0
          for i = rowBase to rowBase + rowCount - 1 do
             for j = columnBase to columnBase + columnCount - 1 do
-               let r, s' = generator s0
+               let r, s' = Random.next generator s0
                result.[i, j] <- r
                s0 <- s'
          result, s0
+      )
 
 let randomInit rowCount columnCount (initializer:int -> int -> GeneratorFunction<_>) =
    if rowCount < 0 then
@@ -40,16 +42,17 @@ let randomInit rowCount columnCount (initializer:int -> int -> GeneratorFunction
    elif columnCount < 0 then
       outOfRange "columnCount" "`columnCount' must not be negative."
    else
-      fun s0 ->
+      GF (fun s0 ->
          let result = Array2D.zeroCreate rowCount columnCount
          let mutable s0 = s0
          for i = 0 to rowCount - 1 do
             let init = initializer i
             for j = 0 to columnCount - 1 do
-               let r, s' = init j s0
+               let r, s' = Random.next (init j) s0
                result.[i, j] <- r
                s0 <- s'
          result, s0
+      )
 
 let randomInitBased rowBase columnBase rowCount columnCount (initializer:int -> int -> GeneratorFunction<_>) =
    if rowCount < 0 then
@@ -57,13 +60,14 @@ let randomInitBased rowBase columnBase rowCount columnCount (initializer:int -> 
    elif columnCount < 0 then
       outOfRange "columnCount" "`columnCount' must not be negative."
    else
-      fun s0 ->
+      GF (fun s0 ->
          let result = Array2D.zeroCreateBased rowBase columnBase rowCount columnCount
          let mutable s0 = s0
          for i = rowBase to rowBase + rowCount - 1 do
             let init = initializer i
             for j = columnBase to columnBase + columnCount - 1 do
-               let r, s' = init j s0
+               let r, s' = Random.next (init j) s0
                result.[i, j] <- r
                s0 <- s'
          result, s0
+      )

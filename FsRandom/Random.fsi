@@ -4,11 +4,11 @@ module FsRandom.Random
 /// <summary>
 /// Generates a random number with the next random state.
 /// </summary>
-val inline next : generator:GeneratorFunction<'a> -> (PrngState -> 'a * PrngState)
+val inline next : generator:GeneratorFunction<'a> -> PrngState -> 'a * PrngState
 /// <summary>
 /// Generates a random number.
 /// </summary>
-val inline get : generator:GeneratorFunction<'a> -> (PrngState -> 'a)
+val inline get : generator:GeneratorFunction<'a> -> PrngState -> 'a
 
 /// <summary>
 /// Always returns the specified value.

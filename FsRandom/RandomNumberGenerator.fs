@@ -5,7 +5,7 @@ open System
 type Prng<'s> = 's -> uint64 * 's
 type PrngState =
    abstract Next64Bits : unit -> uint64 * PrngState
-type GeneratorFunction<'a> = PrngState -> 'a * PrngState
+type GeneratorFunction<'a> = GF of (PrngState -> 'a * PrngState)
 
 let rec createState (prng:Prng<'s>) (seed:'s) = {
    new PrngState with
@@ -14,21 +14,22 @@ let rec createState (prng:Prng<'s>) (seed:'s) = {
          r, createState prng next
 }
 
-let inline bindRandom (m:GeneratorFunction<_>) (f:_ -> GeneratorFunction<_>) = fun s0 -> let v, s' = m s0 in f v s'
-let inline returnRandom x = fun (s:PrngState) -> x, s
-let inline runRandom (m:GeneratorFunction<_>) x = m x
-let inline evaluateRandom (m:GeneratorFunction<_>) x = m x |> fst
-let inline executeRandom (m:GeneratorFunction<_>) x = m x |> snd
+let inline bindRandom (GF m) (f:_ -> GeneratorFunction<_>) =
+   GF (fun s0 -> let v, s' = m s0 in match f v with GF (g) -> g s')
+let inline returnRandom x = GF (fun s -> x, s)
+let inline runRandom (GF m) x = m x
+let inline evaluateRandom (GF m) x = m x |> fst
+let inline executeRandom (GF m) x = m x |> snd
 
 let inline (|>>) m f = bindRandom m f
 let inline (&>>) m b = bindRandom m (fun _ -> b)
 
 type RandomBuilder () =
-   member this.Bind (m, f:'a->GeneratorFunction<_>) = m |>> f
+   member this.Bind (m, f) = m |>> f
    member this.Combine (a:GeneratorFunction<_>, b:GeneratorFunction<_>) = a &>> b
-   member this.Return (x):GeneratorFunction<_> = returnRandom x
+   member this.Return (x) = returnRandom x
    member this.ReturnFrom (m : GeneratorFunction<'a>) = m
-   member this.Zero () = fun (x:PrngState) -> (), x
+   member this.Zero () = GF (fun s -> (), s)
    member this.Delay (f):GeneratorFunction<_> = returnRandom () |>> f
    member this.While (condition, m) =
       if condition () then
@@ -54,14 +55,14 @@ let xorshift s =
    let upper, s = xor128 s
    to64bit lower upper, s
 
-let rawBits (s:PrngState) = s.Next64Bits ()
+let rawBits = GF (fun s -> s.Next64Bits ())
 [<Literal>]
 let ``1 / 2^52`` = 2.22044604925031308084726333618e-16
 [<Literal>]
 let ``1 / 2^53`` = 1.11022302462515654042363166809e-16
 [<Literal>]
 let ``1 / (2^53 - 1)`` = 1.1102230246251566636831481e-16
-let ``(0, 1)`` (s0:PrngState) = let r, s' = s0.Next64Bits () in (float (r >>> 12) + 0.5) * ``1 / 2^52``, s'
-let ``[0, 1)`` (s0:PrngState) = let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / 2^53``, s'
-let ``(0, 1]`` (s0:PrngState) = let r, s' = s0.Next64Bits () in (float (r >>> 12) + 1.0) * ``1 / 2^52``, s'
-let ``[0, 1]`` (s0:PrngState) = let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / (2^53 - 1)``, s'
+let ``(0, 1)`` = GF (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 0.5) * ``1 / 2^52``, s')
+let ``[0, 1)`` = GF (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / 2^53``, s')
+let ``(0, 1]`` = GF (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 1.0) * ``1 / 2^52``, s')
+let ``[0, 1]`` = GF (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / (2^53 - 1)``, s')
