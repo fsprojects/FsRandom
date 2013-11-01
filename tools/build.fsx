@@ -59,7 +59,7 @@ let buildParams =
    let defaultBuildParam = {
       Help = false
       Documentation = false
-      DocumentationRoot = "file://" + (buildDir % "docs")
+      DocumentationRoot = "."
       Debug = false
       Deploy = false
       CleanDeploy = false
@@ -81,7 +81,7 @@ fsi.exe build.fsx [<options>]
 -h | --help       Show this help
 -d | --docs       Build documentation files
 --docs-root <uri> Specify the root uri of the documentation
-                  Default: Build/docs
+                  Default: .
 --debug           Debug build
 --deploy          Create a zip archive and a NuGet package
                   See --no-zip and --no-nuget
