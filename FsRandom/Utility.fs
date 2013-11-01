@@ -2,12 +2,12 @@
 
 open Microsoft.FSharp.Core.LanguagePrimitives
 
-let randomSign =
-   GF (fun s0 ->
+let inline randomSign () =
+   let inline g s0 =
       let r, s' = Random.next rawBits s0
-      let sign = if r &&& 1uL = 0uL then +1 else -1
+      let sign = if r &&& 1uL = 0uL then GenericOne else -GenericOne
       sign, s'
-   )
+   GF (g)
 
 let flipCoin probability =
    ensuresFiniteValue probability "probability"

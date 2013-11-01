@@ -4,10 +4,10 @@
 /// <summary>
 /// Returns +1 or -1 randomly.
 /// </summary>
-val randomSign : GeneratorFunction<int>
-//val inline randomSign : GeneratorFunction<(^a)>
-//   when ^a : (static member One : ^a)
-//   and ^a : (static member (~-) : ^a -> ^a)
+//val randomSign : GeneratorFunction<int>
+val inline randomSign : unit -> GeneratorFunction<(^a)>
+   when ^a : (static member One : ^a)
+   and ^a : (static member (~-) : ^a -> ^a)
 
 /// <summary>
 /// Returns a random Boolean value with the specified probability.
