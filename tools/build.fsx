@@ -168,7 +168,7 @@ Target "Documentation" (fun () ->
       "project-name", "FsRandom"
       "project-author", "RecycleBin"
       "project-summary", "Purely functional random number generating framework designed for F#"
-      "project-github", "http://github.com/kos59125/FsRandom"
+      "project-github", "https://github.com/kos59125/FsRandom"
       "project-nuget", "https://nuget.org/packages/FsRandom"
    ]
 

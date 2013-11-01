@@ -38,6 +38,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{668880F2-5
 	ProjectSection(SolutionItems) = preProject
 		docs\documentation.fsx = docs\documentation.fsx
 		docs\index.fsx = docs\index.fsx
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{F54D831F-52EE-42FD-A8D8-B64693BFA78D}"
