@@ -5,6 +5,8 @@ obj/
 packages/*/
 TestResults/
 *.nupkg
+*.pdb
+*.xml
 
 Build/
 Deploy/

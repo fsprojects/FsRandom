@@ -1,10 +1,21 @@
-﻿#r @"FakeLib.dll"
-#r @"ICSharpCode.SharpZipLib.dll"
+﻿#I "FSharp.Formatting/lib/net40"
+#I "RazorEngine/lib/net40/"
+#r "Microsoft.AspNet.Razor/lib/net40/System.Web.Razor.dll"
+#r "FakeLib.dll"
+#r "ICSharpCode.SharpZipLib.dll"
+#r "RazorEngine.dll"
+#r "FSharp.Literate.dll"
+#r "FSharp.CodeFormat.dll"
+#r "FSharp.MetadataFormat.dll"
+#r "FSharp.Markdown.dll"
 
 open System
 open System.IO
 open System.Reflection
 open Fake
+open Fake.FileHelper
+open FSharp.Literate
+open FSharp.MetadataFormat
 
 let baseDir = Path.GetDirectoryName (__SOURCE_DIRECTORY__)
 let inline (~%) name = Path.Combine (baseDir, name)
@@ -20,6 +31,8 @@ let zipName = deployDir % "FsRandom.zip"
 
 type BuildParameter = {
    Help : bool
+   Documentation : bool
+   DocumentationRoot : string option
    Debug : bool
    Deploy : bool
    CleanDeploy : bool
@@ -31,6 +44,8 @@ let buildParams =
    let rec loop acc = function
       | [] -> acc
       | "-h" :: _ | "--help" :: _ -> { acc with Help = true }  // don't care other arguments
+      | "-d" :: args | "--docs" :: args -> loop { acc with Documentation = true } args
+      | "--docs-root" :: path :: args -> loop { acc with DocumentationRoot = Some (path) } args
       | "--debug" :: args -> loop { acc with Debug = true } args
       | "--deploy" :: args -> loop { acc with Deploy = true } args
       | "--clean-deploy" :: args -> loop { acc with CleanDeploy = true } args
@@ -42,6 +57,8 @@ let buildParams =
          exit 1
    let defaultBuildParam = {
       Help = false
+      Documentation = false
+      DocumentationRoot = None
       Debug = false
       Deploy = false
       CleanDeploy = false
@@ -61,6 +78,8 @@ fsi.exe build.fsx [<options>]
 
 # Options
 -h | --help       Show this help
+-d | --docs       Build documentation
+--docs-root <uri> Specifies the root uri of the documentation
 --debug           Debug build
 --deploy          Create a zip archive and a NuGet package
                   See --no-zip and --no-nuget
@@ -140,6 +159,49 @@ Target "NuGet" (fun () ->
    pack projectName
 )
 
+let docsRoot =
+   match buildParams.DocumentationRoot with
+      | Some (path) -> path
+      | None -> "file://" + (buildDir % "docs")
+Target "Documentation" (fun () ->
+   let info = [
+      "project-name", "FsRandom"
+      "project-author", "RecycleBin"
+      "project-summary", "Purely functional random number generating framework designed for F#"
+      "project-github", "http://github.com/kos59125/FsRandom"
+      "project-nuget", "https://nuget.org/packages/FsRandom"
+   ]
+
+   // Paths with template/source/output locations
+   let content    = % "docs"
+   let output     = buildDir % "docs"
+   let templates  = __SOURCE_DIRECTORY__ % "templates"
+   let formatting = __SOURCE_DIRECTORY__ % "FSharp.Formatting"
+   let docTemplate = formatting % "templates" % "docpage.cshtml"
+
+   // Where to look for *.csproj templates (in this order)
+   let layoutRoots = [ templates; formatting @@ "templates" ]
+
+   // Copy static files and CSS + JS from F# Formatting
+   let copyFiles () =
+      ensureDirectory (output @@ "content")
+      CopyRecursive (formatting @@ "content") (output @@ "content") true 
+      |> Log "Copying styles and scripts: "
+
+   // Build documentation from `fsx` and `md` files in `docs/content`
+   let buildDocumentation () =
+      let subdirs = Directory.EnumerateDirectories(content, "*", SearchOption.AllDirectories)
+      for dir in Seq.append [content] subdirs do
+         let sub = if dir.Length > content.Length then dir.Substring(content.Length + 1) else "."
+         Literate.ProcessDirectory
+            ( dir, docTemplate, output @@ sub, replacements = ("root", docsRoot)::info,
+              layoutRoots = layoutRoots )
+
+   // Generate
+   copyFiles()
+   buildDocumentation()
+)
+
 Target "Zip" (fun () ->
    !+ (buildDir % "*.*")
    |> Scan
@@ -161,6 +223,10 @@ Target "Deploy" (fun () ->
 "Clean"
 ==> "Build"
 
+// Documentation dependency
+"Build"
+==> "Documentation"
+
 // NuGet dependency
 "Build"
 ==> "EnsureDeploy"
@@ -173,9 +239,10 @@ Target "Deploy" (fun () ->
 
 // Deploy dependency
 "Build"
+=?> ("Documentation", buildParams.Documentation)
 =?> ("Zip", not buildParams.NoZip)
 =?> ("NuGet", not buildParams.NoNuGet)
 ==> "Deploy"
 
 let deploy = buildParams.Deploy && (not buildParams.NoZip || not buildParams.NoNuGet)
-Run <| if deploy then "Deploy" else "Build"
+Run <| if deploy then "Deploy" elif buildParams.Documentation then "Documentation" else "Build"
