@@ -14,7 +14,7 @@ let rec createState (prng:Prng<'s>) (seed:'s) = {
          r, createState prng next
 }
 
-let inline bindRandom (GF m) (f:_ -> GeneratorFunction<_>) =
+let inline bindRandom (GF m) f =
    GF (fun s0 -> let v, s' = m s0 in match f v with GF (g) -> g s')
 let inline returnRandom x = GF (fun s -> x, s)
 let inline runRandom (GF m) x = m x
@@ -26,11 +26,11 @@ let inline (&>>) m b = bindRandom m (fun _ -> b)
 
 type RandomBuilder () =
    member this.Bind (m, f) = m |>> f
-   member this.Combine (a:GeneratorFunction<_>, b:GeneratorFunction<_>) = a &>> b
+   member this.Combine (a, b) = a &>> b
    member this.Return (x) = returnRandom x
-   member this.ReturnFrom (m : GeneratorFunction<'a>) = m
+   member this.ReturnFrom (m : GeneratorFunction<_>) = m
    member this.Zero () = GF (fun s -> (), s)
-   member this.Delay (f):GeneratorFunction<_> = returnRandom () |>> f
+   member this.Delay (f) = returnRandom () |>> f
    member this.While (condition, m) =
       if condition () then
          m |>> (fun () -> this.While (condition, m))

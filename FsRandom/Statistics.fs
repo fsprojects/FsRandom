@@ -315,7 +315,7 @@ let multinomial (n, weight) =
       )
          
 module Seq =
-   let markovChain (generator:_ -> GeneratorFunction<_>) =
+   let markovChain generator =
       let f = generator >> Random.next
       fun x0 s0 -> seq {
          let x = ref x0

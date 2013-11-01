@@ -7,7 +7,7 @@ let swap i j (array:'a []) =
    array.[i] <- array.[j]
    array.[j] <- temp
 
-let randomCreate count (generator:GeneratorFunction<_>) =
+let randomCreate count generator =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
    else
@@ -21,7 +21,7 @@ let randomCreate count (generator:GeneratorFunction<_>) =
          result, s0
       )
 
-let randomInit count (initializer:int -> GeneratorFunction<_>) =
+let randomInit count initializer =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
    else
@@ -35,7 +35,7 @@ let randomInit count (initializer:int -> GeneratorFunction<_>) =
          result, s0
       )
 
-let randomFill (array:'a []) targetIndex count (generator:GeneratorFunction<'a>) =
+let randomFill (array:'a []) targetIndex count generator =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
    else

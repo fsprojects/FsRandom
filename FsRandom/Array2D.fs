@@ -2,7 +2,7 @@
 
 open System
 
-let randomCreate rowCount columnCount (generator:GeneratorFunction<_>) =
+let randomCreate rowCount columnCount generator =
    if rowCount < 0 then
       outOfRange "rowCount" "`rowCount' must not be negative."
    elif columnCount < 0 then
@@ -19,7 +19,7 @@ let randomCreate rowCount columnCount (generator:GeneratorFunction<_>) =
          result, s0
       )
 
-let randomCreateBased rowBase columnBase rowCount columnCount (generator:GeneratorFunction<_>) =
+let randomCreateBased rowBase columnBase rowCount columnCount generator =
    if rowCount < 0 then
       outOfRange "rowCount" "`rowCount' must not be negative."
    elif columnCount < 0 then
@@ -36,7 +36,7 @@ let randomCreateBased rowBase columnBase rowCount columnCount (generator:Generat
          result, s0
       )
 
-let randomInit rowCount columnCount (initializer:int -> int -> GeneratorFunction<_>) =
+let randomInit rowCount columnCount initializer =
    if rowCount < 0 then
       outOfRange "rowCount" "`rowCount' must not be negative."
    elif columnCount < 0 then
@@ -54,7 +54,7 @@ let randomInit rowCount columnCount (initializer:int -> int -> GeneratorFunction
          result, s0
       )
 
-let randomInitBased rowBase columnBase rowCount columnCount (initializer:int -> int -> GeneratorFunction<_>) =
+let randomInitBased rowBase columnBase rowCount columnCount initializer =
    if rowCount < 0 then
       outOfRange "rowCount" "`rowCount' must not be negative."
    elif columnCount < 0 then

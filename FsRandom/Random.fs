@@ -1,19 +1,19 @@
 ﻿module FsRandom.Random
 
-let inline next (generator:GeneratorFunction<_>) s = runRandom generator s
-let inline get (generator:GeneratorFunction<_>) s = evaluateRandom generator s
+let inline next generator s = runRandom generator s
+let inline get generator s = evaluateRandom generator s
 
 let inline singleton x = returnRandom x
 let inline identity (generator:GeneratorFunction<_>) = generator
-let inline transformBy f (generator:GeneratorFunction<_>) =
+let inline transformBy f generator =
    GF (fun s0 -> let r, s' = next generator s0 in f r, s')
-let inline transformBy2 f (g1:GeneratorFunction<_>) (g2:GeneratorFunction<_>) =
+let inline transformBy2 f g1 g2 =
    GF (fun s0 ->
       let r1, s1 = next g1 s0
       let r2, s2 = next g2 s1
       f r1 r2, s2
    )
-let inline transformBy3 f (g1:GeneratorFunction<_>) (g2:GeneratorFunction<_>) (g3:GeneratorFunction<_>) =
+let inline transformBy3 f g1 g2 g3 =
    GF (fun s0 ->
       let r1, s1 = next g1 s0
       let r2, s2 = next g2 s1

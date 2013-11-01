@@ -1,6 +1,6 @@
 ﻿module FsRandom.Seq
 
-let ofRandom (generator:GeneratorFunction<_>) =
+let ofRandom generator =
    let f = Random.next generator
    fun s0 -> seq {
       let s = ref s0

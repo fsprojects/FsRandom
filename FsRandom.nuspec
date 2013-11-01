@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
    <metadata>
       <id>FsRandom</id>
-      <version>1.1</version>
+      <version>1.2</version>
       <title>FsRandom</title>
       <authors>RecycleBin</authors>
       <owners>kos59125</owners>
@@ -15,7 +15,7 @@
       <references>
          <reference file="FsRandom.dll" />
       </references>
-      <tags>F# random-number computation-expression</tags>
+      <tags>F# random-number computation-expression monte-carlo statistics</tags>
    </metadata>
    <files>
       <file src="FsRandom\bin\Release\FsRandom.dll" target="lib\net40" />
