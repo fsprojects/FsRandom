@@ -11,12 +11,13 @@ let uniform (min, max) =
       if isInfinity (max - min) then
          let middle = (min + max) / 2.0
          let halfLength = middle - min
-         fun s0 ->
-            let u, s' = ``[0, 1]`` s0
+         GF (fun s0 ->
+            let u, s' = Random.next ``[0, 1]`` s0
             if u < 0.5 then
                min + 2.0 * u * halfLength, s'
             else
                middle + (2.0 * u - 1.0) * halfLength, s'
+         )
       else
          let length = max - min
          let transform u =  min + u * length
@@ -67,8 +68,8 @@ let gammaSmall alpha s0 =
    let mutable result = 0.0
    let incomplete = ref true
    while !incomplete do
-      let u1, s1 = ``(0, 1)`` state
-      let u2, s' = ``(0, 1)`` s1
+      let u1, s1 = Random.next ``(0, 1)`` state
+      let u2, s' = Random.next ``(0, 1)`` s1
       state <- s'
       let v = c2 * u1
       if v <= 1.0 then
@@ -92,12 +93,12 @@ let gammaLarge alpha s0 =
    let mutable result = 0.0
    let incomplete = ref true
    while !incomplete do
-      let z, s' = normal (0.0, 1.0) state
+      let z, s' = Random.next (normal (0.0, 1.0)) state
       state <- s'
       let t = 1.0 + c2 * z;
       if t > 0.0 then
          let v = pown t 3;
-         let u, s' = ``(0, 1)`` state
+         let u, s' = Random.next ``(0, 1)`` state
          state <- s'
          if u < 1.0 - 0.0331 * pown z 4 || log u < 0.5 * z * z + c1 * (1.0 - v + log v) then
             result <- c1 * v
@@ -109,7 +110,7 @@ let gammaInt alpha s0 =
       match n with
          | 0 -> result
          | _ ->
-            let u, s' = ``(0, 1)`` s
+            let u, s' = Random.next ``(0, 1)`` s
             loop (n - 1) (sum - log u, s')
    loop alpha (0.0, s0)
 
@@ -123,11 +124,11 @@ let gamma (shape, scale) =
    else
       let get = Random.transformBy ((*) scale)
       if isInt shape then
-         get (gammaInt (int shape))
+         get (GF (gammaInt (int shape)))
       elif shape < 1.0 then
-         get (gammaSmall shape)
+         get (GF (gammaSmall shape))
       else
-         get (gammaLarge shape)
+         get (GF (gammaLarge shape))
 
 let beta (alpha, beta) =
    ensuresFiniteValue alpha "alpha"
@@ -219,12 +220,12 @@ let poisson lambda =
       let m = int lambda
       let m' = float m
       let d = exp <| -lambda + m' * log lambda - loggamma (m' + 1.0)
-      fun s0 ->
+      GF (fun s0 ->
          let xu = ref m
          let xl = ref m
          let mutable pu = d
          let mutable pl = d
-         let mutable u, s' = ``[0, 1)`` s0
+         let mutable u, s' = Random.next ``[0, 1)`` s0
          let mutable v = u - pu
          let mutable result = if v <= 0.0 then Some (!xu) else None
          while result.IsNone do
@@ -243,6 +244,7 @@ let poisson lambda =
                v <- u - pu
                result <- if v <= 0.0 then Some (!xu) else None
          result.Value, s'
+      )
 
 let geometric probability =
    ensuresFiniteValue probability "probability"
@@ -268,14 +270,15 @@ let binomial (n, probability) =
    elif probability <= 0.0 || 1.0 <= probability then
       outOfRange "probability" "`probability' must be in the range of (0, 1)."
    else
-      fun s0 ->
+      GF (fun s0 ->
          let count = ref 0
          let mutable s = s0
          for i = 1 to n do
-            let u, s' = ``[0, 1]`` s
+            let u, s' = Random.next ``[0, 1]`` s
             if u <= probability then incr count
             s <- s'
          !count, s
+      )
 
 let dirichlet alpha =
    let k = List.length alpha
@@ -284,9 +287,10 @@ let dirichlet alpha =
    elif List.exists (fun x -> isNaN x || isInfinity x || x <= 0.0) alpha then
       outOfRange "alpha" "All elements in `alpha' must be positive."
    else
-      fun s0 ->
-         let y, sum, s' = List.foldBack (fun a (xs, sum, s) -> let x, s' = gamma (a, 1.0) s in x :: xs, sum + x, s') alpha ([], 0.0, s0)
+      GF (fun s0 ->
+         let y, sum, s' = List.foldBack (fun a (xs, sum, s) -> let x, s' = Random.next (gamma (a, 1.0)) s in x :: xs, sum + x, s') alpha ([], 0.0, s0)
          List.map (fun y' -> y' / sum) y, s'
+      )
 
 let multinomial (n, weight) =
    if n <= 0 then
@@ -298,19 +302,20 @@ let multinomial (n, weight) =
       outOfRange "probability" "All elements in `weight' must be positive."
    else
       let cdf, sum = List.fold (fun (xs, sum) x -> let s = sum + x in xs @ [s], s) ([], 0.0) weight
-      fun s0 ->
+      GF (fun s0 ->
          let result = Array.zeroCreate k
          let mutable s = s0
          for loop = 1 to n do
-            let u, s' = ``[0, 1)`` s
+            let u, s' = Random.next ``[0, 1)`` s
             let p = sum * u
             let index = List.findIndex (fun x -> p < x) cdf
             result.[index] <- result.[index] + 1
             s <- s'
          Array.toList result, s
+      )
          
 module Seq =
-   let markovChain (generator:_ -> GeneratorFunction<_, _>) =
+   let markovChain (generator:_ -> GeneratorFunction<_>) =
       let f = generator >> Random.next
       fun x0 s0 -> seq {
          let x = ref x0

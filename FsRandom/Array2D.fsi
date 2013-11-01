@@ -7,7 +7,7 @@ module FsRandom.Array2D
 /// <param name="rowCount">The length of the first dimension of the array.</param>
 /// <param name="columnCount">The length of the second dimension of the array.</param>
 /// <param name="generator">The generator function.</param>
-val randomCreate : rowCount:int -> columnCount:int -> generator:GeneratorFunction<'s, 'a> -> GeneratorFunction<'s, 'a [,]>
+val randomCreate : rowCount:int -> columnCount:int -> generator:GeneratorFunction<'a> -> GeneratorFunction<'a [,]>
 
 /// <summary>
 /// Creates a based array whose elements are randomly generated. 
@@ -17,7 +17,7 @@ val randomCreate : rowCount:int -> columnCount:int -> generator:GeneratorFunctio
 /// <param name="rowCount">The length of the first dimension of the array.</param>
 /// <param name="columnCount">The length of the second dimension of the array.</param>
 /// <param name="generator">The generator function.</param>
-val randomCreateBased : rowBase:int -> columnBase:int -> rowCount:int -> columnCount:int -> generator:GeneratorFunction<'s, 'a> -> GeneratorFunction<'s, 'a [,]>
+val randomCreateBased : rowBase:int -> columnBase:int -> rowCount:int -> columnCount:int -> generator:GeneratorFunction<'a> -> GeneratorFunction<'a [,]>
 
 /// <summary>
 /// Creates an array whose elements are randomly generated. 
@@ -25,7 +25,7 @@ val randomCreateBased : rowBase:int -> columnBase:int -> rowCount:int -> columnC
 /// <param name="rowCount">The length of the first dimension of the array.</param>
 /// <param name="columnCount">The length of the second dimension of the array.</param>
 /// <param name="initializer">The function to take an index and produce a random number generating function.</param>
-val randomInit : rowCount:int -> columnCount:int -> initializer:(int -> int -> GeneratorFunction<'s, 'a>) -> GeneratorFunction<'s, 'a [,]>
+val randomInit : rowCount:int -> columnCount:int -> initializer:(int -> int -> GeneratorFunction<'a>) -> GeneratorFunction<'a [,]>
 
 /// <summary>
 /// Creates a based array whose elements are randomly generated. 
@@ -35,4 +35,4 @@ val randomInit : rowCount:int -> columnCount:int -> initializer:(int -> int -> G
 /// <param name="rowCount">The length of the first dimension of the array.</param>
 /// <param name="columnCount">The length of the second dimension of the array.</param>
 /// <param name="generator">The generator function.</param>
-val randomInitBased : rowBase:int -> columnBase:int -> rowCount:int -> columnCount:int -> initializer:(int -> int -> GeneratorFunction<'s, 'a>) -> GeneratorFunction<'s, 'a [,]>
+val randomInitBased : rowBase:int -> columnBase:int -> rowCount:int -> columnCount:int -> initializer:(int -> int -> GeneratorFunction<'a>) -> GeneratorFunction<'a [,]>

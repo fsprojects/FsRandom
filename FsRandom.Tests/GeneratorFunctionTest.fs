@@ -195,13 +195,13 @@ let testMultinomial tester parameter =
 
 let testRandomSignInt tester =
    let p = 0.5
-   let generator = Random.transformBy (fun s -> if s > 0 then 1 else -1) Utility.randomSign
+   let generator = Random.transformBy (fun s -> if s > 0 then 1 else -1) (Utility.randomSign ())
    let cdf = cdfBernoulli p
    testBinary tester generator cdf p
 
 let testRandomSignFloat tester =
    let p = 0.5
-   let generator = Random.transformBy (fun s -> if s > 0.0 then 1 else -1) Utility.randomSign
+   let generator = Random.transformBy (fun s -> if s > 0.0 then 1 else -1) (Utility.randomSign ())
    let cdf = cdfBernoulli p
    testBinary tester generator cdf p
 
@@ -315,88 +315,7 @@ let ``Validates choose`` () =
    let n = 4
    let tester = getDefaultTester ()
    let result, next = Random.next (Utility.choose 10 n) tester
-   Assert.That (snd next, Is.Not.EqualTo(snd tester))
+   Assert.That (next, Is.Not.EqualTo(tester))
    Assert.That (List.length result, Is.EqualTo(n))
    Assert.That (List.forall (fun x -> List.exists ((=) x) [0..9]) result, Is.True)
    Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(n))
-
-[<Test>]
-let ``Validates Array.sample`` () =
-   let array = Array.init 10 id
-   let tester = getDefaultTester ()
-   let result, next = Random.next (Array.sample 8 array) tester
-   Assert.That (snd next, Is.Not.EqualTo(snd tester))
-   Assert.That (Array.length result, Is.EqualTo(8))
-   Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
-   Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(8))
-
-[<Test>]
-let ``Validates Array.weightedSample`` () =
-   let array = Array.init 10 id
-   let weight = Array.init (Array.length array) (id >> float >> ((+) 1.0))
-   let tester = getDefaultTester ()
-   let result, next = Random.next (Array.weightedSample 8 weight array) tester
-   Assert.That (snd next, Is.Not.EqualTo(snd tester))
-   Assert.That (Array.length result, Is.EqualTo(8))
-   Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
-   Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(8))
-
-[<Test>]
-let ``Validates Array.sampleWithReplacement`` () =
-   let array = Array.init 5 id
-   let tester = getDefaultTester ()
-   let result, next = Random.next (Array.sampleWithReplacement 8 array) tester
-   Assert.That (snd next, Is.Not.EqualTo(snd tester))
-   Assert.That (Array.length result, Is.EqualTo(8))
-   Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
-   Assert.That (Seq.length (Seq.distinct result), Is.Not.EqualTo(1))
-
-[<Test>]
-let ``Validates Array.weightedSampleWithReplacement`` () =
-   let array = Array.init 5 id
-   let weight = Array.init (Array.length array) (id >> float >> ((+) 1.0))
-   let tester = getDefaultTester ()
-   let result, next = Random.next (Array.weightedSampleWithReplacement 8 weight array) tester
-   Assert.That (snd next, Is.Not.EqualTo(snd tester))
-   Assert.That (Array.length result, Is.EqualTo(8))
-   Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
-   Assert.That (Seq.length (Seq.distinct result), Is.Not.EqualTo(1))
-
-[<Test>]
-let ``Validates Array.randomCreate`` () =
-   let tester = getDefaultTester ()
-   let result, next = Random.next (Array.randomCreate 8 ``[0, 1)``) tester
-   Assert.That (snd next, Is.Not.EqualTo(snd tester))
-   Assert.That (Array.length result, Is.EqualTo(8))
-   let head = result.[0]
-   Assert.That (Array.forall ((=) head) result, Is.False)
-
-[<Test>]
-let ``Validates Array.randomInit`` () =
-   let tester = getDefaultTester ()
-   let expected =
-      Random.get (Array.randomCreate 8 (normal (0.0, 1.0))) tester
-      |> Array.mapi (fun index z -> z + float index)
-   let actual = Random.get (Array.randomInit 8 (fun index -> normal (float index, 1.0))) tester
-   Assert.That (actual, Is.EqualTo(expected))
-
-[<Test>]
-let ``Validates Array.shuffle`` () =
-   let tester = getDefaultTester ()
-   let array = Array.init 8 id
-   let result, next = Random.next (Array.shuffle array) tester
-   Assert.That (snd next, Is.Not.EqualTo(snd tester))
-   Assert.That (Object.ReferenceEquals (result, array), Is.False)
-   Assert.That (Array.length result, Is.EqualTo(Array.length array))
-   Assert.That (Array.zip array result |> Array.forall (fun (x, y) -> x = y), Is.False)
-   Assert.That (Array.sort result, Is.EquivalentTo(array))
-
-[<Test>]
-let ``Validates Array.shuffleInPlace`` () =
-   let tester = getDefaultTester ()
-   let array = Array.init 8 id
-   let copied = Array.copy array
-   let _, next = Random.next (Array.shuffleInPlace array) tester
-   Assert.That (next, Is.Not.EqualTo(seed))
-   Assert.That (Array.zip copied array |> Array.forall (fun (x, y) -> x = y), Is.False)
-   Assert.That (Array.sort array, Is.EquivalentTo(copied))

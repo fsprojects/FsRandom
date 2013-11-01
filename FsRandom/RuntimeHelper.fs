@@ -6,6 +6,7 @@ open Microsoft.FSharp.Core.LanguagePrimitives
 
 let inline curry f x y = f (x, y)
 let inline uncurry f (x, y) = f x y
+let inline flip f x y = f y x
 let inline cons x xs = x :: xs
 let inline tuple x y = x, y
 let inline tuple3 x y z = x, y, z

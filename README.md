@@ -49,10 +49,9 @@ It is easy to do with `normal` random number generator in the Statistics module.
 To give the specific parameter, say the mean of 0 and the variance of 1, do:
 
 ```fsharp
-let generator<'s> : GeneratorFunction<'s, _> = Statistics.normal (0.0, 1.0)
+let generator = Statistics.normal (0.0, 1.0)
 ```
 
-`'s` is a random state type described below.
 The generator function is only able to use with a pseudo-random number generator (PRNG).
 The PRNG constructs a computation expression to generate random numbers.
 The computation expression is a function which takes a random seed and returns a random number and a new seed for the next call.
@@ -198,10 +197,8 @@ Random.get generator linearState
 
 This section explains how to construct generator functions such like `normal` and `uniform`.
 
-The type of generator function is `GeneratorFunction<'s, 'a>`,
-where `'s` is a type of random seed and `'a` is a type of random number.
-`'s` should be generic whenever we define new generator functions,
-since it is determined by random number generators.
+The type of generator function is `GeneratorFunction<'a>`,
+where `'a` is a type of random number.
 
 As an example of user-defined generator function,
 let's construct a random number generator to produce an *approximate*
@@ -213,7 +210,7 @@ Therefore, if we subtract 6 from the sum of 12 standard random numbers, the resu
 approximates a standard normal random number.
 
 ```fsharp
-let approximatelyStandardNormal<'s> : GeneratorFunction<'s, _> = random {
+let approximatelyStandardNormal = random {
    let! values = Array.randomCreate 12 ``(0, 1)``  // ``(0, 1)`` is a standard random number generator in (0, 1)
    return Array.sum values - 6.0
 }

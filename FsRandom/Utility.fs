@@ -2,10 +2,12 @@
 
 open Microsoft.FSharp.Core.LanguagePrimitives
 
-let inline randomSign s0 =
-   let r, s' = rawBits s0
-   let sign = if r &&& 1uL = 0uL then GenericOne else -GenericOne
-   sign, s'
+let inline randomSign () =
+   let inline g s0 =
+      let r, s' = Random.next rawBits s0
+      let sign = if r &&& 1uL = 0uL then GenericOne else -GenericOne
+      sign, s'
+   GF (g)
 
 let flipCoin probability =
    ensuresFiniteValue probability "probability"
@@ -21,7 +23,7 @@ let choose m n =
    elif n < 0 || m < n then
       outOfRange "n" "`n' must be in the range of [0, m]."
    else
-      fun s0 ->
+      GF (fun s0 ->
          let rec loop (acc, p, s) = function
             | index when index < 0 ->
                // List.rev is for ascending order.
@@ -30,9 +32,10 @@ let choose m n =
             | index ->
                let mutable probability = 1.0
                let mutable p = p
-               let u, s' = ``[0, 1)`` s
+               let u, s' = Random.next ``[0, 1)`` s
                while u < probability do
                   probability <- probability * float (p - index - 1) / float p
                   p <- p - 1
                loop (m - p - 1 :: acc, p, s') (index - 1)
          loop ([], m, s0) (n - 1)
+      )

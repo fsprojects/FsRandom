@@ -3,7 +3,9 @@
 open FsRandom
 
 let r0 = System.Random ()
-let s = createState systemrandom r0
+let state = createState systemrandom r0
 
-printfn "%f" <| Random.get ``[0, 1)`` s
-printfn "%f" <| Random.get ``[0, 1)`` s
+// systemrandom offers a statefun workflow.
+// The result should be different.
+printfn "%f" <| Random.get ``[0, 1)`` state
+printfn "%f" <| Random.get ``[0, 1)`` state

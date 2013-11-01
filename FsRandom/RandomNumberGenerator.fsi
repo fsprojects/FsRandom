@@ -10,39 +10,38 @@ type Prng<'s> = 's -> uint64 * 's
 /// <summary>
 /// Represents a random state.
 /// </summary>
-type PrngState<'s> = Prng<'s> * 's
+type PrngState =
+   abstract Next64Bits : unit -> uint64 * PrngState
 /// <summary>
 /// Generates random numbers.
 /// </summary>
-type GeneratorFunction<'s, 'a> = PrngState<'s> -> 'a * PrngState<'s>
+type GeneratorFunction<'a> = GF of (PrngState -> 'a * PrngState)
 
 /// <summary>
 /// Constructs a random state.
 /// </summary>
 /// <param name="prng">The PRNG.</param>
 /// <param name="seed">The random seed.</param>
-val createState : prng:Prng<'s> -> seed:'s -> PrngState<'s>
+val createState : prng:Prng<'s> -> seed:'s -> PrngState
 
-val inline internal ( |>> ) : m:GeneratorFunction<'s, 'a> -> f:('a -> GeneratorFunction<'s, 'b>) -> GeneratorFunction<'s, 'b>
-val inline internal ( &>> ) : m:GeneratorFunction<'s, 'a> -> b:GeneratorFunction<'s, 'b> -> GeneratorFunction<'s, 'b>
-val inline internal bindRandom : m:GeneratorFunction<'s, 'a> -> f:('a -> GeneratorFunction<'s, 'b>) -> GeneratorFunction<'s, 'b>
-val inline internal returnRandom : a:'a -> GeneratorFunction<'s, 'a>
-val inline internal getRandom : GeneratorFunction<'s, 's>
-val inline internal setRandom : state:PrngState<'s> -> GeneratorFunction<'s, unit>
-val inline internal runRandom : GeneratorFunction<'s, 'a> -> PrngState<'s> -> 'a * PrngState<'s>
-val inline internal evaluateRandom : GeneratorFunction<'s, 'a> -> PrngState<'s> -> 'a
-val inline internal executeRandom : GeneratorFunction<'s, 'a> -> PrngState<'s> -> PrngState<'s>
+val inline internal ( |>> ) : m:GeneratorFunction<'a> -> f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b>
+val inline internal ( &>> ) : m:GeneratorFunction<'a> -> b:GeneratorFunction<'b> -> GeneratorFunction<'b>
+val inline internal bindRandom : m:GeneratorFunction<'a> -> f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b>
+val inline internal returnRandom : a:'a -> GeneratorFunction<'a>
+val inline internal runRandom : GeneratorFunction<'a> -> PrngState -> 'a * PrngState
+val inline internal evaluateRandom : GeneratorFunction<'a> -> PrngState -> 'a
+val inline internal executeRandom : GeneratorFunction<'a> -> PrngState -> PrngState
 
 type RandomBuilder =
    new : unit -> RandomBuilder
-   member Bind : m:GeneratorFunction<'s, 'a> * f:('a -> GeneratorFunction<'s, 'b>) -> GeneratorFunction<'s, 'b>
-   member Combine : a:GeneratorFunction<'s, 'a> * b:GeneratorFunction<'s, 'b> -> GeneratorFunction<'s, 'b>
-   member Return : a:'a -> GeneratorFunction<'s, 'a>
-   member ReturnFrom : m:GeneratorFunction<'s, 'a> -> GeneratorFunction<'s, 'a>
-   member Zero : unit -> GeneratorFunction<'s, unit>
-   member Delay : (unit -> GeneratorFunction<'s, 'a>) -> GeneratorFunction<'s, 'a>
-   member While : condition:(unit -> bool) * m:GeneratorFunction<'s, unit> -> GeneratorFunction<'s, unit>
-   member For : source:seq<'a> * f:('a -> GeneratorFunction<'s, unit>) -> GeneratorFunction<'s, unit>
+   member Bind : m:GeneratorFunction<'a> * f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b>
+   member Combine : a:GeneratorFunction<'a> * b:GeneratorFunction<'b> -> GeneratorFunction<'b>
+   member Return : a:'a -> GeneratorFunction<'a>
+   member ReturnFrom : m:GeneratorFunction<'a> -> GeneratorFunction<'a>
+   member Zero : unit -> GeneratorFunction<unit>
+   member Delay : (unit -> GeneratorFunction<'a>) -> GeneratorFunction<'a>
+   member While : condition:(unit -> bool) * m:GeneratorFunction<unit> -> GeneratorFunction<unit>
+   member For : source:seq<'a> * f:('a -> GeneratorFunction<unit>) -> GeneratorFunction<unit>
 /// <summary>
 /// Constructs a random number function.
 /// </summary>
@@ -63,20 +62,20 @@ val xorshift : Prng<uint32 * uint32 * uint32 * uint32>
 /// <summary>
 /// Returns a random 64-bit number.
 /// </summary>
-val rawBits : GeneratorFunction<'s, uint64>
+val rawBits : GeneratorFunction<uint64>
 /// <summary>
 /// Returns a random number in the range of (0, 1).
 /// </summary>
-val ``(0, 1)`` : GeneratorFunction<'s, float>
+val ``(0, 1)`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of [0, 1).
 /// </summary>
-val ``[0, 1)`` : GeneratorFunction<'s, float>
+val ``[0, 1)`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of (0, 1].
 /// </summary>
-val ``(0, 1]`` : GeneratorFunction<'s, float>
+val ``(0, 1]`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of [0, 1].
 /// </summary>
-val ``[0, 1]`` : GeneratorFunction<'s, float>
+val ``[0, 1]`` : GeneratorFunction<float>
