@@ -1,0 +1,321 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>FsRandom by kos59125</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>FsRandom</h1>
+        <p>A random number generator framework designed for F#</p>
+
+        <p class="view"><a href="https://github.com/kos59125/FsRandom">View the Project on GitHub <small>kos59125/FsRandom</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/kos59125/FsRandom/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/kos59125/FsRandom/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/kos59125/FsRandom">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="fsrandom" class="anchor" href="#fsrandom"><span class="octicon octicon-link"></span></a>FsRandom</h1>
+
+<p>FsRandom (formerly RecycleBin.Random) is a (purely-functional) random number generator framework designed for F# language.
+It helps you to obtain a variety of random numbers to use more than ten predefined generators,
+and to define a new function to generate random numbers you want.</p>
+
+<h2>
+<a name="randoms-functions" class="anchor" href="#randoms-functions"><span class="octicon octicon-link"></span></a>Randoms Functions</h2>
+
+<ul>
+<li>
+<strong>RandomNumberGenerator module</strong> provides standard random number generators: <code>``(0, 1)``</code>, <code>``[0, 1)``</code>, <code>``(0, 1]``</code>, and <code>``[0, 1]``</code>.</li>
+<li>
+<strong>Random module</strong> manipulates random numbers.</li>
+<li>
+<strong>Statistics module</strong> provides a variety of statistical distributions such like <code>uniform</code>, <code>normal</code> and <code>gamma</code>.</li>
+<li>
+<strong>Seq module</strong> provides functions for generating random number sequences.</li>
+<li>
+<strong>Array module</strong> provides functions for array operations like <code>shuffle</code>.</li>
+<li>
+<strong>Utility module</strong> provides utility functions.</li>
+</ul><p>Also, user-defined functions can be implemented easily (see below).</p>
+
+<h2>
+<a name="how-to-install" class="anchor" href="#how-to-install"><span class="octicon octicon-link"></span></a>How to Install</h2>
+
+<h3>
+<a name="install-from-nuget" class="anchor" href="#install-from-nuget"><span class="octicon octicon-link"></span></a>Install from NuGet</h3>
+
+<p>FsRandom is <a href="https://nuget.org/packages/FsRandom/">available on the NuGet Gallery</a>.
+Use the following command to install FsRandom via NuGet.</p>
+
+<pre><code>Install-Package FsRandom
+</code></pre>
+
+<p><a href="https://nuget.org/">Visit the site</a> for more information.</p>
+
+<h3>
+<a name="build-from-source-code" class="anchor" href="#build-from-source-code"><span class="octicon octicon-link"></span></a>Build from source code</h3>
+
+<p>Run:</p>
+
+<pre><code>fsi tools\build.fsx --debug
+</code></pre>
+
+<h2>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to Use</h2>
+
+<h3>
+<a name="first-random-number" class="anchor" href="#first-random-number"><span class="octicon octicon-link"></span></a>First random number</h3>
+
+<p>Let's try to get a first random number <code>z</code> ~ N(0, 1).
+It is easy to do with <code>normal</code> random number generator in the Statistics module.
+To give the specific parameter, say the mean of 0 and the variance of 1, do:</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">let</span> <span class="n">generator</span> <span class="o">=</span> <span class="nn">Statistics</span><span class="p">.</span><span class="n">normal</span> <span class="o">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">)</span>
+</pre></div>
+
+<p>The generator function is only able to use with a pseudo-random number generator (PRNG).
+The PRNG constructs a computation expression to generate random numbers.
+The computation expression is a function which takes a random seed and returns a random number and a new seed for the next call.
+It is important to keep the new state because it is used when we generate a new random number.</p>
+
+<p>Here for example, we choose xorshift PRNG, which is implemented in FsRandom.
+We need to define an initial random seed first for xorshift algorithm
+(of course, another algorithm is available rather than xorshift, as described later).
+It is a tuple composed of four 32-bit unsigned integers.
+And then, we should combine the PRNG and the seed using <code>createState</code> function.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">let</span> <span class="n">seed</span> <span class="o">=</span> <span class="mi">123456789</span><span class="n">u</span><span class="o">,</span> <span class="mi">362436069</span><span class="n">u</span><span class="o">,</span> <span class="mi">521288629</span><span class="n">u</span><span class="o">,</span> <span class="mi">88675123</span><span class="n">u</span>
+<span class="k">let</span> <span class="n">state</span> <span class="o">=</span> <span class="n">createState</span> <span class="n">xorshift</span> <span class="n">seed</span>
+</pre></div>
+
+<p>Now we can retrieve a random number using <code>Random.get</code> function.</p>
+
+<pre><code>let z = Random.get generator state
+printfn "%f" z
+</code></pre>
+
+<p>Since <code>Random.get</code> returns a stateless function,
+if you do the code above, the same thing occurs.
+To generate a new random number,
+we need to get next state using <code>Random.next</code> instead of <code>Random.get</code>:</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">let</span> <span class="o">_,</span> <span class="n">nextState</span> <span class="o">=</span> <span class="nn">Random</span><span class="p">.</span><span class="n">next</span> <span class="n">generator</span> <span class="n">state</span>
+<span class="k">let</span> <span class="n">z2</span> <span class="o">=</span> <span class="nn">Random</span><span class="p">.</span><span class="n">get</span> <span class="n">generator</span> <span class="n">nextState</span>
+<span class="n">printfn</span> <span class="s2">"%f"</span> <span class="n">z2</span>
+</pre></div>
+
+<h3>
+<a name="transforming-random-numbers" class="anchor" href="#transforming-random-numbers"><span class="octicon octicon-link"></span></a>Transforming random numbers</h3>
+
+<p>Transformation of random numbers is a regular work.
+FsRandom defines <code>Random.transformBy</code> function for the purpose.
+The following code shows how to use it.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">let</span> <span class="n">plusOne</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span>
+<span class="nn">Random</span><span class="p">.</span><span class="n">transformBy</span> <span class="n">plusOne</span> <span class="o">&lt;|</span> <span class="nn">Statistics</span><span class="p">.</span><span class="n">uniform</span> <span class="o">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">)</span>
+<span class="o">|&gt;</span> <span class="nn">Random</span><span class="p">.</span><span class="n">get</span>
+<span class="o">&lt;|</span> <span class="n">state</span>
+</pre></div>
+
+<p><code>plusOne</code> is a function that takes an argument and adds one to it.
+<code>uniform</code> is a uniform random number generator between its two arguments.
+So <code>x</code> finally becomes a uniform random number between 1 and 2.</p>
+
+<p>The both following codes return the same results as above.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="nn">Random</span><span class="p">.</span><span class="n">identity</span> <span class="o">&lt;|</span> <span class="nn">Statistics</span><span class="p">.</span><span class="n">uniform</span> <span class="o">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">)</span>
+<span class="o">|&gt;</span> <span class="nn">Random</span><span class="p">.</span><span class="n">get</span>
+<span class="o">&lt;|</span> <span class="n">state</span>
+<span class="o">|&gt;</span> <span class="n">plusOne</span>
+</pre></div>
+
+<div class="highlight highlight-fsharp"><pre><span class="nn">Statistics</span><span class="p">.</span><span class="n">uniform</span> <span class="o">(</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">)</span>
+<span class="o">|&gt;</span> <span class="nn">Random</span><span class="p">.</span><span class="n">get</span>
+<span class="o">&lt;|</span> <span class="n">state</span>
+<span class="o">|&gt;</span> <span class="n">plusOne</span>
+</pre></div>
+
+<h3>
+<a name="random-number-sequence" class="anchor" href="#random-number-sequence"><span class="octicon octicon-link"></span></a>Random number sequence</h3>
+
+<p>Usually, we use a lot of random numbers for our needs.
+The following code defines a function generating an infinite binary sequence
+using Bernoulli random number generator,
+and it illustrates how we can generate a number of random numbers.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">let</span> <span class="k">rec</span> <span class="n">binaries</span> <span class="n">initialState</span> <span class="o">=</span> <span class="n">seq</span> <span class="o">{</span>
+   <span class="k">let</span> <span class="n">binary</span><span class="o">,</span> <span class="n">nextState</span> <span class="o">=</span> <span class="nn">Random</span><span class="p">.</span><span class="n">next</span> <span class="o">(</span><span class="nn">Statistics</span><span class="p">.</span><span class="n">bernoulli</span> <span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">)</span> <span class="n">initialState</span>
+   <span class="k">yield</span> <span class="n">binary</span>
+   <span class="k">yield</span><span class="o">!</span> <span class="n">binaries</span> <span class="n">nextState</span> <span class="c1">// recursively generating binaries.</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>Or, more precisely like the following:</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">let</span> <span class="n">binaries</span> <span class="n">state</span> <span class="o">=</span> <span class="nn">Seq</span><span class="p">.</span><span class="n">ofRandom</span> <span class="o">(</span><span class="nn">Statistics</span><span class="p">.</span><span class="n">bernoulli</span><span class="o">&lt;</span><span class="k">'</span><span class="n">a</span><span class="o">&gt;</span> <span class="mi">0</span><span class="o">.</span><span class="mi">5</span><span class="o">)</span> <span class="n">state</span>
+</pre></div>
+
+<h3>
+<a name="using-systemrandom" class="anchor" href="#using-systemrandom"><span class="octicon octicon-link"></span></a>Using <code>System.Random</code>
+</h3>
+
+<p>The examples above uses <code>xorshift</code> to generate random numbers.
+The familliar <code>System.Random</code> (and its subclasses) is available in the workflow.
+Just use <code>systemrandom</code> instead of <code>xorshift</code>.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">let</span> <span class="n">r0</span> <span class="o">=</span> <span class="nn">System</span><span class="p">.</span><span class="nc">Random</span> <span class="bp">()</span>
+<span class="k">let</span> <span class="n">s</span> <span class="o">=</span> <span class="n">createState</span> <span class="n">systemrandom</span> <span class="n">r0</span>
+</pre></div>
+
+<p>Because <code>System.Random</code> is a stateful object,
+unlike <code>xorshift</code>, we will get different result on each call.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">let</span> <span class="n">u1</span> <span class="o">=</span> <span class="nn">Random</span><span class="p">.</span><span class="n">get</span> <span class="n">generator</span> <span class="n">s</span>
+<span class="k">let</span> <span class="n">u2</span> <span class="o">=</span> <span class="nn">Random</span><span class="p">.</span><span class="n">get</span> <span class="n">generator</span> <span class="n">s</span>
+</pre></div>
+
+<h3>
+<a name="constructing-a-user-defined-random-number-generator" class="anchor" href="#constructing-a-user-defined-random-number-generator"><span class="octicon octicon-link"></span></a>Constructing a user-defined random number generator</h3>
+
+<h4>
+<a name="computation-expression" class="anchor" href="#computation-expression"><span class="octicon octicon-link"></span></a>Computation expression</h4>
+
+<p>This section explains how to construct random computation expressions such as <code>xorshift</code> and <code>systemrandom</code>.</p>
+
+<p>FsRandom has a random computation expression builder named <code>random</code>,
+which enables users to construct a user-defined random computation expression builder.
+The <code>random</code> uses a pseudorandom number generating function, that is, a function
+which has a type of <code>Prng&lt;'s&gt; = 's -&gt; uint64 * 's</code> where <code>'s</code> is a type of state seed.
+<code>Prng</code> is an actual random number generator which receives a random seed (<code>: 's</code>) and returns
+a random number in 64-bit resolution (<code>: uint64</code>) and a next state (<code>: 's</code>) in the random computation expression.
+As we saw above, FsRandom currently supports xorshift algorithm and <code>System.Random</code>.</p>
+
+<p>As an example of user-defined <code>Prng</code>,
+let's implement <a href="http://en.wikipedia.org/wiki/Linear_congruential_generator">linear congruential generator</a>.
+First, we make a function of <code>Prng</code>.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="c1">// Coefficients are cited from Wikipedi</span>
+<span class="k">let</span> <span class="n">linear</span> <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">,</span> <span class="mi">6364136223846793005</span><span class="n">uL</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1442695040888963407</span><span class="n">uL</span>
+</pre></div>
+
+<p>The first returned value is a random number and the second returned value is a next state.
+Note that modulus is not defined because <code>Prng</code> is required to return random numbers
+in 64-bit resolution.</p>
+
+<p>Hereafter we can use the <code>linear</code> builder to generate random numbers.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">let</span> <span class="n">linearState</span> <span class="o">=</span> <span class="n">createState</span> <span class="n">linear</span> <span class="mi">0</span><span class="n">x123456789ABCDEFuL</span>
+<span class="nn">Random</span><span class="p">.</span><span class="n">get</span> <span class="n">generator</span> <span class="n">linearState</span>
+</pre></div>
+
+<h4>
+<a name="generator-function" class="anchor" href="#generator-function"><span class="octicon octicon-link"></span></a>Generator function</h4>
+
+<p>This section explains how to construct generator functions such like <code>normal</code> and <code>uniform</code>.</p>
+
+<p>The type of generator function is <code>GeneratorFunction&lt;'a&gt;</code>,
+where <code>'a</code> is a type of random number.</p>
+
+<p>As an example of user-defined generator function,
+let's construct a random number generator to produce an <em>approximate</em>
+standard normal random number (approximately ~ N(0, 1)).
+Theorem says that the mean of 12 standard random numbers,
+namely, 12 random numbers between 0 and 1, approximates a normal random number
+with mean of 1/2 and variance of 1/12.
+Therefore, if we subtract 6 from the sum of 12 standard random numbers, the result
+approximates a standard normal random number.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">let</span> <span class="n">approximatelyStandardNormal</span> <span class="o">=</span> <span class="n">random</span> <span class="o">{</span>
+   <span class="k">let</span><span class="o">!</span> <span class="n">values</span> <span class="o">=</span> <span class="nn">Array</span><span class="p">.</span><span class="n">randomCreate</span> <span class="mi">12</span> <span class="o">``(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">)``</span>  <span class="c1">// ``(0, 1)`` is a standard random number generator in (0, 1)</span>
+   <span class="k">return</span> <span class="nn">Array</span><span class="p">.</span><span class="n">sum</span> <span class="n">values</span> <span class="o">-</span> <span class="mi">6</span><span class="o">.</span><span class="mi">0</span>
+<span class="o">}</span>
+</pre></div>
+
+<p>The <code>approximatelyStandardNormal</code> can be used in the generating process as the following.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="nn">Random</span><span class="p">.</span><span class="n">get</span> <span class="n">approximatelyStandardNormal</span> <span class="n">state</span>
+</pre></div>
+
+<p>Don't forget that FsRandom has a normal random number generator <code>normal</code>.</p>
+
+<h2>
+<a name="numerical-examples" class="anchor" href="#numerical-examples"><span class="octicon octicon-link"></span></a>Numerical Examples</h2>
+
+<h3>
+<a name="estimating-pi-the-ratio-of-a-circles-circumference-to-its-diameter" class="anchor" href="#estimating-pi-the-ratio-of-a-circles-circumference-to-its-diameter"><span class="octicon octicon-link"></span></a>Estimating pi, the ratio of a circle's circumference to its diameter.</h3>
+
+<div class="highlight highlight-fsharp"><pre><span class="c1">// Generates random points on [-1, 1] x [-1, 1].</span>
+<span class="k">let</span> <span class="n">randomPointGenerator</span> <span class="o">=</span> <span class="n">random</span> <span class="o">{</span>
+   <span class="k">let</span><span class="o">!</span> <span class="n">x</span> <span class="o">=</span> <span class="nn">Statistics</span><span class="p">.</span><span class="n">uniform</span> <span class="o">(-</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">)</span>
+   <span class="k">let</span><span class="o">!</span> <span class="n">y</span> <span class="o">=</span> <span class="nn">Statistics</span><span class="p">.</span><span class="n">uniform</span> <span class="o">(-</span><span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span><span class="o">)</span>
+   <span class="k">return</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span>
+<span class="o">}</span>
+<span class="c1">// Weight of a point</span>
+<span class="c1">// If the distance from (0, 0) is equal to or less than 1 (in the unit circle),</span>
+<span class="c1">// the weight is 4 (because random points are distributed on [-1, 1] x [-1, 1]).</span>
+<span class="k">let</span> <span class="n">weight</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">=</span> <span class="k">if</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="o">.</span><span class="mi">0</span> <span class="k">then</span> <span class="mi">4</span><span class="o">.</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="o">.</span><span class="mi">0</span>
+<span class="c1">// Function to generate a sequence</span>
+<span class="k">let</span> <span class="n">values</span> <span class="o">=</span> <span class="nn">Seq</span><span class="p">.</span><span class="n">ofRandom</span> <span class="o">(</span><span class="nn">Random</span><span class="p">.</span><span class="n">transformBy</span> <span class="n">weight</span> <span class="n">randomPointGenerator</span><span class="o">)</span>
+
+<span class="c1">// Monte Carlo integration</span>
+<span class="c1">// Generates 1,000,000 random values and the average becomes estimator of pi</span>
+<span class="n">values</span> <span class="n">state</span>
+<span class="o">|&gt;</span> <span class="nn">Seq</span><span class="p">.</span><span class="n">take</span> <span class="mi">1000000</span>
+<span class="o">|&gt;</span> <span class="nn">Seq</span><span class="p">.</span><span class="n">average</span>
+<span class="o">|&gt;</span> <span class="n">printfn</span> <span class="s2">"%f"</span>
+</pre></div>
+
+<h3>
+<a name="generating-bivariate-normal-random-numbers-using-gibbs-sampler" class="anchor" href="#generating-bivariate-normal-random-numbers-using-gibbs-sampler"><span class="octicon octicon-link"></span></a>Generating bivariate normal random numbers using Gibbs sampler</h3>
+
+<p>To sample from bivariate normal distribution
+<img src="http://chart.apis.google.com/chart?cht=tx&amp;chl=N_%7B2%7D%5cleft%28%5cbegin%7Bbmatrix%7D%5cmu_%7BX%7D%5c%5c%5cmu_%7BY%7D%5cend%7Bbmatrix%7D,%5c,%5cbegin%7Bbmatrix%7D%5csigma_%7BX%7D%5E%7B2%7D%26%5csigma_%7BXY%7D%5c%5c%5csigma_%7BXY%7D%26%5csigma_%7BY%7D%5E%7B2%7D%5cend%7Bbmatrix%7D%5cright%29" alt="n2">,
+we will construct a Gibbs sample.
+Because the density function f(x, y) is propotional to f(x | y) * f(y) and
+f(x | y) is propotinal to
+<img src="http://chart.apis.google.com/chart?cht=tx&amp;chl=p%5cleft%28%5cmu_%7BX%7D%2b%5cfrac%7B%5csigma_%7BXY%7D%7D%7B%5csigma_%7BY%7D%5E%7B2%7D%7D%28y-%5cmu_%7BY%7D%29,%5c,%5csigma_%7BX%7D%5E%7B2%7D-%5cfrac%7B%5csigma_%7BXY%7D%5E%7B2%7D%7D%7B%5csigma_%7BY%7D%5E%7B2%7D%7D%5cright%29" alt="p">
+where p is a univariate normal density function,
+the Gibbs sampler for bivariate normal distribution consists of iterating as the following:</p>
+
+<ol>
+<li>Draw <img src="http://chart.apis.google.com/chart?cht=tx&amp;chl=x_%7Bt%2b1%7D%5csim+N%5cleft%28%5cmu_%7BX%7D%2b%5cfrac%7B%5csigma_%7BXY%7D%7D%7B%5csigma_%7BY%7D%5E%7B2%7D%7D%28y_%7Bt%7D-%5cmu_%7BY%7D%29,%5c,%5csigma_%7BX%7D%5E%7B2%7D-%5cfrac%7B%5csigma_%7BXY%7D%5E%7B2%7D%7D%7B%5csigma_%7BY%7D%5E%7B2%7D%7D%5cright%29" alt="draw_x">
+</li>
+<li>Draw <img src="http://chart.apis.google.com/chart?cht=tx&amp;chl=y_%7Bt%2b1%7D%5csim+N%5cleft%28%5cmu_%7BY%7D%2b%5cfrac%7B%5csigma_%7BXY%7D%7D%7B%5csigma_%7BX%7D%5E%7B2%7D%7D%28x_%7Bt%2b1%7D-%5cmu_%7BX%7D%29,%5c,%5csigma_%7BY%7D%5E%7B2%7D-%5cfrac%7B%5csigma_%7BXY%7D%5E%7B2%7D%7D%7B%5csigma_%7BX%7D%5E%7B2%7D%7D%5cright%29" alt="draw_y">
+</li>
+</ol><p>And it can be naturally translated into F# code as the following.</p>
+
+<div class="highlight highlight-fsharp"><pre><span class="k">open</span> <span class="nn">FsRandom</span><span class="p">.</span><span class="nc">Statistics</span>
+<span class="k">let</span> <span class="n">gibbsBinormal</span> <span class="o">(</span><span class="n">meanX</span><span class="o">,</span> <span class="n">meanY</span><span class="o">,</span> <span class="n">varX</span><span class="o">,</span> <span class="n">varY</span><span class="o">,</span> <span class="n">cov</span><span class="o">)</span> <span class="o">(_</span> <span class="o">:</span> <span class="kt">float</span><span class="o">,</span> <span class="n">y</span> <span class="o">:</span> <span class="kt">float</span><span class="o">)</span> <span class="o">=</span> <span class="n">random</span> <span class="o">{</span>
+   <span class="k">let</span><span class="o">!</span> <span class="n">x'</span> <span class="o">=</span> <span class="n">normal</span> <span class="o">(</span><span class="n">meanX</span> <span class="o">+</span> <span class="n">cov</span> <span class="o">*</span> <span class="o">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">meanY</span><span class="o">)</span> <span class="o">/</span> <span class="n">varY</span><span class="o">,</span> <span class="n">sqrt</span> <span class="o">&lt;|</span> <span class="n">varX</span> <span class="o">-</span> <span class="n">cov</span> <span class="o">**</span> <span class="mi">2</span><span class="o">.</span><span class="mi">0</span> <span class="o">/</span> <span class="n">varY</span><span class="o">)</span>
+   <span class="k">let</span><span class="o">!</span> <span class="n">y'</span> <span class="o">=</span> <span class="n">normal</span> <span class="o">(</span><span class="n">meanY</span> <span class="o">+</span> <span class="n">cov</span> <span class="o">*</span> <span class="o">(</span><span class="n">x'</span> <span class="o">-</span> <span class="n">meanX</span><span class="o">)</span> <span class="o">/</span> <span class="n">varX</span><span class="o">,</span> <span class="n">sqrt</span> <span class="o">&lt;|</span> <span class="n">varY</span> <span class="o">-</span> <span class="n">cov</span> <span class="o">**</span> <span class="mi">2</span><span class="o">.</span><span class="mi">0</span> <span class="o">/</span> <span class="n">varX</span><span class="o">)</span>
+   <span class="k">return</span> <span class="o">(</span><span class="n">x'</span><span class="o">,</span> <span class="n">y'</span><span class="o">)</span>
+<span class="o">}</span>
+<span class="k">let</span> <span class="n">binormal</span> <span class="n">parameter</span> <span class="o">=</span> <span class="nn">Seq</span><span class="p">.</span><span class="n">markovChain</span> <span class="o">(</span><span class="n">gibbsBinormal</span> <span class="n">parameter</span><span class="o">)</span>
+</pre></div>
+
+<p>Note that the generating bivariate normal random number sequence is <a href="http://en.wikipedia.org/wiki/Autocorrelation">autocorrelated</a>.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/kos59125">kos59125</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
