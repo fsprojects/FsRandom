@@ -32,7 +32,7 @@ let zipName = deployDir % "FsRandom.zip"
 type BuildParameter = {
    Help : bool
    Documentation : bool
-   DocumentationRoot : string option
+   DocumentationRoot : string
    Debug : bool
    Deploy : bool
    CleanDeploy : bool
@@ -41,11 +41,12 @@ type BuildParameter = {
    Key : string option
 }
 let buildParams =
+   let isOption (s:string) = s.StartsWith ("-")
    let rec loop acc = function
       | [] -> acc
       | "-h" :: _ | "--help" :: _ -> { acc with Help = true }  // don't care other arguments
       | "-d" :: args | "--docs" :: args -> loop { acc with Documentation = true } args
-      | "--docs-root" :: path :: args -> loop { acc with DocumentationRoot = Some (path) } args
+      | "--docs-root" :: path :: args -> loop { acc with DocumentationRoot = path } args
       | "--debug" :: args -> loop { acc with Debug = true } args
       | "--deploy" :: args -> loop { acc with Deploy = true } args
       | "--clean-deploy" :: args -> loop { acc with CleanDeploy = true } args
@@ -58,7 +59,7 @@ let buildParams =
    let defaultBuildParam = {
       Help = false
       Documentation = false
-      DocumentationRoot = None
+      DocumentationRoot = "file://" + (buildDir % "docs")
       Debug = false
       Deploy = false
       CleanDeploy = false
@@ -78,8 +79,9 @@ fsi.exe build.fsx [<options>]
 
 # Options
 -h | --help       Show this help
--d | --docs       Build documentation
---docs-root <uri> Specifies the root uri of the documentation
+-d | --docs       Build documentation files
+--docs-root <uri> Specify the root uri of the documentation
+                  Default: Build/docs
 --debug           Debug build
 --deploy          Create a zip archive and a NuGet package
                   See --no-zip and --no-nuget
@@ -159,10 +161,6 @@ Target "NuGet" (fun () ->
    pack projectName
 )
 
-let docsRoot =
-   match buildParams.DocumentationRoot with
-      | Some (path) -> path
-      | None -> "file://" + (buildDir % "docs")
 Target "Documentation" (fun () ->
    let info = [
       "project-name", "FsRandom"
@@ -194,7 +192,7 @@ Target "Documentation" (fun () ->
       for dir in Seq.append [content] subdirs do
          let sub = if dir.Length > content.Length then dir.Substring(content.Length + 1) else "."
          Literate.ProcessDirectory
-            ( dir, docTemplate, output @@ sub, replacements = ("root", docsRoot)::info,
+            ( dir, docTemplate, output @@ sub, replacements = ("root", buildParams.DocumentationRoot)::info,
               layoutRoots = layoutRoots )
 
    // Generate

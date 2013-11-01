@@ -188,7 +188,7 @@ approximates a standard normal random number.
 *)
 
 let approximatelyStandardNormal = random {
-   let! values = Array.randomCreate 12 ``(0, 1)``  // ``(0, 1)`` is a standard random number generator in (0, 1)
+   let! values = Array.randomCreate 12 ``(0, 1)``
    return Array.sum values - 6.0
 }
 
