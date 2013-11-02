@@ -75,7 +75,7 @@ To sample from bivariate normal distribution
   \sigma\_{XY} & \sigma\_{Y}^{2}
 \end{array}\right]
 \right) \\),
-we will construct a Gibbs sampler.
+you will construct a Gibbs sampler.
 Let \\(f\_{2}(x, y)\\) be the density function of \\(N\_{2}\\),
 and let \\(x'\\) and \\(y'\\) be \\(x-\mu\_{X}\\) and \\(y-\mu\_{Y}\\) respectively.
 Then,

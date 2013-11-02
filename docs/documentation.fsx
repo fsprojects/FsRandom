@@ -22,20 +22,20 @@ let generator = Statistics.normal (0.0, 1.0)
 The generator function is only able to use with a pseudo-random number generator (PRNG).
 The PRNG constructs a computation expression to generate random numbers.
 The computation expression is a function which takes a random seed and returns a random number and a new seed for the next call.
-It is important to keep the new state because it is used when we generate a new random number.
+It is important to keep the new state because it is used when you generate a new random number.
 
-Here for example, we choose xorshift PRNG, which is implemented in FsRandom.
-We need to define an initial random seed first for xorshift algorithm
+Here for example, you choose xorshift PRNG, which is implemented in FsRandom.
+You need to define an initial random seed first for xorshift algorithm
 (of course, another algorithm is available rather than xorshift, as described later).
 It is a tuple composed of four 32-bit unsigned integers.
-And then, we should combine the PRNG and the seed using `createState` function.
+And then, you should combine the PRNG and the seed using `createState` function.
 *)
 
 let seed = 123456789u, 362436069u, 521288629u, 88675123u
 let state = createState xorshift seed
 
 (**
-Now we can retrieve a random number using `Random.get` function.
+Now you can retrieve a random number using `Random.get` function.
 *)
 
 let z = Random.get generator state
@@ -45,7 +45,7 @@ printfn "%f" z
 Since `Random.get` returns a stateless function,
 if you do the code above, the same thing occurs.
 To generate a new random number,
-we need to get next state using `Random.next` instead of `Random.get`:
+you need to get next state using `Random.next` instead of `Random.get`:
 *)
 
 let _, nextState = Random.next generator state
@@ -92,10 +92,10 @@ Statistics.uniform (0.0, 1.0)
 Random Number Sequence
 ----------------------
 
-Usually, we use a lot of random numbers for our needs.
+Usually, you use a lot of random numbers for our needs.
 The following code defines a function generating an infinite binary sequence
 using Bernoulli random number generator,
-and it illustrates how we can generate a number of random numbers.
+and it illustrates how you can generate a number of random numbers.
 *)
 
 let rec binaries initialState = seq {
@@ -125,19 +125,16 @@ let s = createState systemrandom r0
 
 (**
 Because `System.Random` is a stateful object,
-unlike `xorshift`, we will get different result on each call.
+unlike `xorshift`, you will get different result on each call.
 *)
 
 let u1 = Random.get generator s
 let u2 = Random.get generator s
 
 (**
-<a name="user-defined-random-number-generators"></a>
-Constructing User-Defined Random Number Generators
---------------------------------------------------
-
 <a name="generator-function"></a>
-### Generator function
+Generator function
+------------------
 
 This section explains how to construct generator functions such like `normal` and `uniform`.
 
@@ -150,7 +147,7 @@ standard normal random number (approximately ~ N(0, 1)).
 Theorem says that the mean of 12 standard random numbers,
 namely, 12 random numbers between 0 and 1, approximates a normal random number
 with mean of 1/2 and variance of 1/12.
-Therefore, if we subtract 6 from the sum of 12 standard random numbers, the result
+Therefore, if you subtract 6 from the sum of 12 standard random numbers, the result
 approximates a standard normal random number.
 *)
 
@@ -169,7 +166,8 @@ Random.get approximatelyStandardNormal state
 Don't forget that FsRandom has a normal random number generator `normal`.
 
 <a name="pseudo-random-number-generators"></a>
-### Pseudo-random number generators
+Pseudo-random number generators
+-------------------------------
 
 This section explains how to implement pseudo-random number generator (PRNG) algorithms such as `xorshift` and `systemrandom`.
 
@@ -180,7 +178,7 @@ Here `'s` is the type of random state of the PRNG.
 
 As an example of user-defined `Prng`,
 let's implement [linear congruential generator](http://en.wikipedia.org/wiki/Linear_congruential_generator).
-First, we make a function of `Prng`.
+First, you make a function of `Prng`.
 *)
 
 // Coefficients are cited from Wikipedia
@@ -191,7 +189,7 @@ The first returned value is a random number and the second returned value is a n
 Note that modulus is not defined because `Prng` is required to return random numbers
 in 64-bit resolution.
 
-Hereafter we can use the `linear` builder to generate random numbers.
+Hereafter you can use the `linear` PRNG to generate random numbers.
 *)
 
 let linearState = createState linear 0x123456789ABCDEFuL
