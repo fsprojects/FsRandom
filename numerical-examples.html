@@ -55,7 +55,7 @@ For statistics, the Statistics module is useful:</p>
 The area of the circle is \(\pi\) and the area of the square is 4.
 If you put \(N\) random points on the square, roughly \(\displaystyle\frac{\pi}{4}N\) points are inside the circle.
 In other words, if you find \(M\) points out of \(N\) are inside the circle,
-\(\frac{M}{N}\) approximates \(\displaystyle\frac{\pi}{4}\).</p>
+\(\displaystyle\frac{M}{N}\) approximates \(\displaystyle\frac{\pi}{4}\).</p>
 
 <div style="text-align:center;margin-right:100px;">
 <img src="images/monte-carlo-pi.png" width="512" height="512" alt="random points approximates pi" />
@@ -131,7 +131,7 @@ To generate 1,000,000 scores and to compute the average, the approximation of \(
   \sigma_{XY} &amp; \sigma_{Y}^{2}
 \end{array}\right]
 \right) \),
-we will construct a Gibbs sampler.
+you will construct a Gibbs sampler.
 Let \(f_{2}(x, y)\) be the density function of \(N_{2}\),
 and let \(x'\) and \(y'\) be \(x-\mu_{X}\) and \(y-\mu_{Y}\) respectively.
 Then,
@@ -245,21 +245,12 @@ Therefore, the Gibbs sampler for bivariate normal distribution consists of itera
             <li><a href="./documentation.html#first-random-number">First random number</a></li>
             <li><a href="./documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
             <li><a href="./documentation.html#random-number-sequence">Random Number Sequence</a></li>
-            <li>
-              <a href="./documentation.html#user-defined-random-number-generators">Constructing User-Defined Random Number Generators</a>
-              <ul class="nav nav-list">
-                <li><a href="./documentation.html#generator-function">Generator function</a></li>
-                <li><a href="./documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
-              </ul>
-            </li>
+            <li><a href="./documentation.html#generator-function">Generator function</a></li>
+            <li><a href="./documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
             
             <li class="nav-header"><a href="./numerical-examples.html">Numerical Examples</a></li>
-            <li>
-              <ul class="nav nav-list">
-                <li><a href="./numerical-examples.html#monte-carlo">Estimating pi</a></li>
-                <li><a href="./numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
-              </ul>
-            </li>
+            <li><a href="./numerical-examples.html#monte-carlo">Estimating pi</a></li>
+            <li><a href="./numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
           </ul>
         </div>
       </div>

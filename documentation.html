@@ -53,13 +53,13 @@ To give the specific parameter, say the mean of 0 and the variance of 1, do:</p>
 <p>The generator function is only able to use with a pseudo-random number generator (PRNG).
 The PRNG constructs a computation expression to generate random numbers.
 The computation expression is a function which takes a random seed and returns a random number and a new seed for the next call.
-It is important to keep the new state because it is used when we generate a new random number.</p>
+It is important to keep the new state because it is used when you generate a new random number.</p>
 
-<p>Here for example, we choose xorshift PRNG, which is implemented in FsRandom.
-We need to define an initial random seed first for xorshift algorithm
+<p>Here for example, you choose xorshift PRNG, which is implemented in FsRandom.
+You need to define an initial random seed first for xorshift algorithm
 (of course, another algorithm is available rather than xorshift, as described later).
 It is a tuple composed of four 32-bit unsigned integers.
-And then, we should combine the PRNG and the seed using <code>createState</code> function.</p>
+And then, you should combine the PRNG and the seed using <code>createState</code> function.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -73,7 +73,7 @@ And then, we should combine the PRNG and the seed using <code>createState</code>
 </tr>
 </table>
 
-<p>Now we can retrieve a random number using <code>Random.get</code> function.</p>
+<p>Now you can retrieve a random number using <code>Random.get</code> function.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -90,7 +90,7 @@ And then, we should combine the PRNG and the seed using <code>createState</code>
 <p>Since <code>Random.get</code> returns a stateless function,
 if you do the code above, the same thing occurs.
 To generate a new random number,
-we need to get next state using <code>Random.next</code> instead of <code>Random.get</code>:</p>
+you need to get next state using <code>Random.next</code> instead of <code>Random.get</code>:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -172,10 +172,10 @@ So <code>x</code> finally becomes a uniform random number between 1 and 2.</p>
 
 <h2>Random Number Sequence</h2>
 
-<p>Usually, we use a lot of random numbers for our needs.
+<p>Usually, you use a lot of random numbers for our needs.
 The following code defines a function generating an infinite binary sequence
 using Bernoulli random number generator,
-and it illustrates how we can generate a number of random numbers.</p>
+and it illustrates how you can generate a number of random numbers.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -228,7 +228,7 @@ Just use <code>systemrandom</code> instead of <code>xorshift</code>.</p>
 </table>
 
 <p>Because <code>System.Random</code> is a stateful object,
-unlike <code>xorshift</code>, we will get different result on each call.</p>
+unlike <code>xorshift</code>, you will get different result on each call.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -242,13 +242,9 @@ unlike <code>xorshift</code>, we will get different result on each call.</p>
 </tr>
 </table>
 
-<a name="user-defined-random-number-generators"></a>
-
-<h2>Constructing User-Defined Random Number Generators</h2>
-
 <a name="generator-function"></a>
 
-<h3>Generator function</h3>
+<h2>Generator function</h2>
 
 <p>This section explains how to construct generator functions such like <code>normal</code> and <code>uniform</code>.</p>
 
@@ -261,7 +257,7 @@ standard normal random number (approximately ~ N(0, 1)).
 Theorem says that the mean of 12 standard random numbers,
 namely, 12 random numbers between 0 and 1, approximates a normal random number
 with mean of 1/2 and variance of 1/12.
-Therefore, if we subtract 6 from the sum of 12 standard random numbers, the result
+Therefore, if you subtract 6 from the sum of 12 standard random numbers, the result
 approximates a standard normal random number.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
@@ -296,7 +292,7 @@ approximates a standard normal random number.</p>
 
 <a name="pseudo-random-number-generators"></a>
 
-<h3>Pseudo-random number generators</h3>
+<h2>Pseudo-random number generators</h2>
 
 <p>This section explains how to implement pseudo-random number generator (PRNG) algorithms such as <code>xorshift</code> and <code>systemrandom</code>.</p>
 
@@ -307,7 +303,7 @@ Here <code>'s</code> is the type of random state of the PRNG.</p>
 
 <p>As an example of user-defined <code>Prng</code>,
 let's implement <a href="http://en.wikipedia.org/wiki/Linear_congruential_generator">linear congruential generator</a>.
-First, we make a function of <code>Prng</code>.</p>
+First, you make a function of <code>Prng</code>.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -325,7 +321,7 @@ First, we make a function of <code>Prng</code>.</p>
 Note that modulus is not defined because <code>Prng</code> is required to return random numbers
 in 64-bit resolution.</p>
 
-<p>Hereafter we can use the <code>linear</code> builder to generate random numbers.</p>
+<p>Hereafter you can use the <code>linear</code> PRNG to generate random numbers.</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -401,21 +397,12 @@ in 64-bit resolution.</p>
             <li><a href="./documentation.html#first-random-number">First random number</a></li>
             <li><a href="./documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
             <li><a href="./documentation.html#random-number-sequence">Random Number Sequence</a></li>
-            <li>
-              <a href="./documentation.html#user-defined-random-number-generators">Constructing User-Defined Random Number Generators</a>
-              <ul class="nav nav-list">
-                <li><a href="./documentation.html#generator-function">Generator function</a></li>
-                <li><a href="./documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
-              </ul>
-            </li>
+            <li><a href="./documentation.html#generator-function">Generator function</a></li>
+            <li><a href="./documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
             
             <li class="nav-header"><a href="./numerical-examples.html">Numerical Examples</a></li>
-            <li>
-              <ul class="nav nav-list">
-                <li><a href="./numerical-examples.html#monte-carlo">Estimating pi</a></li>
-                <li><a href="./numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
-              </ul>
-            </li>
+            <li><a href="./numerical-examples.html#monte-carlo">Estimating pi</a></li>
+            <li><a href="./numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
           </ul>
         </div>
       </div>
