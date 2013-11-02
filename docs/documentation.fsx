@@ -136,18 +136,15 @@ let u2 = Random.get generator s
 Constructing User-Defined Random Number Generators
 --------------------------------------------------
 
-<a name="random-computation-expression"></a>
-### Random computation expression
+<a name="pseudo-random-number-generators"></a>
+### Pseudo-random number generators
 
-This section explains how to construct random computation expressions such as `xorshift` and `systemrandom`.
+This section explains how to implement pseudo-random number generator (PRNG) algorithms such as `xorshift` and `systemrandom`.
 
-FsRandom has a random computation expression builder named `random`,
-which enables users to construct a user-defined random computation expression builder.
-The `random` uses a pseudorandom number generating function, that is, a function
-which has a type of `Prng<'s> = 's -> uint64 * 's` where `'s` is a type of state seed.
-`Prng` is an actual random number generator which receives a random seed (`: 's`) and returns
-a random number in 64-bit resolution (`: uint64`) and a next state (`: 's`) in the random computation expression.
-As we saw above, FsRandom currently supports xorshift algorithm and `System.Random`.
+A PRNG is often defined as a simple series of numbers whose next number is determined by the current state.
+For example, the Xorshift algorithm has four 32-bit integers as a state.
+To describe such PRNGs, the type of PRNGs in FsRandom is defined as `type Prng<'s> = 's -> uint64 * 's`.
+Here `'s` is the type of random state of the PRNG.
 
 As an example of user-defined `Prng`,
 let's implement [linear congruential generator](http://en.wikipedia.org/wiki/Linear_congruential_generator).
@@ -175,7 +172,7 @@ Random.get generator linearState
 This section explains how to construct generator functions such like `normal` and `uniform`.
 
 The type of generator function is `GeneratorFunction<'a>`,
-where `'a` is a type of random number.
+where `'a` is a type of random numbers the generator function returns.
 
 As an example of user-defined generator function,
 let's construct a random number generator to produce an *approximate*
