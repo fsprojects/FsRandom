@@ -41,10 +41,11 @@ type RandomBuilder () =
       this.While (e.MoveNext, this.Delay (fun () -> f e.Current))
 let random = RandomBuilder ()
 
-let buffer = Array.zeroCreate sizeof<uint64>
-let systemrandom (random : Random) = 
-   random.NextBytes (buffer)
-   BitConverter.ToUInt64 (buffer, 0), random
+let systemrandom (random : Random) =
+   let lower  = (uint64 (random.Next ())       ) &&& 0b0000000000000000000000000000000000000000000011111111111111111111uL
+   let middle = (uint64 (random.Next ()) <<< 20) &&& 0b0000000000000000000000111111111111111111111100000000000000000000uL
+   let upper  = (uint64 (random.Next ()) <<< 42) &&& 0b1111111111111111111111000000000000000000000000000000000000000000uL
+   lower ||| middle ||| upper, random
    
 let inline xor128 (x:uint32, y:uint32, z:uint32, w:uint32) =
    let t = x ^^^ (x <<< 11)
