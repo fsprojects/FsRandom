@@ -23,7 +23,16 @@
   <body>
     <div class="container">
       <div class="masthead">
-        <h3 class="muted">@Properties["project-name"]</h3>
+        <h3 class="muted">@{
+          if (System.Uri.IsWellFormedUriString(Root, System.UriKind.Absolute))
+          {
+            @System.String.Format("<a href=\"{0}\">{1}</a>", Root, Properties["project-name"]);
+          }
+          else
+          {
+            @Properties["project-name"];
+          }
+        }</h3>
       </div>
       <hr />
       <div class="row">
@@ -50,6 +59,8 @@
             <li class="nav-header"><a href="@Root/numerical-examples.html">Numerical Examples</a></li>
             <li><a href="@Root/numerical-examples.html#monte-carlo">Estimating pi</a></li>
             <li><a href="@Root/numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
+            <li><a href="@Root/numerical-examples.html#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
+            <li><a href="@Root/numerical-examples.html#approximate-bayesian-computation">Approximate Bayesian Computation</a></li>
           </ul>
         </div>
       </div>

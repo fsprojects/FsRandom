@@ -111,10 +111,10 @@ Therefore, the Gibbs sampler for bivariate normal distribution consists of itera
 And it can be naturally translated into F# code as the following.
 *)
 
-let gibbsBinormal (meanX, meanY, varX, varY, cov) (_ : float, y : float) =
+let gibbsBinormal (meanX, meanY, varX, varY, cov) =
    let sdx = sqrt <| varX - cov ** 2.0 / varY
    let sdy = sqrt <| varY - cov ** 2.0 / varX
-   random {
+   fun (_, y) -> random {
       let! x' = normal (meanX + cov * (y - meanY) / varY, sdx)
       let! y' = normal (meanY + cov * (x' - meanX) / varX, sdy)
       return (x', y')
@@ -123,4 +123,119 @@ let binormal parameter = Seq.markovChain (gibbsBinormal parameter)
 
 (**
 Note that the generating bivariate normal random number sequence is [autocorrelated](http://en.wikipedia.org/wiki/Autocorrelation).
+
+<a name="hamiltonian-monte-carlo"></a>
+Hamiltonian Monte Carlo
+-----------------------
+
+Gibbs sampler sometimes produces strongly autocorrelated traces.
+Hamiltonian Monte Carlo (also known as [hybrid Monte Carlo](http://en.wikipedia.org/wiki/Hybrid_Monte_Carlo))
+could be efficient in such situations.
+Hamiltonian Monte Carlo algorithm is available
+if you know about the density of the taget distribution without normalizing constant.
 *)
+
+let inline updateWith f (ys:float []) (xs:float []) =
+   for index = 0 to Array.length xs - 1 do
+      xs.[index] <- f xs.[index] ys.[index]
+
+/// Hamiltonian Monte Carlo
+let hmc minusLogDensity gradMinusLogDensity epsilon step =
+   /// Leapfrog integration
+   let leapfrog q p =
+      updateWith (fun x y -> x + 0.5 * epsilon * y) (gradMinusLogDensity q) p
+      for i = 1 to step - 1 do
+         updateWith (fun x y -> x + epsilon * y) p q
+         updateWith (fun x y -> x - epsilon * y) (gradMinusLogDensity q) p
+      updateWith (fun x y -> x + epsilon * y) p q
+      updateWith (fun x y -> -x + 0.5 * epsilon * y) (gradMinusLogDensity q) p
+   /// Hamiltonian
+   let hamiltonian q p =
+      let potential = minusLogDensity q
+      let kinetic = Array.fold2 (fun acc x y -> acc + x * y) 0.0 p p / 2.0
+      potential + kinetic
+   fun currentQ -> random {
+      let q = Array.copy currentQ
+      // resampling of particles
+      let! currentP = Array.randomCreate (Array.length currentQ) (normal (0.0, 1.0))
+      let p = Array.copy currentP
+      leapfrog q p
+      let currentH = hamiltonian currentQ currentP
+      let proposedH = hamiltonian q p
+      let! r = ``[0, 1)``
+      return if r < exp (currentH - proposedH) then q else currentQ
+   }
+
+(**
+<a name="approximate-bayesian-computation"></a>
+Approximate Bayesian Computation
+--------------------------------
+
+[Approximate Bayesian computation](http://en.wikipedia.org/wiki/Approximate_Bayesian_computation)
+is known as a likelihood-free method of parameter estimation.
+This section follows the example in the Wikipedia article.
+
+The initial state of the system is not described whether it is determined or inferred.
+Here it is assumed as 'A' for convenience.
+Then, the model is described as follows:
+*)
+
+type HiddenSystem = A | B
+let switch = function A -> B | B -> A
+let observe correctly system =
+   if correctly then
+      match system with A -> 'A' | B -> 'B'
+   else
+      match system with B -> 'B' | A -> 'A'
+let model (theta, gamma, length) = random {
+   let state = ref A
+   let builder = System.Text.StringBuilder ()
+   for index = 1 to length do
+      let! switchState = Utility.flipCoin theta
+      if switchState then state := switch !state
+      let! correctly = Utility.flipCoin gamma
+      builder.Append (observe correctly !state) |> ignore
+   return builder.ToString ()
+}
+
+(**
+Step 1: the observed data is `AAAABAABBAAAAAABAAAA`.
+*)
+
+let observed = "AAAABAABBAAAAAABAAAA"
+
+(**
+Step 2: the prior of theta is a uniform [0, 1] and gamma is known.
+*)
+
+let prior = uniform (0.0, 1.0)
+let gamma = 0.8
+
+(**
+Step 3: the summary statistic is the frequency of switches between two states (A and B).
+Note that the summary statistic is bad to estimate theta (see the article).
+*)
+
+let w (data:string) =
+   Seq.windowed 2 data
+   |> Seq.filter (fun c -> c.[0] <> c.[1])  // switch
+   |> Seq.length
+
+(**
+Step 4: the distance between the observed and simulated is the difference between the summary statistics.
+*)
+
+let rho simulated = abs (w observed - w simulated)
+
+(**
+Step 5: do the simulation with tolerance epsilon.
+*)
+
+type SimulationResult =
+   | Accept of float
+   | Reject
+let simulate epsilon = random {
+   let! theta = prior
+   let! simulated = model (theta, gamma, String.length observed)
+   return if rho simulated <= epsilon then Accept (theta) else Reject
+}

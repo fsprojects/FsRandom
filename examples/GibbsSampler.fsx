@@ -1,4 +1,5 @@
-#r "../Build/FsRandom.dll"
+#I "../Build"
+#r "FsRandom.dll"
 
 open FsRandom
 open FsRandom.Statistics
@@ -32,4 +33,4 @@ let sampler =
 
 sampler
 |> Seq.take 50
-|> Seq.iter (fun (x, y) -> printfn "(%6.3f, %6.3f)" x y)
+|> Seq.iter (fun (x, y) -> printfn "%6.3f\t%6.3f" x y)

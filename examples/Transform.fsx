@@ -1,4 +1,5 @@
-#r "../Build/FsRandom.dll"
+#I "../Build"
+#r "FsRandom.dll"
 
 open FsRandom
 
