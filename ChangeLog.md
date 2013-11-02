@@ -5,6 +5,7 @@ Version 1.2
 -----------
 
 * API change (#40). PrngState no longer requires generics.
+* Support use binding and error handling in random computation expression (#43).
 * Add String module (#23).
 * Add several useful functions.
 

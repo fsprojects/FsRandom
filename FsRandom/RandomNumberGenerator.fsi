@@ -42,6 +42,9 @@ type RandomBuilder =
    member Delay : (unit -> GeneratorFunction<'a>) -> GeneratorFunction<'a>
    member While : condition:(unit -> bool) * m:GeneratorFunction<unit> -> GeneratorFunction<unit>
    member For : source:seq<'a> * f:('a -> GeneratorFunction<unit>) -> GeneratorFunction<unit>
+   member TryFinally : m:GeneratorFunction<'a> * finalizer:(unit -> unit) -> GeneratorFunction<'a>
+   member TryWith : m:GeneratorFunction<'a> * handler:(exn -> GeneratorFunction<'a>) -> GeneratorFunction<'a>
+   member Using : a:'a * f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b> when 'a :> IDisposable
 /// <summary>
 /// Constructs a random number function.
 /// </summary>

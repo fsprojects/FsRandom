@@ -39,6 +39,12 @@ type RandomBuilder () =
    member this.For (source : seq<'a>, f) =
       use e = source.GetEnumerator ()
       this.While (e.MoveNext, this.Delay (fun () -> f e.Current))
+   member this.TryFinally (GeneratorFunction g, finalizer) =
+      GeneratorFunction (fun s -> try g s finally finalizer ())
+   member this.TryWith (GeneratorFunction g, handler) =
+      GeneratorFunction (fun s -> try g s with ex -> let (GeneratorFunction h) = handler ex in h s)
+   member this.Using (x:#IDisposable, f) =
+      this.TryFinally (f x, fun () -> using x ignore)
 let random = RandomBuilder ()
 
 let systemrandom (random : Random) =

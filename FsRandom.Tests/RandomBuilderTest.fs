@@ -29,3 +29,46 @@ let ``Satisfies monad law 3 (associativity)`` () =
    let l = random.Bind (random.Bind (m, f), g) |> Random.get <| tester
    let r = random.Bind (m, fun y -> random.Bind (f y, g)) |> Random.get <| tester
    r |> should equal l
+
+[<Test>]
+let ``Can use try-with expression in random computation expression`` () =
+   Random.get
+   <| random {
+      try
+         invalidOp ""
+         return false
+      with
+         | _ -> return true
+   }
+   <| getDefaultTester ()
+   |> should be True
+
+[<Test>]
+let ``Can use try-finally in random computation expression`` () =
+   let isFinallyRun = ref false
+   Random.get
+   <| random {
+      try
+         return true
+      finally
+         isFinallyRun := true
+   }
+   <| getDefaultTester ()
+   |> should be True
+   !isFinallyRun |> should be True
+
+type Resource () =
+   member val Closed = false with get, set
+   interface System.IDisposable with
+      member this.Dispose () = this.Closed <- true
+[<Test>]
+let ``Can use use binding in random computation expression`` () =
+   let r = new Resource ()
+   Random.get
+   <| random {
+      use r2 = r
+      return r2.Closed
+   }
+   <| getDefaultTester ()
+   |> should be False
+   r.Closed |> should be True
