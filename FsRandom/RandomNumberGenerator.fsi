@@ -32,8 +32,8 @@ val inline internal runRandom : GeneratorFunction<'a> -> PrngState -> 'a * PrngS
 val inline internal evaluateRandom : GeneratorFunction<'a> -> PrngState -> 'a
 val inline internal executeRandom : GeneratorFunction<'a> -> PrngState -> PrngState
 
+[<Class>]
 type RandomBuilder =
-   new : unit -> RandomBuilder
    member Bind : m:GeneratorFunction<'a> * f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b>
    member Combine : a:GeneratorFunction<'a> * b:GeneratorFunction<'b> -> GeneratorFunction<'b>
    member Return : a:'a -> GeneratorFunction<'a>
