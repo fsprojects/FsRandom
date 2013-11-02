@@ -1,0 +1,13 @@
+bin/
+obj/
+*.suo
+
+packages/*/
+TestResults/
+*.nupkg
+*.pdb
+*.xml
+
+Build/
+Deploy/
+
