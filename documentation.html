@@ -245,19 +245,16 @@ unlike <code>xorshift</code>, we will get different result on each call.</p>
 
 <h2>Constructing User-Defined Random Number Generators</h2>
 
-<a name="random-computation-expression"></a>
+<a name="pseudo-random-number-generators"></a>
 
-<h3>Random computation expression</h3>
+<h3>Pseudo-random number generators</h3>
 
-<p>This section explains how to construct random computation expressions such as <code>xorshift</code> and <code>systemrandom</code>.</p>
+<p>This section explains how to implement pseudo-random number generator (PRNG) algorithms such as <code>xorshift</code> and <code>systemrandom</code>.</p>
 
-<p>FsRandom has a random computation expression builder named <code>random</code>,
-which enables users to construct a user-defined random computation expression builder.
-The <code>random</code> uses a pseudorandom number generating function, that is, a function
-which has a type of <code>Prng&lt;'s&gt; = 's -&gt; uint64 * 's</code> where <code>'s</code> is a type of state seed.
-<code>Prng</code> is an actual random number generator which receives a random seed (<code>: 's</code>) and returns
-a random number in 64-bit resolution (<code>: uint64</code>) and a next state (<code>: 's</code>) in the random computation expression.
-As we saw above, FsRandom currently supports xorshift algorithm and <code>System.Random</code>.</p>
+<p>A PRNG is often defined as a simple series of numbers whose next number is determined by the current state.
+For example, the Xorshift algorithm has four 32-bit integers as a state.
+To describe such PRNGs, the type of PRNGs in FsRandom is defined as <code>type Prng&lt;'s&gt; = 's -&gt; uint64 * 's</code>.
+Here <code>'s</code> is the type of random state of the PRNG.</p>
 
 <p>As an example of user-defined <code>Prng</code>,
 let's implement <a href="http://en.wikipedia.org/wiki/Linear_congruential_generator">linear congruential generator</a>.
@@ -300,7 +297,7 @@ in 64-bit resolution.</p>
 <p>This section explains how to construct generator functions such like <code>normal</code> and <code>uniform</code>.</p>
 
 <p>The type of generator function is <code>GeneratorFunction&lt;'a&gt;</code>,
-where <code>'a</code> is a type of random number.</p>
+where <code>'a</code> is a type of random numbers the generator function returns.</p>
 
 <p>As an example of user-defined generator function,
 let's construct a random number generator to produce an <em>approximate</em>
@@ -320,7 +317,7 @@ approximates a standard normal random number.</p>
 </td>
 <td class="snippet"><pre class="fssnip">
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs40', 101)" onmouseover="showTip(event, 'fs40', 101)" class="i">approximatelyStandardNormal</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs41', 102)" onmouseover="showTip(event, 'fs41', 102)" class="i">random</span> {
-   <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs42', 103)" onmouseover="showTip(event, 'fs42', 103)" class="i">values</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs43', 104)" onmouseover="showTip(event, 'fs43', 104)" class="i">Array</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs44', 105)" onmouseover="showTip(event, 'fs44', 105)" class="i">randomCreate</span> <span class="n">12</span> <span onmouseout="hideTip(event, 'fs45', 106)" onmouseover="showTip(event, 'fs45', 106)" class="i">``(0, 1)``</span>  <span class="c">// ``(0, 1)`` is a standard random number generator in (0, 1)</span>
+   <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs42', 103)" onmouseover="showTip(event, 'fs42', 103)" class="i">values</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs43', 104)" onmouseover="showTip(event, 'fs43', 104)" class="i">Array</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs44', 105)" onmouseover="showTip(event, 'fs44', 105)" class="i">randomCreate</span> <span class="n">12</span> <span onmouseout="hideTip(event, 'fs45', 106)" onmouseover="showTip(event, 'fs45', 106)" class="i">``(0, 1)``</span>
    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs43', 107)" onmouseover="showTip(event, 'fs43', 107)" class="i">Array</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs46', 108)" onmouseover="showTip(event, 'fs46', 108)" class="i">sum</span> <span onmouseout="hideTip(event, 'fs42', 109)" onmouseover="showTip(event, 'fs42', 109)" class="i">values</span> <span class="o">-</span> <span class="n">6.0</span>
 }</pre>
 </td>
@@ -525,7 +522,7 @@ the Gibbs sampler for bivariate normal distribution consists of iterating as the
             <li>
               <a href="http://kos59125.github.io/FsRandom/documentation.html#user-defined-random-number-generators">Constructing User-Defined Random Number Generators</a>
               <ul class="nav nav-list">
-                <li><a href="http://kos59125.github.io/FsRandom/documentation.html#random-computation-expression">Random computation expression</a></li>
+                <li><a href="http://kos59125.github.io/FsRandom/documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
                 <li><a href="http://kos59125.github.io/FsRandom/documentation.html#generator-function">Generator function</a></li>
               </ul>
             </li>
