@@ -11,7 +11,7 @@ let randomCreate count generator =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let result = Array.zeroCreate count
          let mutable s0 = s0
          for index = 0 to count - 1 do
@@ -25,7 +25,7 @@ let randomInit count initializer =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let result = Array.zeroCreate count
          let mutable s0 = s0
          for index = 0 to count - 1 do
@@ -39,7 +39,7 @@ let randomFill (array:'a []) targetIndex count generator =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let mutable s0 = s0
          for index = targetIndex to targetIndex + count - 1 do
             let r, s' = Random.next generator s0
@@ -49,7 +49,7 @@ let randomFill (array:'a []) targetIndex count generator =
       )
 
 let shuffleInPlace array =
-   GF (fun s0 ->
+   GeneratorFunction (fun s0 ->
       let mutable s0 = s0
       for index = Array.length array - 1 downto 1 do
          let u, s' = Random.next ``[0, 1)`` s0
@@ -60,7 +60,7 @@ let shuffleInPlace array =
    )
 
 let shuffle array =
-   GF (fun s0 ->
+   GeneratorFunction (fun s0 ->
       let copiedArray = Array.copy array
       let _, s' = Random.next (shuffleInPlace copiedArray) s0
       copiedArray, s'
@@ -71,7 +71,7 @@ let sample n source =
    if n < 0 || size < n then
       outOfRange "n" "`n' must be between 0 and the number of elements in `source`."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let result = Array.zeroCreate n
          let mutable p = size
          let mutable s0 = s0
@@ -123,7 +123,7 @@ let sampleWithReplacement n source =
    if n < 0 then
       outOfRange "n" "`n' must not be negative."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let result = Array.zeroCreate n
          let size = float <| Array.length source
          let mutable s0 = s0
@@ -141,7 +141,7 @@ let weightedSampleWithReplacement n weight source =
    elif Array.length weight <> size then
       invalidArg "weight" "`weight' must have the same length of `source'."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let result = Array.zeroCreate n
          let cdf = Array.accumulate (+) weight
          let sum = cdf.[size - 1]

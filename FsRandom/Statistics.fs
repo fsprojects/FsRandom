@@ -11,7 +11,7 @@ let uniform (min, max) =
       if isInfinity (max - min) then
          let middle = (min + max) / 2.0
          let halfLength = middle - min
-         GF (fun s0 ->
+         GeneratorFunction (fun s0 ->
             let u, s' = Random.next ``[0, 1]`` s0
             if u < 0.5 then
                min + 2.0 * u * halfLength, s'
@@ -124,11 +124,11 @@ let gamma (shape, scale) =
    else
       let get = Random.transformBy ((*) scale)
       if isInt shape then
-         get (GF (gammaInt (int shape)))
+         get (GeneratorFunction (gammaInt (int shape)))
       elif shape < 1.0 then
-         get (GF (gammaSmall shape))
+         get (GeneratorFunction (gammaSmall shape))
       else
-         get (GF (gammaLarge shape))
+         get (GeneratorFunction (gammaLarge shape))
 
 let beta (alpha, beta) =
    ensuresFiniteValue alpha "alpha"
@@ -220,7 +220,7 @@ let poisson lambda =
       let m = int lambda
       let m' = float m
       let d = exp <| -lambda + m' * log lambda - loggamma (m' + 1.0)
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let xu = ref m
          let xl = ref m
          let mutable pu = d
@@ -270,7 +270,7 @@ let binomial (n, probability) =
    elif probability <= 0.0 || 1.0 <= probability then
       outOfRange "probability" "`probability' must be in the range of (0, 1)."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let count = ref 0
          let mutable s = s0
          for i = 1 to n do
@@ -287,7 +287,7 @@ let dirichlet alpha =
    elif List.exists (fun x -> isNaN x || isInfinity x || x <= 0.0) alpha then
       outOfRange "alpha" "All elements in `alpha' must be positive."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let y, sum, s' = List.foldBack (fun a (xs, sum, s) -> let x, s' = Random.next (gamma (a, 1.0)) s in x :: xs, sum + x, s') alpha ([], 0.0, s0)
          List.map (fun y' -> y' / sum) y, s'
       )
@@ -302,7 +302,7 @@ let multinomial (n, weight) =
       outOfRange "probability" "All elements in `weight' must be positive."
    else
       let cdf, sum = List.fold (fun (xs, sum) x -> let s = sum + x in xs @ [s], s) ([], 0.0) weight
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let result = Array.zeroCreate k
          let mutable s = s0
          for loop = 1 to n do

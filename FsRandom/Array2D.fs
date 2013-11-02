@@ -8,7 +8,7 @@ let randomCreate rowCount columnCount generator =
    elif columnCount < 0 then
       outOfRange "columnCount" "`columnCount' must not be negative."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let result = Array2D.zeroCreate rowCount columnCount
          let mutable s0 = s0
          for i = 0 to rowCount - 1 do
@@ -25,7 +25,7 @@ let randomCreateBased rowBase columnBase rowCount columnCount generator =
    elif columnCount < 0 then
       outOfRange "columnCount" "`columnCount' must not be negative."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let result = Array2D.zeroCreateBased rowBase columnBase rowCount columnCount
          let mutable s0 = s0
          for i = rowBase to rowBase + rowCount - 1 do
@@ -42,7 +42,7 @@ let randomInit rowCount columnCount initializer =
    elif columnCount < 0 then
       outOfRange "columnCount" "`columnCount' must not be negative."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let result = Array2D.zeroCreate rowCount columnCount
          let mutable s0 = s0
          for i = 0 to rowCount - 1 do
@@ -60,7 +60,7 @@ let randomInitBased rowBase columnBase rowCount columnCount initializer =
    elif columnCount < 0 then
       outOfRange "columnCount" "`columnCount' must not be negative."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let result = Array2D.zeroCreateBased rowBase columnBase rowCount columnCount
          let mutable s0 = s0
          for i = rowBase to rowBase + rowCount - 1 do

@@ -5,7 +5,7 @@ open System
 type Prng<'s> = 's -> uint64 * 's
 type PrngState =
    abstract Next64Bits : unit -> uint64 * PrngState
-type GeneratorFunction<'a> = GF of (PrngState -> 'a * PrngState)
+type GeneratorFunction<'a> = GeneratorFunction of (PrngState -> 'a * PrngState)
 
 let rec createState (prng:Prng<'s>) (seed:'s) = {
    new PrngState with
@@ -14,12 +14,12 @@ let rec createState (prng:Prng<'s>) (seed:'s) = {
          r, createState prng next
 }
 
-let inline bindRandom (GF m) f =
-   GF (fun s0 -> let v, s' = m s0 in match f v with GF (g) -> g s')
-let inline returnRandom x = GF (fun s -> x, s)
-let inline runRandom (GF m) x = m x
-let inline evaluateRandom (GF m) x = m x |> fst
-let inline executeRandom (GF m) x = m x |> snd
+let inline bindRandom (GeneratorFunction m) f =
+   GeneratorFunction (fun s0 -> let v, s' = m s0 in match f v with GeneratorFunction (g) -> g s')
+let inline returnRandom x = GeneratorFunction (fun s -> x, s)
+let inline runRandom (GeneratorFunction m) x = m x
+let inline evaluateRandom (GeneratorFunction m) x = m x |> fst
+let inline executeRandom (GeneratorFunction m) x = m x |> snd
 
 let inline (|>>) m f = bindRandom m f
 let inline (&>>) m b = bindRandom m (fun _ -> b)
@@ -29,7 +29,7 @@ type RandomBuilder () =
    member this.Combine (a, b) = a &>> b
    member this.Return (x) = returnRandom x
    member this.ReturnFrom (m : GeneratorFunction<_>) = m
-   member this.Zero () = GF (fun s -> (), s)
+   member this.Zero () = GeneratorFunction (fun s -> (), s)
    member this.Delay (f) = returnRandom () |>> f
    member this.While (condition, m) =
       if condition () then
@@ -56,14 +56,14 @@ let xorshift s =
    let upper, s = xor128 s
    to64bit lower upper, s
 
-let rawBits = GF (fun s -> s.Next64Bits ())
+let rawBits = GeneratorFunction (fun s -> s.Next64Bits ())
 [<Literal>]
 let ``1 / 2^52`` = 2.22044604925031308084726333618e-16
 [<Literal>]
 let ``1 / 2^53`` = 1.11022302462515654042363166809e-16
 [<Literal>]
 let ``1 / (2^53 - 1)`` = 1.1102230246251566636831481e-16
-let ``(0, 1)`` = GF (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 0.5) * ``1 / 2^52``, s')
-let ``[0, 1)`` = GF (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / 2^53``, s')
-let ``(0, 1]`` = GF (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 1.0) * ``1 / 2^52``, s')
-let ``[0, 1]`` = GF (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / (2^53 - 1)``, s')
+let ``(0, 1)`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 0.5) * ``1 / 2^52``, s')
+let ``[0, 1)`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / 2^53``, s')
+let ``(0, 1]`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 1.0) * ``1 / 2^52``, s')
+let ``[0, 1]`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / (2^53 - 1)``, s')

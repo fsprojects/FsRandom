@@ -15,7 +15,7 @@ type PrngState =
 /// <summary>
 /// Generates random numbers.
 /// </summary>
-type GeneratorFunction<'a> = GF of (PrngState -> 'a * PrngState)
+type GeneratorFunction<'a> = GeneratorFunction of (PrngState -> 'a * PrngState)
 
 /// <summary>
 /// Constructs a random state.

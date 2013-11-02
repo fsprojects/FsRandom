@@ -7,7 +7,7 @@ let inline randomSign () =
       let r, s' = Random.next rawBits s0
       let sign = if r &&& 1uL = 0uL then GenericOne else -GenericOne
       sign, s'
-   GF (g)
+   GeneratorFunction (g)
 
 let flipCoin probability =
    ensuresFiniteValue probability "probability"
@@ -23,7 +23,7 @@ let choose m n =
    elif n < 0 || m < n then
       outOfRange "n" "`n' must be in the range of [0, m]."
    else
-      GF (fun s0 ->
+      GeneratorFunction (fun s0 ->
          let rec loop (acc, p, s) = function
             | index when index < 0 ->
                // List.rev is for ascending order.
