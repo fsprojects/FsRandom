@@ -173,7 +173,7 @@ Target "Documentation" (fun () ->
    // Paths with template/source/output locations
    let content    = % "docs"
    let output     = buildDir % "docs"
-   let templates  = __SOURCE_DIRECTORY__ % "templates"
+   let templates  = content % "templates"
    let formatting = __SOURCE_DIRECTORY__ % "FSharp.Formatting"
    let docTemplate = formatting % "templates" % "docpage.cshtml"
 
@@ -182,13 +182,16 @@ Target "Documentation" (fun () ->
 
    // Copy static files and CSS + JS from F# Formatting
    let copyFiles () =
+      ensureDirectory (output @@ "images")
+      CopyRecursive (content @@ "images") (output @@ "images") true
+      |> Log "Copying images: "
       ensureDirectory (output @@ "content")
       CopyRecursive (formatting @@ "content") (output @@ "content") true 
       |> Log "Copying styles and scripts: "
 
-   // Build documentation from `fsx` and `md` files in `docs/content`
+   // Build documentation from `*.fsx` files in `docs`
    let buildDocumentation () =
-      let subdirs = Directory.EnumerateDirectories(content, "*", SearchOption.AllDirectories)
+      let subdirs = Directory.EnumerateDirectories(content, "*.fsx", SearchOption.AllDirectories)
       for dir in Seq.append [content] subdirs do
          let sub = if dir.Length > content.Length then dir.Substring(content.Length + 1) else "."
          Literate.ProcessDirectory

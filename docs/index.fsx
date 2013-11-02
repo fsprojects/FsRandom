@@ -77,8 +77,6 @@ FsRandom provides a variety of random number generator functions:
 * **String module** provides functions for generating random strings.
 * **Utility module** provides utility functions.
 
-Also, user-defined functions can be implemented easily (see tutrials).
-
 ### Pseudo-Random Number Generators
 
 You can choose an algorithm of pseudo-random numbger generator:
@@ -88,6 +86,4 @@ You can choose an algorithm of pseudo-random numbger generator:
   This PRNG is not purely functional because the state of the PRNG is controled in the classes.
 * **mersenne** in MersenneTwister module implements 64-bit version of [Mersenne Twister](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html) algorithm.
 * **sfmt** in SimdOrientedFastMersenneTwister module implements [SFMT](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/index.html) algorithm.
-
-Of course, user-defined PRNGs can be implemented.
 *)

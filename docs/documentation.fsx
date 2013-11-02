@@ -53,7 +53,7 @@ let z2 = Random.get generator nextState
 printfn "%f" z2
 
 (**
-<a name="transforming random numbers"></a>
+<a name="transforming-random-numbers"></a>
 Transforming Random Numbers
 ---------------------------
 
@@ -136,36 +136,6 @@ let u2 = Random.get generator s
 Constructing User-Defined Random Number Generators
 --------------------------------------------------
 
-<a name="pseudo-random-number-generators"></a>
-### Pseudo-random number generators
-
-This section explains how to implement pseudo-random number generator (PRNG) algorithms such as `xorshift` and `systemrandom`.
-
-A PRNG is often defined as a simple series of numbers whose next number is determined by the current state.
-For example, the Xorshift algorithm has four 32-bit integers as a state.
-To describe such PRNGs, the type of PRNGs in FsRandom is defined as `type Prng<'s> = 's -> uint64 * 's`.
-Here `'s` is the type of random state of the PRNG.
-
-As an example of user-defined `Prng`,
-let's implement [linear congruential generator](http://en.wikipedia.org/wiki/Linear_congruential_generator).
-First, we make a function of `Prng`.
-*)
-
-// Coefficients are cited from Wikipedia
-let linear x = x, 6364136223846793005uL * x + 1442695040888963407uL
-
-(**
-The first returned value is a random number and the second returned value is a next state.
-Note that modulus is not defined because `Prng` is required to return random numbers
-in 64-bit resolution.
-
-Hereafter we can use the `linear` builder to generate random numbers.
-*)
-
-let linearState = createState linear 0x123456789ABCDEFuL
-Random.get generator linearState
-
-(**
 <a name="generator-function"></a>
 ### Generator function
 
@@ -198,61 +168,31 @@ Random.get approximatelyStandardNormal state
 (**
 Don't forget that FsRandom has a normal random number generator `normal`.
 
-<a name="numerical-examples"></a>
-Numerical Examples
-------------------
+<a name="pseudo-random-number-generators"></a>
+### Pseudo-random number generators
 
-<a name="monte-carlo"></a>
-### Estimating pi, the ratio of a circle's circumference to its diameter
+This section explains how to implement pseudo-random number generator (PRNG) algorithms such as `xorshift` and `systemrandom`.
+
+A PRNG is often defined as a simple series of numbers whose next number is determined by the current state.
+For example, the Xorshift algorithm has four 32-bit integers as a state.
+To describe such PRNGs, the type of PRNGs in FsRandom is defined as `type Prng<'s> = 's -> uint64 * 's`.
+Here `'s` is the type of random state of the PRNG.
+
+As an example of user-defined `Prng`,
+let's implement [linear congruential generator](http://en.wikipedia.org/wiki/Linear_congruential_generator).
+First, we make a function of `Prng`.
 *)
 
-// Generates random points on [-1, 1] x [-1, 1].
-let randomPointGenerator = random {
-   let! x = Statistics.uniform (-1.0, 1.0)
-   let! y = Statistics.uniform (-1.0, 1.0)
-   return (x, y)
-}
-// Weight of a point
-// If the distance from (0, 0) is equal to or less than 1 (in the unit circle),
-// the weight is 4 (because random points are distributed on [-1, 1] x [-1, 1]).
-let weight (x, y) = if x * x + y * y <= 1.0 then 4.0 else 0.0
-// Function to generate a sequence
-let values = Seq.ofRandom (Random.transformBy weight randomPointGenerator)
-
-// Monte Carlo integration
-// Generates 1,000,000 random values and the average becomes estimator of pi
-values state
-|> Seq.take 1000000
-|> Seq.average
-|> printfn "%f"
+// Coefficients are cited from Wikipedia
+let linear x = x, 6364136223846793005uL * x + 1442695040888963407uL
 
 (**
-<a name="gibbs-sampler"></a>
-### Generating bivariate normal random numbers using Gibbs sampler
+The first returned value is a random number and the second returned value is a next state.
+Note that modulus is not defined because `Prng` is required to return random numbers
+in 64-bit resolution.
 
-To sample from bivariate normal distribution
-![n2](http://chart.apis.google.com/chart?cht=tx&chl=N_{2}%5cleft%28%5cbegin{bmatrix}%5cmu_{X}%5c%5c%5cmu_{Y}%5cend{bmatrix},%5c,%5cbegin{bmatrix}%5csigma_{X}^{2}%26%5csigma_{XY}%5c%5c%5csigma_{XY}%26%5csigma_{Y}^{2}%5cend{bmatrix}%5cright%29),
-we will construct a Gibbs sample.
-Because the density function f(x, y) is propotional to f(x | y) * f(y) and
-f(x | y) is propotinal to
-![p](http://chart.apis.google.com/chart?cht=tx&chl=p%5cleft%28%5cmu_{X}%2b%5cfrac{%5csigma_{XY}}{%5csigma_{Y}^{2}}%28y-%5cmu_{Y}%29,%5c,%5csigma_{X}^{2}-%5cfrac{%5csigma_{XY}^{2}}{%5csigma_{Y}^{2}}%5cright%29)
-where p is a univariate normal density function,
-the Gibbs sampler for bivariate normal distribution consists of iterating as the following:
-
-1. Draw ![draw_x](http://chart.apis.google.com/chart?cht=tx&chl=x_{t%2b1}%5csim+N%5cleft%28%5cmu_{X}%2b%5cfrac{%5csigma_{XY}}{%5csigma_{Y}^{2}}%28y_{t}-%5cmu_{Y}%29,%5c,%5csigma_{X}^{2}-%5cfrac{%5csigma_{XY}^{2}}{%5csigma_{Y}^{2}}%5cright%29)
-2. Draw ![draw_y](http://chart.apis.google.com/chart?cht=tx&chl=y_{t%2b1}%5csim+N%5cleft%28%5cmu_{Y}%2b%5cfrac{%5csigma_{XY}}{%5csigma_{X}^{2}}%28x_{t%2b1}-%5cmu_{X}%29,%5c,%5csigma_{Y}^{2}-%5cfrac{%5csigma_{XY}^{2}}{%5csigma_{X}^{2}}%5cright%29)
-
-And it can be naturally translated into F# code as the following.
+Hereafter we can use the `linear` builder to generate random numbers.
 *)
 
-open FsRandom.Statistics
-let gibbsBinormal (meanX, meanY, varX, varY, cov) (_ : float, y : float) = random {
-   let! x' = normal (meanX + cov * (y - meanY) / varY, sqrt <| varX - cov ** 2.0 / varY)
-   let! y' = normal (meanY + cov * (x' - meanX) / varX, sqrt <| varY - cov ** 2.0 / varX)
-   return (x', y')
-}
-let binormal parameter = Seq.markovChain (gibbsBinormal parameter)
-
-(**
-Note that the generating bivariate normal random number sequence is [autocorrelated](http://en.wikipedia.org/wiki/Autocorrelation).
-*)
+let linearState = createState linear 0x123456789ABCDEFuL
+Random.get generator linearState
