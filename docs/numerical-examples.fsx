@@ -24,7 +24,8 @@ Estimating pi, the ratio of a circle's circumference to its diameter
 Suppose there is a circle of radius 1 is inside a square with side length 2.
 The area of the circle is \\(\pi\\) and the area of the square is 4.
 If you put \\(N\\) random points on the square, roughly \\(\displaystyle\frac{\pi}{4}N\\) points are inside the circle.
-In other words, if you find \\(M\\) points are inside the circle, \\(M\\) approximates \\(\displaystyle\frac{\pi}{4}\\).
+In other words, if you find \\(M\\) points out of \\(N\\) are inside the circle,
+\\(\frac{M}{N}\\) approximates \\(\displaystyle\frac{\pi}{4}\\).
 
 <div style="text-align:center;margin-right:100px;">
 <img src="images/monte-carlo-pi.png" width="512" height="512" alt="random points approximates pi" />
