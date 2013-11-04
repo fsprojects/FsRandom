@@ -1,8 +1,9 @@
 ﻿#I "FSharp.Formatting/lib/net40"
 #I "RazorEngine/lib/net40/"
-#r "Microsoft.AspNet.Razor/lib/net40/System.Web.Razor.dll"
+#I "Microsoft.AspNet.Razor/lib/net40"
 #r "FakeLib.dll"
 #r "ICSharpCode.SharpZipLib.dll"
+#r "System.Web.Razor.dll"
 #r "RazorEngine.dll"
 #r "FSharp.Literate.dll"
 #r "FSharp.CodeFormat.dll"
@@ -24,6 +25,7 @@ let inline (%) dir name = Path.Combine (dir, name)
 let nugetToolPath = % ".nuget" % "NuGet.exe"
 let buildDir = % "Build"
 let deployDir = % "Deploy"
+let docsDir = buildDir % "docs"
 
 let mainSolution = % "FsRandom" % "FsRandom.fsproj"
 let projectName = "FsRandom"
@@ -45,7 +47,7 @@ let buildParams =
    let rec loop acc = function
       | [] -> acc
       | "-h" :: _ | "--help" :: _ -> { acc with Help = true }  // don't care other arguments
-      | "-d" :: args | "--docs" :: args -> loop { acc with Documentation = true } args
+      | "--docs" :: args -> loop { acc with Documentation = true } args
       | "--docs-root" :: path :: args -> loop { acc with DocumentationRoot = path } args
       | "--debug" :: args -> loop { acc with Debug = true } args
       | "--deploy" :: args -> loop { acc with Deploy = true } args
@@ -79,7 +81,7 @@ fsi.exe build.fsx [<options>]
 
 # Options
 -h | --help       Show this help
--d | --docs       Build documentation files
+--docs            Build documentation files
 --docs-root <uri> Specify the root uri of the documentation
                   Default: .
 --debug           Debug build
@@ -130,7 +132,7 @@ Target "Build" (fun () ->
    build setBuildParams mainSolution
    getProducts projectName
    |> Copy buildDir
-   !+ (buildDir % "*.*")
+   !+ (buildDir % "**")
    |> Scan
    |> Log "Build-Output: "
 )
@@ -172,21 +174,20 @@ Target "Documentation" (fun () ->
 
    // Paths with template/source/output locations
    let content    = % "docs"
-   let output     = buildDir % "docs"
    let templates  = content % "templates"
    let formatting = __SOURCE_DIRECTORY__ % "FSharp.Formatting"
    let docTemplate = formatting % "templates" % "docpage.cshtml"
 
-   // Where to look for *.csproj templates (in this order)
-   let layoutRoots = [ templates; formatting @@ "templates" ]
+   // Where to look for *.cshtml templates (in this order)
+   let layoutRoots = [ templates; formatting % "templates" ]
 
    // Copy static files and CSS + JS from F# Formatting
    let copyFiles () =
-      ensureDirectory (output @@ "images")
-      CopyRecursive (content @@ "images") (output @@ "images") true
+      ensureDirectory (docsDir % "images")
+      CopyRecursive (content % "images") (docsDir % "images") true
       |> Log "Copying images: "
-      ensureDirectory (output @@ "content")
-      CopyRecursive (formatting @@ "content") (output @@ "content") true 
+      ensureDirectory (docsDir % "content")
+      CopyRecursive (formatting % "content") (docsDir % "content") true 
       |> Log "Copying styles and scripts: "
 
    // Build documentation from `*.fsx` files in `docs`
@@ -195,7 +196,7 @@ Target "Documentation" (fun () ->
       for dir in Seq.append [content] subdirs do
          let sub = if dir.Length > content.Length then dir.Substring(content.Length + 1) else "."
          Literate.ProcessDirectory
-            ( dir, docTemplate, output @@ sub, replacements = ("root", buildParams.DocumentationRoot)::info,
+            ( dir, docTemplate, docsDir % sub, replacements = ("root", buildParams.DocumentationRoot)::info,
               layoutRoots = layoutRoots )
 
    // Generate
@@ -204,7 +205,12 @@ Target "Documentation" (fun () ->
 )
 
 Target "Zip" (fun () ->
-   !+ (buildDir % "*.*")
+   let files =
+      if buildParams.Documentation && buildParams.DocumentationRoot = "." then
+         !+ (buildDir % "*.*") ++ (docsDir % "**")
+      else
+         !+ (buildDir % "*.*")
+   files
    |> Scan
    |> Zip buildDir zipName
 )
