@@ -94,16 +94,19 @@ let weightedSample n weight source =
       invalidArg "weight" "`weight' must have the same length of `source'."
    else
       // Efraimidis and Spirakis (2006) Weighted random sampling with a reservoir (DOI: 10.1016/j.ipl.2005.11.003)
-      random {
+      GeneratorFunction (fun s0 ->
+         let s = ref s0
          let result = ref BinarySearchTree.empty
          for index = 0 to n - 1 do
-            let! u = ``[0, 1)``
+            let u, s' = Random.next ``[0, 1)`` !s
+            s := s'
             let key = u ** (1.0 / weight.[index])
             result := BinarySearchTree.insert key source.[index] !result
          let index = ref n
          while !index < size do
             let threshold = BinarySearchTree.min !result |> fst
-            let! u = ``[0, 1)``
+            let u, s' = Random.next ``[0, 1)`` !s
+            s := s'
             let x = log u / log threshold
             let weightSum = ref 0.0
             while !index < size && !weightSum < x do
@@ -112,12 +115,13 @@ let weightedSample n weight source =
             if !weightSum >= x then
                let index = !index - 1
                let w = weight.[index]
-               let! u = ``[0, 1)``
+               let u, s' = Random.next ``[0, 1)`` !s
+               s := s'
                let r = let t = threshold ** w in t + u * (1.0 - t)
                let key = r ** (1.0 / w)
                result := BinarySearchTree.removeMinimum !result |> BinarySearchTree.insert key source.[index]
-         return !result |> (BinarySearchTree.toSeq >> Seq.map snd >> Seq.toArray)
-      }
+         !result |> (BinarySearchTree.toList >> List.map snd >> List.toArray), !s
+      )
 
 let sampleWithReplacement n source =
    if n < 0 then

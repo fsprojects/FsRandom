@@ -50,7 +50,7 @@ type Tree<'a> =
    | Node of 'a * Tree<'a> * Tree<'a>
 
 module BinarySearchTree =
-   let empty<'a> = Tree<'a>.Empty
+   let empty = Tree.Empty
    let singleton key value = Tree.Node ((key, value), empty, empty)
    let rec insert key value = function
       | Node ((key', _) as y, left, right) when key < key' -> Node (y, insert key value left, right)
@@ -64,11 +64,8 @@ module BinarySearchTree =
       | Node (x, Empty, _) -> x
       | Node (_, left, _) -> min left
       | Empty -> failwith "Empty."
-   let rec toSeq = function
-      | Node (x, left, right) ->
-         seq {
-            yield! toSeq left
-            yield x
-            yield! toSeq right
-         }
-      | Empty -> Seq.empty
+   let toList tree =
+      let rec loop acc = function
+         | Node (x, left, right) -> loop (x :: loop acc right) left
+         | Empty -> acc
+      loop [] tree
