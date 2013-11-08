@@ -44,19 +44,78 @@ let triangular (min, max, mode) =
       let transform u = if u < mode then left u else right u
       Random.transformBy transform (uniform (min, max))
 
-// Box-Muller's transformation.
+// Ziggurat algorithm.
+[<Literal>]
+let k0 = 8
+[<Literal>]
+let m = 64
+[<Literal>]
+let n = 256  // 2^8
+[<Literal>]
+let r = 3.6541528853610088
+[<Literal>]
+let v = 0.00492867323399
+let inline f x = exp (-x * x / 2.0)
+let kn, fn, wn =
+   let d = pown 2.0 (m - k0 - 1)
+   let xn = Array.zeroCreate (n + 1)
+   xn.[n] <- v / f r
+   xn.[n - 1] <- r
+   for i = n - 2 downto 1 do
+      xn.[i] <- sqrt <| -2.0 * log (f xn.[i + 1] + v / xn.[i + 1])
+   let wn = Array.zeroCreate n
+   wn.[n - 1] <- v / f r / d
+   wn.[n - 2] <- r / d
+   let kn = Array.zeroCreate n
+   kn.[n - 1] <- uint64 (r / wn.[n - 1])
+   let fn = Array.zeroCreate n
+   fn.[n - 1] <- f r
+   for i = n - 2 downto 1 do
+      wn.[i - 1] <- xn.[i] / d
+      kn.[i] <- uint64 (xn.[i] / wn.[i])
+      fn.[i] <- f xn.[i]
+//   kn.[0] <- 0uL
+   fn.[0] <- 1.0
+   kn, fn, wn
+let ziggurat = GeneratorFunction (fun s0 ->
+   let s = ref s0
+   let mutable result = None
+   while result.IsNone do
+      let u, s' = Random.next rawBits !s
+      s := s'
+      let i = int (u &&& 0b11111111uL)
+      let u = u >>> k0
+      let sign = if u &&& 0x1uL = 0uL then 1.0 else -1.0
+      let u = u >>> 1
+      if u < kn.[i] then
+         let ux = float u * wn.[i]
+         result <- Some (sign * ux)
+      elif i = n - 1 then
+         while result.IsNone do
+            let u1, s' = Random.next ``[0, 1)`` !s
+            let u2, s' = Random.next ``[0, 1)`` s'
+            s := s'
+            let y = -log (1.0 - u1) / r
+            let z = -log (u2)
+            if y * y <= z + z then
+               result <- Some (sign * (r + y))
+      else
+         let ux = float u * wn.[i]
+         let fx = f ux
+         let u, s' = Random.next ``[0, 1)`` !s
+         s := s'
+         if u * (fn.[i] - fn.[i + 1]) <= fx - fn.[i + 1] then
+            result <- Some (ux * sign)
+   result.Value, !s
+)
 let normal (mean, sd) =
    ensuresFiniteValue mean "mean"
    ensuresFiniteValue sd "sd"
    if sd <= 0.0 then
       outOfRange "sd" "`sd' must be positive."
    else
-      let transform u1 u2 =
-         let r = sqrt <| -2.0 * log u1
-         let theta = ``2pi`` * u2
-         let z = r * cos theta
-         mean + z * sd
-      Random.transformBy2 transform ``(0, 1)`` ``(0, 1)``
+      let transform z = mean + z * sd
+      Random.transformBy transform ziggurat
 
 let lognormal p = Random.transformBy exp (normal p)
       
