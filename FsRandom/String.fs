@@ -10,7 +10,10 @@ let alphanumeric = Array.concat [digit; alphabet]
 
 let inline makeString (array:char []) = System.String (array)
 let inline randomStringByCharArray array length =
-   Random.transformBy makeString (Array.sampleWithReplacement length array)
+   if length = 0 then
+      Random.singleton ""
+   else
+      Random.transformBy makeString (Array.sampleWithReplacement length array)
 
 let randomByString (s:string) length = randomStringByCharArray (s.ToCharArray ()) length
 let randomAscii length = randomStringByCharArray ascii length
