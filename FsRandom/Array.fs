@@ -125,8 +125,11 @@ let weightedSample n weight source =
       )
 
 let sampleWithReplacement n source =
+   let size = Array.length source
    if n < 0 then
       outOfRange "n" "`n' must not be negative."
+   elif size = 0 then
+      invalidArg "source" "empty array."
    else
       GeneratorFunction (fun s0 ->
          let result = Array.zeroCreate n
@@ -143,6 +146,8 @@ let weightedSampleWithReplacement n weight source =
    let size = Array.length source
    if n < 0 then
       outOfRange "n" "`n' must not be negative."
+   elif size = 0 then
+      invalidArg "source" "empty array."
    elif Array.length weight <> size then
       invalidArg "weight" "`weight' must have the same length of `source'."
    else

@@ -11,7 +11,7 @@ module List =
 module Array =
    let accumulate accumulation array =
       if Array.length array = 0 then
-         Array.empty
+         invalidArg "array" "Empty array."
       else
          let size = Array.length array
          let result = Array.zeroCreate size
