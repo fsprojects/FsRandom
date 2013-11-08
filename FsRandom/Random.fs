@@ -1,4 +1,5 @@
-﻿module FsRandom.Random
+﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module FsRandom.Random
 
 let inline next generator s = runRandom generator s
 let inline get generator s = evaluateRandom generator s

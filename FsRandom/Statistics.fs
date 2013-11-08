@@ -1,4 +1,5 @@
-﻿module FsRandom.Statistics
+﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module FsRandom.Statistics
 
 open System
 

@@ -1,4 +1,5 @@
-﻿[<RequireQualifiedAccess>]
+﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+[<RequireQualifiedAccess>]
 module FsRandom.Array2D
 
 /// <summary>

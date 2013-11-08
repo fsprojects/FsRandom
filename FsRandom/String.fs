@@ -1,4 +1,5 @@
-﻿module FsRandom.String
+﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module FsRandom.String
 
 let ascii = [|'!' .. '~'|]
 let digit = [|'0' .. '9'|]

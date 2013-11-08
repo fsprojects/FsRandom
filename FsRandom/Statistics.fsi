@@ -1,4 +1,5 @@
-﻿module FsRandom.Statistics
+﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module FsRandom.Statistics
 
 /// <summary>
 /// Returns a random number distributed uniformly in the range of [<paramref name="min" />, <paramref name="max" />].

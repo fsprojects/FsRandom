@@ -1,4 +1,5 @@
-﻿module FsRandom.Utility
+﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module FsRandom.Utility
 
 
 /// <summary>

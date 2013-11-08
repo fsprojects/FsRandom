@@ -1,4 +1,5 @@
-﻿module FsRandom.Array
+﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module FsRandom.Array
 
 open System
 

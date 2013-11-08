@@ -1,4 +1,5 @@
-﻿[<AutoOpen>]
+﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+[<AutoOpen>]
 module internal FsRandom.Math
 
 [<Literal>]
