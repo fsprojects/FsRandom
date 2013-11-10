@@ -64,13 +64,9 @@ let kn, fn, wn =
    for i = n - 2 downto 1 do
       xn.[i] <- sqrt <| -2.0 * log (f xn.[i + 1] + v / xn.[i + 1])
    let wn = Array.zeroCreate n
-   wn.[n - 1] <- v / f r / d
-   wn.[n - 2] <- r / d
    let kn = Array.zeroCreate n
-   kn.[n - 1] <- uint64 (r / wn.[n - 1])
    let fn = Array.zeroCreate n
-   fn.[n - 1] <- f r
-   for i = n - 2 downto 1 do
+   for i = n - 1 downto 1 do
       wn.[i - 1] <- xn.[i] / d
       kn.[i] <- uint64 (xn.[i] / wn.[i])
       fn.[i] <- f xn.[i]
