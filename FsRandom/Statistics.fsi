@@ -62,7 +62,7 @@ val weibull : shape:float * scale:float -> GeneratorFunction<float>
 /// <param name="scale">The scale parameter.</param>
 val gumbel : location:float * scale:float -> GeneratorFunction<float>
 /// <summary>
-/// Returns a random number distributed cauchy.
+/// Returns a random number distributed Cauchy.
 /// </summary>
 /// <param name="location">The location parameter.</param>
 /// <param name="scale">The scale parameter.</param>
@@ -119,6 +119,41 @@ val dirichlet : alpha:float list -> GeneratorFunction<float list>
 val multinomial : n:int * weight:float list -> GeneratorFunction<int list>
 
 [<RequireQualifiedAccess>]
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module Standard =
+   /// <summary>
+   /// Returns a standard uniform random number.
+   /// </summary>
+   val uniform : GeneratorFunction<float>
+   /// <summary>
+   /// Returns a standard normal random number.
+   /// </summary>
+   val normal : GeneratorFunction<float>
+   /// <summary>
+   /// Returns a standard gamma random number.
+   /// </summary>
+   /// <param name="shape">The shape parameter.</param>
+   val gamma : shape:float -> GeneratorFunction<float>
+   /// <summary>
+   /// Returns a standard exponential random number.
+   /// </summary>
+   val exponential : GeneratorFunction<float>
+   /// <summary>
+   /// Returns a standard Weibull random number.
+   /// </summary>
+   /// <param name="shape">The shape parameter.</param>
+   val weibull : shape:float -> GeneratorFunction<float>
+   /// <summary>
+   /// Returns a standard Gumbel random number.
+   /// </summary>
+   val gumbel : GeneratorFunction<float>
+   /// <summary>
+   /// Returns a standard Cauchy random number.
+   /// </summary>
+   val cauchy : GeneratorFunction<float>
+
+[<RequireQualifiedAccess>]
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Seq =
    /// <summary>
    /// Makes infinite Markov chain.

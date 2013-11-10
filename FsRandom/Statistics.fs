@@ -1,8 +1,158 @@
 ﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module FsRandom.Statistics
 
-open System
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module Standard =
+   let inline minusLog x = -log x
 
+   let uniform = ``[0, 1]``
+
+   // Ziggurat algorithm for normal distribution.
+   [<Literal>]
+   let k0 = 8
+   [<Literal>]
+   let m = 64
+   [<Literal>]
+   let n = 256  // 2^8
+   [<Literal>]
+   let r = 3.6541528853610088
+   [<Literal>]
+   let v = 0.00492867323399
+   let inline f x = exp (-x * x / 2.0)
+   let kn, fn, wn =
+      let d = pown 2.0 (m - k0 - 1)
+      let xn = Array.zeroCreate (n + 1)
+      xn.[n] <- v / f r
+      xn.[n - 1] <- r
+      for i = n - 2 downto 1 do
+         xn.[i] <- sqrt <| -2.0 * log (f xn.[i + 1] + v / xn.[i + 1])
+      let wn = Array.zeroCreate n
+      let kn = Array.zeroCreate n
+      let fn = Array.zeroCreate n
+      for i = n - 1 downto 1 do
+         wn.[i - 1] <- xn.[i] / d
+         kn.[i] <- uint64 (xn.[i] / wn.[i])
+         fn.[i] <- f xn.[i]
+   //   kn.[0] <- 0uL
+      fn.[0] <- 1.0
+      kn, fn, wn
+   let normal = GeneratorFunction (fun s0 ->
+      let s = ref s0
+      let mutable result = None
+      while result.IsNone do
+         let u, s' = Random.next rawBits !s
+         s := s'
+         let i = int (u &&& 0b11111111uL)
+         let u = u >>> k0
+         let sign = if u &&& 0x1uL = 0uL then 1.0 else -1.0
+         let u = u >>> 1
+         if u < kn.[i] then
+            let ux = float u * wn.[i]
+            result <- Some (sign * ux)
+         elif i = n - 1 then
+            while result.IsNone do
+               let u1, s' = Random.next ``[0, 1)`` !s
+               let u2, s' = Random.next ``[0, 1)`` s'
+               s := s'
+               let y = -log (1.0 - u1) / r
+               let z = -log (u2)
+               if y * y <= z + z then
+                  result <- Some (sign * (r + y))
+         else
+            let ux = float u * wn.[i]
+            let fx = f ux
+            let u, s' = Random.next ``[0, 1)`` !s
+            s := s'
+            if u * (fn.[i] - fn.[i + 1]) <= fx - fn.[i + 1] then
+               result <- Some (ux * sign)
+      result.Value, !s
+   )
+
+   // random number distributed gamma for alpha < 1 (Best 1983).
+   let gammaSmall alpha s0 =
+      let c1 = 0.07 + sqrt (1.0 - alpha)
+      let c2 = 1.0 + alpha * exp (-c1) / c1
+      let c3 = 1.0 / alpha
+      let mutable state = s0
+      let mutable result = 0.0
+      let incomplete = ref true
+      while !incomplete do
+         let u1, s1 = Random.next ``(0, 1)`` state
+         let u2, s' = Random.next ``(0, 1)`` s1
+         state <- s'
+         let v = c2 * u1
+         if v <= 1.0 then
+            let x = c1 * v ** c3
+            if u2 <= (2.0 - x) / (2.0 + x) || u2 <= exp (-x) then
+               result <- x
+               incomplete := false
+         else
+            let x = -log (c1 * c3 * (c2 - v));
+            let y = x / c1;
+            if u2 * (alpha + y - alpha * y) <= 1.0 || u2 <= y ** (alpha - 1.0) then
+               result <- x
+               incomplete := false
+      result, state
+
+   // random number distributed gamma for alpha < 1 (Marsaglia & Tsang 2001).
+   let gammaLarge alpha s0 =
+      let c1 = alpha - 1.0 / 3.0
+      let c2 = 1.0 / sqrt (9.0 * c1)
+      let mutable state = s0
+      let mutable result = 0.0
+      let incomplete = ref true
+      while !incomplete do
+         let z, s' = Random.next normal state
+         state <- s'
+         let t = 1.0 + c2 * z;
+         if t > 0.0 then
+            let v = pown t 3;
+            let u, s' = Random.next ``(0, 1)`` state
+            state <- s'
+            if u < 1.0 - 0.0331 * pown z 4 || log u < 0.5 * z * z + c1 * (1.0 - v + log v) then
+               result <- c1 * v
+               incomplete := false
+      result, state
+   // random number distributed gamma for alpha is integer.
+   let gammaInt alpha s0 =
+      let rec loop n ((sum, s) as result) =
+         match n with
+            | 0 -> result
+            | _ ->
+               let u, s' = Random.next ``(0, 1)`` s
+               loop (n - 1) (sum - log u, s')
+      loop alpha (0.0, s0)
+
+   let gamma shape =
+      ensuresFiniteValue shape "shape"
+      if shape <= 0.0 then
+         outOfRange "shape" "`scale' must be positive."
+      else
+         if isInt shape then
+            GeneratorFunction (gammaInt (int shape))
+         elif shape < 1.0 then
+            GeneratorFunction (gammaSmall shape)
+         else
+            GeneratorFunction (gammaLarge shape)
+
+   let exponential =
+      Random.transformBy minusLog ``(0, 1)``
+
+   let weibull shape =
+      ensuresFiniteValue shape "shape"
+      if shape <= 0.0 then
+         outOfRange "shape" "`shape' must be positive."
+      else
+         let transform u = (-log u) ** (1.0 / shape)
+         Random.transformBy transform ``(0, 1)``
+
+   let gumbel =
+      Random.transformBy (minusLog >> minusLog) ``(0, 1)``
+
+   let cauchy =
+      let transform u = tan (pi * (u - 0.5))
+      Random.transformBy transform ``(0, 1)``
+      
 let uniform (min, max) =
    ensuresFiniteValue min "min"
    ensuresFiniteValue max "max"
@@ -44,66 +194,6 @@ let triangular (min, max, mode) =
       let transform u = if u < mode then left u else right u
       Random.transformBy transform (uniform (min, max))
 
-// Ziggurat algorithm.
-[<Literal>]
-let k0 = 8
-[<Literal>]
-let m = 64
-[<Literal>]
-let n = 256  // 2^8
-[<Literal>]
-let r = 3.6541528853610088
-[<Literal>]
-let v = 0.00492867323399
-let inline f x = exp (-x * x / 2.0)
-let kn, fn, wn =
-   let d = pown 2.0 (m - k0 - 1)
-   let xn = Array.zeroCreate (n + 1)
-   xn.[n] <- v / f r
-   xn.[n - 1] <- r
-   for i = n - 2 downto 1 do
-      xn.[i] <- sqrt <| -2.0 * log (f xn.[i + 1] + v / xn.[i + 1])
-   let wn = Array.zeroCreate n
-   let kn = Array.zeroCreate n
-   let fn = Array.zeroCreate n
-   for i = n - 1 downto 1 do
-      wn.[i - 1] <- xn.[i] / d
-      kn.[i] <- uint64 (xn.[i] / wn.[i])
-      fn.[i] <- f xn.[i]
-//   kn.[0] <- 0uL
-   fn.[0] <- 1.0
-   kn, fn, wn
-let ziggurat = GeneratorFunction (fun s0 ->
-   let s = ref s0
-   let mutable result = None
-   while result.IsNone do
-      let u, s' = Random.next rawBits !s
-      s := s'
-      let i = int (u &&& 0b11111111uL)
-      let u = u >>> k0
-      let sign = if u &&& 0x1uL = 0uL then 1.0 else -1.0
-      let u = u >>> 1
-      if u < kn.[i] then
-         let ux = float u * wn.[i]
-         result <- Some (sign * ux)
-      elif i = n - 1 then
-         while result.IsNone do
-            let u1, s' = Random.next ``[0, 1)`` !s
-            let u2, s' = Random.next ``[0, 1)`` s'
-            s := s'
-            let y = -log (1.0 - u1) / r
-            let z = -log (u2)
-            if y * y <= z + z then
-               result <- Some (sign * (r + y))
-      else
-         let ux = float u * wn.[i]
-         let fx = f ux
-         let u, s' = Random.next ``[0, 1)`` !s
-         s := s'
-         if u * (fn.[i] - fn.[i + 1]) <= fx - fn.[i + 1] then
-            result <- Some (ux * sign)
-   result.Value, !s
-)
 let normal (mean, sd) =
    ensuresFiniteValue mean "mean"
    ensuresFiniteValue sd "sd"
@@ -111,65 +201,10 @@ let normal (mean, sd) =
       outOfRange "sd" "`sd' must be positive."
    else
       let transform z = mean + z * sd
-      Random.transformBy transform ziggurat
+      Random.transformBy transform Standard.normal
 
 let lognormal p = Random.transformBy exp (normal p)
       
-// random number distributed gamma for alpha < 1 (Best 1983).
-let gammaSmall alpha s0 =
-   let c1 = 0.07 + sqrt (1.0 - alpha)
-   let c2 = 1.0 + alpha * exp (-c1) / c1
-   let c3 = 1.0 / alpha
-   let mutable state = s0
-   let mutable result = 0.0
-   let incomplete = ref true
-   while !incomplete do
-      let u1, s1 = Random.next ``(0, 1)`` state
-      let u2, s' = Random.next ``(0, 1)`` s1
-      state <- s'
-      let v = c2 * u1
-      if v <= 1.0 then
-         let x = c1 * v ** c3
-         if u2 <= (2.0 - x) / (2.0 + x) || u2 <= exp (-x) then
-            result <- x
-            incomplete := false
-      else
-         let x = -log (c1 * c3 * (c2 - v));
-         let y = x / c1;
-         if u2 * (alpha + y - alpha * y) <= 1.0 || u2 <= y ** (alpha - 1.0) then
-            result <- x
-            incomplete := false
-   result, state
-
-// random number distributed gamma for alpha < 1 (Marsaglia & Tsang 2001).
-let gammaLarge alpha s0 =
-   let c1 = alpha - 1.0 / 3.0
-   let c2 = 1.0 / sqrt (9.0 * c1)
-   let mutable state = s0
-   let mutable result = 0.0
-   let incomplete = ref true
-   while !incomplete do
-      let z, s' = Random.next (normal (0.0, 1.0)) state
-      state <- s'
-      let t = 1.0 + c2 * z;
-      if t > 0.0 then
-         let v = pown t 3;
-         let u, s' = Random.next ``(0, 1)`` state
-         state <- s'
-         if u < 1.0 - 0.0331 * pown z 4 || log u < 0.5 * z * z + c1 * (1.0 - v + log v) then
-            result <- c1 * v
-            incomplete := false
-   result, state
-// random number distributed gamma for alpha is integer.
-let gammaInt alpha s0 =
-   let rec loop n ((sum, s) as result) =
-      match n with
-         | 0 -> result
-         | _ ->
-            let u, s' = Random.next ``(0, 1)`` s
-            loop (n - 1) (sum - log u, s')
-   loop alpha (0.0, s0)
-
 let gamma (shape, scale) =
    ensuresFiniteValue shape "shape"
    ensuresFiniteValue scale "scale"
@@ -178,13 +213,7 @@ let gamma (shape, scale) =
    elif scale <= 0.0 then
       outOfRange "scale" "`scale' must be positive."
    else
-      let get = Random.transformBy ((*) scale)
-      if isInt shape then
-         get (GeneratorFunction (gammaInt (int shape)))
-      elif shape < 1.0 then
-         get (GeneratorFunction (gammaSmall shape))
-      else
-         get (GeneratorFunction (gammaLarge shape))
+      Random.transformBy ((*) scale) (Standard.gamma (shape))
 
 let beta (alpha, beta) =
    ensuresFiniteValue alpha "alpha"
@@ -195,26 +224,22 @@ let beta (alpha, beta) =
       outOfRange "beta" "`beta' must be positive."
    else
       let transform y1 y2 = y1 / (y1 + y2)
-      Random.transformBy2 transform (gamma (alpha, 1.0)) (gamma (beta, 1.0))
+      Random.transformBy2 transform (Standard.gamma (alpha)) (Standard.gamma (beta))
 
 let exponential rate =
    ensuresFiniteValue rate "rate"
    if rate <= 0.0 then
       outOfRange "rate" "`rate' must be positive."
    else
-      let transform u = -log u / rate
-      Random.transformBy transform ``(0, 1)``
+      let transform t = t / rate
+      Random.transformBy transform Standard.exponential
 
 let weibull (shape, scale) =
-   ensuresFiniteValue shape "shape"
    ensuresFiniteValue scale "scale"
-   if shape <= 0.0 then
-      outOfRange "shape" "`shape' must be positive."
-   elif scale <= 0.0 then
+   if scale <= 0.0 then
       outOfRange "scale" "`scale' must be positive."
    else
-      let transform u = let r = (-log u) ** (1.0 / shape) in r * scale
-      Random.transformBy transform ``(0, 1)``
+      Random.transformBy ((*) scale) (Standard.weibull (shape))
 
 let gumbel (location, scale) =
    ensuresFiniteValue location "location"
@@ -222,8 +247,8 @@ let gumbel (location, scale) =
    if scale <= 0.0 then
       outOfRange "scale" "`scale' must be positive."
    else
-      let transform u = location - scale * log (-log u)
-      Random.transformBy transform ``(0, 1)``
+      let transform g = location + scale * g
+      Random.transformBy transform Standard.gumbel
 
 let cauchy (location, scale) =
    ensuresFiniteValue location "location"
@@ -231,8 +256,8 @@ let cauchy (location, scale) =
    if scale <= 0.0 then
       outOfRange "scale" "`scale' must be positive."
    else
-      let transform u = location + scale * tan (pi * (u - 0.5))
-      Random.transformBy transform ``(0, 1)``
+      let transform c = location + c * scale
+      Random.transformBy transform Standard.cauchy
 
 let chisquare df =
    if df <= 0 then
@@ -249,15 +274,15 @@ let t df =
       outOfRange "degreeOfFreedom" "`degreeOfFreedom' must be positive."
    else
       if df = 1 then
-         cauchy (0.0, 1.0)
+         Standard.cauchy
       elif df = 2 then
          let transform z w = z / sqrt w
-         Random.transformBy2 transform (normal (0.0, 1.0)) (exponential 1.0)
+         Random.transformBy2 transform Standard.normal Standard.exponential
       else
          let r = float df / 2.0
          let d = sqrt r
          let transform z w = d * z / sqrt w
-         Random.transformBy2 transform (normal (0.0, 1.0)) (gamma (r, 1.0))
+         Random.transformBy2 transform Standard.normal (Standard.gamma (r))
 
 let uniformDiscrete (min, max) =
    if min > max then
@@ -344,7 +369,7 @@ let dirichlet alpha =
       outOfRange "alpha" "All elements in `alpha' must be positive."
    else
       GeneratorFunction (fun s0 ->
-         let y, sum, s' = List.foldBack (fun a (xs, sum, s) -> let x, s' = Random.next (gamma (a, 1.0)) s in x :: xs, sum + x, s') alpha ([], 0.0, s0)
+         let y, sum, s' = List.foldBack (fun a (xs, sum, s) -> let x, s' = Random.next (Standard.gamma (a)) s in x :: xs, sum + x, s') alpha ([], 0.0, s0)
          List.map (fun y' -> y' / sum) y, s'
       )
 
@@ -370,6 +395,7 @@ let multinomial (n, weight) =
          Array.toList result, s
       )
          
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Seq =
    let markovChain generator =
       let f = generator >> Random.next
