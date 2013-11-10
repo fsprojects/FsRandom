@@ -1,5 +1,7 @@
+#if INTERACTIVE
 #I "../Build"
 #r "FsRandom.dll"
+#endif
 
 open FsRandom
 open FsRandom.Statistics
