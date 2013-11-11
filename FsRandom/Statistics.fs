@@ -382,19 +382,29 @@ let multinomial (n, weight) =
    elif List.exists (fun x -> isNaN x || isInfinity x || x <= 0.0) weight then
       outOfRange "probability" "All elements in `weight' must be positive."
    else
-      let cdf, sum = List.fold (fun (xs, sum) x -> let s = sum + x in xs @ [s], s) ([], 0.0) weight
+      let cdf = cdf weight
       GeneratorFunction (fun s0 ->
          let result = Array.zeroCreate k
          let mutable s = s0
          for loop = 1 to n do
             let u, s' = Random.next ``[0, 1)`` s
-            let p = sum * u
+            let p = u
             let index = List.findIndex (fun x -> p < x) cdf
             result.[index] <- result.[index] + 1
             s <- s'
          Array.toList result, s
       )
-         
+
+let mix model =
+   let distribution = List.map fst model |> List.toArray
+   let cdf = List.map snd model |> cdf
+   GeneratorFunction (fun s0 ->
+      let u, s' = Random.next ``[0, 1)`` s0
+      let p = u
+      let index = List.findIndex (fun x -> p < x) cdf
+      Random.next distribution.[index] s'
+   )
+
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Seq =
    let markovChain generator =

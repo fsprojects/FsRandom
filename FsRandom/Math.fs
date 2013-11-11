@@ -45,3 +45,7 @@ let gamma x =
       pi / (sin (pi * x) * exp (loggamma (1.0 - x)))
    else
       exp (loggamma x)
+
+let inline cdf p =
+   let sum = List.sum p
+   List.accumulate (+) p |> List.map (fun w -> w / sum)
