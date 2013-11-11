@@ -286,3 +286,16 @@ let ``Validates binomial`` () =
 //[<Test>]
 //let ``Validates multinomial`` () =
 //   testMultinomial (getDefaultTester ()) [1.0; 2.0; 2.5; 0.5]
+
+[<Test>]
+let ``Validates mix (float)`` () =
+   let engine = getREngine ()
+   use samples =
+      let samples = getSamples (mix [gamma (3.0, 2.0), 1.0; normal (-2.0, 1.0), 3.0])
+      engine.CreateNumericVector (samples)
+   engine.SetSymbol ("x", samples)
+   engine.Evaluate ("""
+   pmix <- function(x) 0.25 * pgamma(x, shape=3, scale=2) + 0.75 * pnorm(x, mean=-2, sd=1)
+   ks.test(x, "pmix")""")
+   |> getP
+   |> should be (greaterThan p)

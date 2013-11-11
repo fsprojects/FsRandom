@@ -117,6 +117,11 @@ val dirichlet : alpha:float list -> GeneratorFunction<float list>
 /// <param name="weight">The list of probability.
 /// Each item is normalized in the function so that the sum of values can be less or greater than 1.</param>
 val multinomial : n:int * weight:float list -> GeneratorFunction<int list>
+/// <summary>
+/// Returns a mixted distribution.
+/// </summary>
+/// <param name="distributions">The mixed model.</param>
+val mix : distributions:(GeneratorFunction<'a> * float) list -> GeneratorFunction<'a>
 
 [<RequireQualifiedAccess>]
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
