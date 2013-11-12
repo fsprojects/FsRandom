@@ -89,10 +89,17 @@ val uniformDiscrete : min:int * max:int -> GeneratorFunction<int>
 /// <param name="lambda">The lambda parameter (equals to its mean).</param>
 val poisson : lambda:float -> GeneratorFunction<int>
 /// <summary>
-/// Returns a random number distributed geometcally.
+/// Returns a random number distributed geometcally on {0, 1, 2, ...}.
 /// </summary>
 /// <param name="probability">The probability to success a trial.</param>
-val geometric : probability:float -> GeneratorFunction<int>
+/// <seealso cref="geometric1" />
+val geometric0 : probability:float -> GeneratorFunction<int>
+/// <summary>
+/// Returns a random number distributed geometcally on {1, 2, 3, ...}.
+/// </summary>
+/// <param name="probability">The probability to success a trial.</param>
+/// <seealso cref="geometric0" />
+val geometric1 : probability:float -> GeneratorFunction<int>
 /// <summary>
 /// Returns a random number distributed Bernoulli.
 /// </summary>

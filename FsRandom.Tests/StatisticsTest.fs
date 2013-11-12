@@ -224,15 +224,33 @@ let ``Validates poisson`` () =
    |> should be (greaterThan p)
 
 [<Test>]
-let ``Validates geometric`` () =
+let ``Validates geometric0`` () =
    let engine = getREngine ()
    use samples =
-      let samples = getSamples (geometric (0.2))
+      let samples = getSamples (geometric0 (0.2))
       engine.CreateIntegerVector (samples)
    engine.SetSymbol ("x", samples)
    engine.Evaluate ("""
    x <- table(x)
    p <- dgeom(as.integer(names(x)), 0.2)
+   if (abs(1 - sum(p)) > .Machine$double.eps) {
+      chisq.test(c(x, 0L), p=c(p, 1 - sum(p)))
+   } else {
+      chisq.test(x, p=p)
+   }""")
+   |> getP
+   |> should be (greaterThan p)
+
+[<Test>]
+let ``Validates geometric1`` () =
+   let engine = getREngine ()
+   use samples =
+      let samples = getSamples (geometric1 (0.7))
+      engine.CreateIntegerVector (samples)
+   engine.SetSymbol ("x", samples)
+   engine.Evaluate ("""
+   x <- table(x)
+   p <- dgeom(as.integer(names(x)) - 1L, 0.7)
    if (abs(1 - sum(p)) > .Machine$double.eps) {
       chisq.test(c(x, 0L), p=c(p, 1 - sum(p)))
    } else {

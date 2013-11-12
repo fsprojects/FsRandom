@@ -327,7 +327,7 @@ let poisson lambda =
          result.Value, s'
       )
 
-let geometric probability =
+let geometric0 probability =
    ensuresFiniteValue probability "probability"
    if probability <= 0.0 || 1.0 < probability then
       outOfRange "probability" "`probability' must be in the range of (0, 1]."
@@ -337,6 +337,7 @@ let geometric probability =
          let u, s' = Random.next ``(0, 1)`` s0
          Random.next (poisson (log u * q)) s'
       )
+let geometric1 probability = Random.transformBy ((+) 1) (geometric0 probability)
 
 let bernoulli probability =
    ensuresFiniteValue probability "probability"
