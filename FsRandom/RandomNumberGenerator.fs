@@ -53,14 +53,12 @@ let systemrandom (random : Random) =
    let upper  = (uint64 (random.Next ()) <<< 42) &&& 0b1111111111111111111111000000000000000000000000000000000000000000uL
    lower ||| middle ||| upper, random
    
-let inline xor128 (x:uint32, y:uint32, z:uint32, w:uint32) =
-   let t = x ^^^ (x <<< 11)
-   let (_, _, _, w') as s = y, z, w, (w ^^^ (w >>> 19)) ^^^ (t ^^^ (t >>> 8))
-   w', s
-let xorshift s =
-   let lower, s = xor128 s
-   let upper, s = xor128 s
-   to64bit lower upper, s
+let xorshift (x:uint32, y:uint32, z:uint32, w:uint32) =
+   let s = x ^^^ (x <<< 11)
+   let t = y ^^^ (y <<< 11)
+   let u = (w ^^^ (w >>> 19)) ^^^ (s ^^^ (s >>> 8))
+   let v = (u ^^^ (u >>> 19)) ^^^ (t ^^^ (t >>> 8))
+   to64bit u v, (z, w, u, v)
 
 let rawBits = GeneratorFunction (fun s -> s.Next64Bits ())
 [<Literal>]
