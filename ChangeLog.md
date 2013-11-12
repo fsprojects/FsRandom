@@ -1,6 +1,15 @@
 FsRandom ChangeLog
 ==================
 
+Version 1.2.1
+-------------
+
+* Fix geometric generates random numbers incorrectly (#58),
+  and support geometric on {0, 1, 2, ...} and {1, 2, 3, ...} (#59).
+  Buggy geometric is removed and geometric0 and geometric1 on the respective supports are added.
+* sampleWithReplacement new throws an error before runtime (#45).
+* Add functions.
+
 Version 1.2
 -----------
 
@@ -93,4 +102,3 @@ Version 1.0.0.0 (RecycleBin.Random)
 Tagged: db812be59c6fafc63a1169ae85887361cbb5bb14
 
 * Initial release.
-
