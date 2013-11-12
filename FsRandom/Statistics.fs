@@ -332,9 +332,11 @@ let geometric probability =
    if probability <= 0.0 || 1.0 < probability then
       outOfRange "probability" "`probability' must be in the range of (0, 1]."
    else
-      let z = log (1.0 - probability)
-      let transform u = int <| ceil (-u / z)
-      Random.transformBy transform ``(0, 1)``
+      let q = -(1.0 - probability) / probability
+      GeneratorFunction (fun s0 ->
+         let u, s' = Random.next ``(0, 1)`` s0
+         Random.next (poisson (log u * q)) s'
+      )
 
 let bernoulli probability =
    ensuresFiniteValue probability "probability"
