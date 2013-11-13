@@ -46,6 +46,6 @@ let gamma x =
    else
       exp (loggamma x)
 
-let inline cdf p =
+let cdf (p:float list) =
    let sum = List.sum p
    List.accumulate (+) p |> List.map (fun w -> w / sum)

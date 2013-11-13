@@ -152,12 +152,14 @@ let hmc minusLogDensity gradMinusLogDensity epsilon step =
    /// Hamiltonian
    let hamiltonian q p =
       let potential = minusLogDensity q
-      let kinetic = Array.fold2 (fun acc x y -> acc + x * y) 0.0 p p / 2.0
+      let kinetic = Array.fold (fun acc x -> acc + x * x) 0.0 p / 2.0
       potential + kinetic
+   /// resampling of particles
+   let resampleK n = Array.randomCreate n Standard.normal
    fun currentQ -> random {
       let q = Array.copy currentQ
       // resampling of particles
-      let! currentP = Array.randomCreate (Array.length currentQ) (normal (0.0, 1.0))
+      let! currentP = resampleK (Array.length currentQ)
       let p = Array.copy currentP
       leapfrog q p
       let currentH = hamiltonian currentQ currentP
