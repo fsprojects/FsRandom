@@ -398,6 +398,20 @@ let multinomial (n, weight) =
          Array.toList result, s
       )
 
+let multinormal (mu, sigma) =
+   let n = Array.length mu
+   if Array2D.length1 sigma <> n || Array2D.length2 sigma <> n then
+      invalidArg "sigma" "Invalid size of covariance matrix."
+   elif not (Matrix.isCovarianceMatrix sigma) then
+      invalidArg "sigma" "Invalid value of covariance matrix."
+   else
+      let eigenvalues, eigenvectors = Matrix.jacobi sigma
+      let d = Array.map sqrt eigenvalues |> Matrix.diagByVector
+      let q = Matrix.multiply eigenvectors d
+      let standard = Array.randomCreate n Standard.normal
+      let transform = Matrix.multiplyVector q >> Vector.add mu
+      Random.transformBy transform standard
+
 let mix model =
    let distribution = List.map fst model |> List.toArray
    let cdf = List.map snd model |> cdf
