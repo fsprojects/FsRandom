@@ -119,6 +119,7 @@ module Matrix =
       let n = Array2D.length2 matrix
       m = n && Seq.forall (fun i -> Seq.forall (fun j -> matrix.[i, j] = matrix.[j, i]) <| seq { 0 .. i - 1 }) <| seq { 0 .. n - 1 }
 
+   // does not check positive semidefiniteness
    let isCovarianceMatrix (matrix:float [,]) =
       let n = Array2D.length1 matrix
       if Array2D.length2 matrix = n then

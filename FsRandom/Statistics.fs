@@ -406,11 +406,14 @@ let multinormal (mu, sigma) =
       invalidArg "sigma" "Invalid value of covariance matrix."
    else
       let eigenvalues, eigenvectors = Matrix.jacobi sigma
-      let d = Array.map sqrt eigenvalues |> Matrix.diagByVector
-      let q = Matrix.multiply eigenvectors d
-      let standard = Array.randomCreate n Standard.normal
-      let transform = Matrix.multiplyVector q >> Vector.add mu
-      Random.transformBy transform standard
+      if Array.exists (fun x -> x < 0.0) eigenvalues then
+         invalidArg "sigma" "Covariance matrix is not positive semidefinite."
+      else
+         let d = Array.map sqrt eigenvalues |> Matrix.diagByVector
+         let q = Matrix.multiply eigenvectors d
+         let standard = Array.randomCreate n Standard.normal
+         let transform = Matrix.multiplyVector q >> Vector.add mu
+         Random.transformBy transform standard
 
 let mix model =
    let distribution = List.map fst model |> List.toArray
