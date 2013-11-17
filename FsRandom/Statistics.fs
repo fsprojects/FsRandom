@@ -402,12 +402,14 @@ let multinormal (mu, sigma) =
    let n = Array.length mu
    if Array2D.length1 sigma <> n || Array2D.length2 sigma <> n then
       invalidArg "sigma" "Invalid size of covariance matrix."
-   elif not (Matrix.isCovarianceMatrix sigma) then
-      invalidArg "sigma" "Invalid value of covariance matrix."
+   elif Matrix.existsDiag (fun x -> x <= 0.0) sigma then
+      invalidArg "sigma" "Found non-positive diagonal element."
+   elif not (Matrix.isSymmetric sigma) then
+      invalidArg "sigma" "Not a symmetric matrix."
    else
       let eigenvalues, eigenvectors = Matrix.jacobi sigma
       if Array.exists (fun x -> x < 0.0) eigenvalues then
-         invalidArg "sigma" "Covariance matrix is not positive semidefinite."
+         invalidArg "sigma" "Not a positive semidefinite matrix."
       else
          let d = Array.map sqrt eigenvalues |> Matrix.diagByVector
          let q = Matrix.multiply eigenvectors d

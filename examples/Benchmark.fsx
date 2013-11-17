@@ -108,6 +108,7 @@ let benchmarkSeq name s =
    |> trimmedMean trim
    |> printfn "\t%A"
 let benchmarkArray name s =
+   GC.Collect ()
    printf "%s" name
    Seq.init round (fun _ -> s)
    |> Seq.map (fun s -> time s size)

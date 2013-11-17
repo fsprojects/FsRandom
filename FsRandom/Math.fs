@@ -83,7 +83,11 @@ module Matrix =
    let inline diagByVector vector =
       let n = Array.length vector
       Array2D.init n n (fun i j -> if i = j then vector.[i] else GenericZero)
-   let getDiag matrix = Array.init (Array2D.length1 matrix) (fun i -> matrix.[i, i])
+
+   let private diagSize matrix = min (Array2D.length1 matrix) (Array2D.length2 matrix)
+   let getDiag matrix = Array.init (diagSize matrix) (fun i -> matrix.[i, i])
+   let forallDiag f matrix = seq { 0 .. diagSize matrix - 1 } |> Seq.forall (fun i -> f matrix.[i, i])
+   let existsDiag f matrix = seq { 0 .. diagSize matrix - 1 } |> Seq.exists (fun i -> f matrix.[i, i])
 
    let inline add a b =
       let m = Array2D.length1 a
@@ -118,15 +122,6 @@ module Matrix =
       let m = Array2D.length1 matrix
       let n = Array2D.length2 matrix
       m = n && Seq.forall (fun i -> Seq.forall (fun j -> matrix.[i, j] = matrix.[j, i]) <| seq { 0 .. i - 1 }) <| seq { 0 .. n - 1 }
-
-   // does not check positive semidefiniteness
-   let isCovarianceMatrix (matrix:float [,]) =
-      let n = Array2D.length1 matrix
-      if Array2D.length2 matrix = n then
-         let indices k = seq { 0 .. k - 1}
-         Seq.forall (fun i -> matrix.[i, i] > 0.0 && Seq.forall (fun j -> matrix.[i, j] * matrix.[i, j] <= matrix.[i, i] * matrix.[j, j]) (indices i)) (indices n)
-      else
-         false
 
    /// <summary>Computes eigenvalues and eigenvectors of symmetric matrix.</summary>
    /// <seealso cref="isSymmetric" />
@@ -174,5 +169,5 @@ module Matrix =
                let aip = eigenvectors.[i, p]
                let aiq = eigenvectors.[i, q]
                eigenvectors.[i, p] <- aip * c - aiq * s
-               eigenvectors.[i, q] <- aiq * c + aip * s
+               eigenvectors.[i, q] <- aip * s + aiq * c
       getDiag eigenvalues, eigenvectors
