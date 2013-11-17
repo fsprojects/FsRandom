@@ -411,6 +411,7 @@ let multinormal (mu, sigma) =
       else
          let d = Array.map sqrt eigenvalues |> Matrix.diagByVector
          let q = Matrix.multiply eigenvectors d
+         let mu = Array.copy mu  // Modification of mu outside affects the transformation
          let standard = Array.randomCreate n Standard.normal
          let transform = Matrix.multiplyVector q >> Vector.add mu
          Random.transformBy transform standard
