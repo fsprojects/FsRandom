@@ -129,8 +129,13 @@ val multinomial : n:int * weight:float list -> GeneratorFunction<int list>
 /// </summary>
 /// <param name="mu">The mean vector.</param>
 /// <param name="sigma">The covariance matrix.</param>
-/// Each item is normalized in the function so that the sum of values can be less or greater than 1.</param>
 val multinormal : mu:float [] * sigma:float [,] -> GeneratorFunction<float []>
+/// <summary>
+/// Returns a random matrix distributed Wishart.
+/// </summary>
+/// <param name="degreeOfFreedom">The degree of freedom.</param>
+/// <param name="sigma">The covariance matrix.</param>
+val wishart : degreeOfFreedom:int * sigma:float [,] -> GeneratorFunction<float [,]>
 /// <summary>
 /// Returns a mixted distribution.
 /// </summary>

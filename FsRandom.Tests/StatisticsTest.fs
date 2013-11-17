@@ -306,6 +306,30 @@ let ``Validates binomial`` () =
 //   testMultinomial (getDefaultTester ()) [1.0; 2.0; 2.5; 0.5]
 
 [<Test>]
+let ``wishart returns positive and positive semidefinite matrices`` () =
+   let sigma = Array2D.init 3 3 (fun i j ->
+      match i, j with
+         | 0, 0 -> 1.0
+         | 1, 1 -> 1.0
+         | 2, 2 -> 4.0
+         | 0, 1 | 1, 0 -> 0.7
+         | 0, 2 | 2, 0 -> -1.0
+         | 1, 2 | 2, 1 -> 0.0
+         | _ -> failwith "never"
+      )
+   let samples =
+      Seq.ofRandom (wishart (4, sigma)) (getDefaultTester ())
+      |> Seq.take 1000
+      |> Seq.toList
+   samples
+   |> List.forall (fun m -> Seq.forall2 (fun i j -> m.[i, j] > 0.0) [0..2] [0..2])
+   |> should be True
+   samples
+   |> List.map (Matrix.jacobi >> fst)
+   |> List.forall (Array.forall (fun x -> x >= 0.0))
+   |> should be True
+
+[<Test>]
 let ``Validates mix (float)`` () =
    let engine = getREngine ()
    use samples =

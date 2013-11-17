@@ -73,6 +73,11 @@ module Vector =
    let inline add a b =
       let n = Array.length a
       Array.init n (fun i -> Array.get a i + Array.get b i)
+   let inline cross vector =
+      Array.reduce (fun x -> x * x) vector
+   let inline transposeCross vector =
+      let n = Array.length vector
+      Array2D.init n n (fun i j -> vector.[i] * vector.[j])
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Matrix =

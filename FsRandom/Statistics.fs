@@ -418,6 +418,31 @@ let multinormal (mu, sigma) =
          let transform = Matrix.multiplyVector q >> Vector.add mu
          Random.transformBy transform standard
 
+let wishart (df, sigma) =
+   if Array2D.length1 sigma > df || Array2D.length2 sigma > df then
+      invalidArg "degreeOfFreedom" "The degree of freedom must be greater than the size of the covariance matrix."
+   elif not (Matrix.isSymmetric sigma) then
+      invalidArg "sigma" "Not a symmetric matrix."
+   elif Matrix.existsDiag (fun x -> x <= 0.0) sigma then
+      invalidArg "sigma" "Found non-positive diagonal element."
+   else
+      let eigenvalues, eigenvectors = Matrix.jacobi sigma
+      if Array.exists (fun x -> x < 0.0) eigenvalues then
+         invalidArg "sigma" "Not a positive semidefinite matrix."
+      else
+         let n = Array.length eigenvalues
+         let d = Array.map sqrt eigenvalues |> Matrix.diagByVector
+         let q = Matrix.multiply eigenvectors d
+         let q' = Matrix.transpose q
+         let transform =
+            List.map Vector.transposeCross
+            >> List.reduce Matrix.add
+            >> Matrix.multiply q
+            >> flip Matrix.multiply q'
+         Array.randomCreate n Standard.normal
+         |> List.replicate df
+         |> Random.mergeWith transform
+
 let mix model =
    let distribution = List.map fst model |> List.toArray
    let cdf = List.map snd model |> cdf
