@@ -13,13 +13,6 @@ type BenchmarkOption = {
    Trim : float
 }
 let option =
-   let rec loop acc = function
-      | [] -> acc
-      | "--iterate" :: n :: rest -> loop { acc with Iterate = int n } rest
-      | "--size" :: n :: rest -> loop { acc with Size = int n } rest
-      | "--round" :: r :: rest -> loop { acc with Round = int r } rest
-      | "--trim" :: t :: rest -> loop { acc with Trim = float t } rest
-      | s -> failwith "unknown option: %s" s
 #if INTERACTIVE
    // recursion iteration with fsharpi (Mac/Linux) is very slow.
    // Too large Iterate does not return so long.
@@ -29,6 +22,17 @@ let option =
    let defaultOption = { Iterate = 5000000; Size = 100000; Round = 20; Trim = 0.2 }
    let args = Environment.GetCommandLineArgs ()
 #endif
+   let rec loop acc = function
+      | [] -> acc
+      | "--iterate" :: n :: rest -> loop { acc with Iterate = int n } rest
+      | "--size" :: n :: rest -> loop { acc with Size = int n } rest
+      | "--round" :: r :: rest -> loop { acc with Round = int r } rest
+      | "--trim" :: t :: rest -> loop { acc with Trim = float t } rest
+      | s :: _ ->
+         eprintfn "unknown option: %s" s
+         let programName = System.IO.Path.GetFileName (args.[0])
+         eprintfn "usage: %s [--iterate int] [--size int] [--round int] [--trim p]" programName
+         exit 1
    let args = (List.ofArray args).Tail
    loop defaultOption args
 
