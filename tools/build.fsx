@@ -179,7 +179,7 @@ Target "Documentation" (fun () ->
    let docTemplate = formatting % "templates" % "docpage.cshtml"
 
    // Where to look for *.cshtml templates (in this order)
-   let layoutRoots = [ templates; formatting % "templates" ]
+   let layoutRoots = [ templates; formatting % "templates"; formatting % "templates" % "reference" ]
 
    // Copy static files and CSS + JS from F# Formatting
    let copyFiles () =
@@ -199,9 +199,17 @@ Target "Documentation" (fun () ->
             ( dir, docTemplate, docsDir % sub, replacements = ("root", buildParams.DocumentationRoot)::info,
               layoutRoots = layoutRoots )
 
+   let buildReference () =
+      let referenceDir = docsDir % "reference"
+      ensureDirectory referenceDir
+      for lib in Directory.GetFiles (buildDir, "*.dll") do
+         MetadataFormat.Generate
+            ( lib, referenceDir, layoutRoots, parameters = ("root", buildParams.DocumentationRoot)::info )
+
    // Generate
    copyFiles()
    buildDocumentation()
+   buildReference ()
 )
 
 Target "Zip" (fun () ->
