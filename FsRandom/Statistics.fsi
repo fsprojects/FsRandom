@@ -78,6 +78,12 @@ val chisquare : degreeOfFreedom:int -> GeneratorFunction<float>
 /// <param name="degreeOfFreedom">The degree of freedom.</param>
 val t : degreeOfFreedom:int -> GeneratorFunction<float>
 /// <summary>
+/// Returns a random number distributed von Mises.
+/// </summary>
+/// <param name="direction">The direction parameter.</param>
+/// <param name="concentration">The concentration parameter.</param>
+val vonMises : direction:float * concentration:float -> GeneratorFunction<float>
+/// <summary>
 /// Returns a random number distributed uniformly.
 /// </summary>
 /// <param name="min">The inclusive lower bound.</param>

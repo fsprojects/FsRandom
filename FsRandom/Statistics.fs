@@ -284,6 +284,30 @@ let t df =
          let transform z w = d * z / sqrt w
          Random.transformBy2 transform Standard.normal (Standard.gamma (r))
 
+let vonMises (mu, kappa) =
+   if mu < -pi || pi <= mu then
+      outOfRange "direction" "`direction' must be in [-pi, pi)."
+   elif kappa <= 0.0 then
+      outOfRange "concentration" "`concentration' must be positive."
+   else
+      let p = let k = 2.0 * kappa in (1.0 + sqrt (1.0 + k * k)) / k
+      GeneratorFunction (fun s0 ->
+         let mutable s = s0
+         let mutable r = None
+         while r.IsNone do
+            let u, s1 = Random.next ``[0, 1)`` s
+            let v, s' = Random.next ``[0, 1]`` s1
+            s <- s'
+            let z = cos (``2pi`` * u)
+            let w = (1.0 - p * z) / (p - z)
+            let t = kappa * (p - w)
+            if v <= t * (2.0 - t) || v <= t * exp (1.0 - t) then
+               let y = if u < 0.5 then -acos w else acos w
+               let x = y + mu
+               r <- Some (if x >= pi then x - ``2pi`` elif x < -pi then x + ``2pi`` else x)
+         r.Value, s
+      )
+
 let uniformDiscrete (min, max) =
    if min > max then
       outOfRange "min" "Invalid range."

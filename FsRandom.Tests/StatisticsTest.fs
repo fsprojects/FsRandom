@@ -24,7 +24,6 @@ let ``Validates uniform`` () =
    engine.Evaluate ("""ks.test(x, "punif", min=-10, max=10)""")
    |> getP
    |> should be (greaterThan p)
-   
 
 [<Test>]
 let ``Validates loguniform`` () =
@@ -188,6 +187,32 @@ let ``Validates t`` () =
       engine.CreateNumericVector (samples)
    engine.SetSymbol ("x", samples)
    engine.Evaluate ("""ks.test(x, "pt", df=3)""")
+   |> getP
+   |> should be (greaterThan p)
+
+[<Test>]
+let ``Validates vonMises`` () =
+   let engine = getREngine ()
+   use samples =
+      let samples = getSamples (vonMises (1.0, 2.0))
+      engine.CreateNumericVector (samples)
+   engine.SetSymbol ("x", samples)
+   engine.Evaluate ("""
+   dvonMises <- function(x, mu, kappa) {
+      i <- integrate(function(t) exp(kappa * cos(t)), 0, pi)$value
+      exp(kappa * cos(x - mu)) / (2 * i)
+   }
+   pvonMises <- function(x, mu, kappa) {
+      if (x < -pi) {
+         0
+      } else if (x > pi) {
+         1
+      } else {
+         integrate(dvonMises, -pi, x, mu=mu, kappa=kappa)$value
+      }
+   }
+   pvonMises <- Vectorize(pvonMises, "x")
+   ks.test(x, "pvonMises", mu=1, kappa=2)""")
    |> getP
    |> should be (greaterThan p)
 
