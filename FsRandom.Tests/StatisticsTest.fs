@@ -199,17 +199,15 @@ let ``Validates vonMises`` () =
    engine.SetSymbol ("x", samples)
    engine.Evaluate ("""
    dvonMises <- function(x, mu, kappa) {
-      i <- integrate(function(t) exp(kappa * cos(t)), 0, pi)$value
-      exp(kappa * cos(x - mu)) / (2 * i)
+      if (x < -pi || pi < x) {
+         0
+      } else {
+         i <- integrate(function(t) exp(kappa * cos(t)), 0, pi)$value
+         exp(kappa * cos(x - mu)) / (2 * i)
+      }
    }
    pvonMises <- function(x, mu, kappa) {
-      if (x < -pi) {
-         0
-      } else if (x > pi) {
-         1
-      } else {
-         integrate(dvonMises, -pi, x, mu=mu, kappa=kappa)$value
-      }
+      integrate(dvonMises, -pi, x, mu=mu, kappa=kappa)$value
    }
    pvonMises <- Vectorize(pvonMises, "x")
    ks.test(x, "pvonMises", mu=1, kappa=2)""")
