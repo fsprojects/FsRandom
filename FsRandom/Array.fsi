@@ -1,4 +1,7 @@
-﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+﻿/// <summary>
+/// Provides basic operations on arrays.
+/// </summary>
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 [<RequireQualifiedAccess>]
 module FsRandom.Array
 

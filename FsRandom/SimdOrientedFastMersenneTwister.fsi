@@ -1,4 +1,11 @@
-﻿module FsRandom.SimdOrientedFastMersenneTwister
+﻿/// <summary>
+/// Implements SIMD-Oriented Fast Mersenne Twister.
+/// See http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/index.html for details.
+/// </summary>
+/// <remarks>
+/// Basically, SIMD is not used in this module because of the lack of SIMD support in .NET Framework.
+/// </remarks>
+module FsRandom.SimdOrientedFastMersenneTwister
 
 /// <summary>
 /// Defines parameters to produce a random cycle of SIMD-Oriented Fast Mersenne Twister.

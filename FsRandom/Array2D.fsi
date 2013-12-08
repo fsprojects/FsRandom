@@ -1,4 +1,7 @@
-﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+﻿/// <summary>
+/// Provides basic operations on 2-dimensional arrays.
+/// </summary>
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 [<RequireQualifiedAccess>]
 module FsRandom.Array2D
 

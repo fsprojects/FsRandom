@@ -1,4 +1,7 @@
-﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+﻿/// <summary>
+/// Provides utility functions.
+/// </summary>
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module FsRandom.Utility
 
 

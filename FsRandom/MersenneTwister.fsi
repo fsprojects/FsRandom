@@ -1,4 +1,8 @@
-﻿module FsRandom.MersenneTwister
+﻿/// <summary>
+/// Implements Mersenne Twister 64-bit version.
+/// See http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html for details.
+/// </summary>
+module FsRandom.MersenneTwister
 
 /// <summary>
 /// Keeps a random state used in the Mersenne Twister process.

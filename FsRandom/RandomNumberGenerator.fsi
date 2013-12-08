@@ -1,4 +1,7 @@
-﻿[<AutoOpen>]
+﻿/// <summary>
+/// Provides the core random classes and the primitive random number generators.
+/// </summary>
+[<AutoOpen>]
 module FsRandom.RandomNumberGenerator
 
 open System
