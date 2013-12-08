@@ -1,6 +1,11 @@
 FsRandom ChangeLog
 ==================
 
+Version 1.2.2
+-------------
+
+* Add functions (multinormal, #46; wishart, #49; vonMises, #62).
+
 Version 1.2.1
 -------------
 

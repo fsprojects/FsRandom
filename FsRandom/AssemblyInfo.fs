@@ -13,8 +13,8 @@ open System.Runtime.InteropServices
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
 
-[<assembly: AssemblyVersion("1.2.1.0")>]
-[<assembly: AssemblyInformationalVersion("1.2.1")>]
+[<assembly: AssemblyVersion("1.2.2.0")>]
+[<assembly: AssemblyInformationalVersion("1.2.2")>]
 
 [<assembly: InternalsVisibleTo("FsRandom.Tests")>]
 
