@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Random - FsRandom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="RecycleBin">
+
+    <script src="http://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="http://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="http://kos59125.github.io/FsRandom//content/style.css" />
+    <script type="text/javascript" src="http://kos59125.github.io/FsRandom//content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <h3 class="muted"><a href="http://kos59125.github.io/FsRandom/">FsRandom</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+
+
+
+<h1>Random</h1>
+<div class="xmldoc">
+<p>Provides basic operations on generator functions.</p>
+</div>
+
+<!-- TODO: Refactor me - copy & paste from 'namespaces.cshtml' -->
+
+
+
+<!-- END TODO -->
+
+
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
+    <thead>
+      <tr><td>Function or value</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '18', 18)" onmouseover="showTip(event, '18', 18)">
+            Random.get(generator arg2)
+          </code>
+          <div class="tip" id="18">
+            <strong>Signature:</strong>generator:GeneratorFunction&lt;&#39;a&gt; -&gt; PrngState -&gt; &#39;a<br />
+                          <strong>Type parameters:</strong> 'a          </div>
+        </td>
+        <td class="xmldoc"><p>Generates a random number.</p>
+</td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '21', 21)" onmouseover="showTip(event, '21', 21)">
+            Random.identity(generator)
+          </code>
+          <div class="tip" id="21">
+            <strong>Signature:</strong>generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'a          </div>
+        </td>
+        <td class="xmldoc"><p>Generates a random number by  and returns the value.</p>
+</td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '22', 22)" onmouseover="showTip(event, '22', 22)">
+            Random.merge(generators)
+          </code>
+          <div class="tip" id="22">
+            <strong>Signature:</strong>generators:GeneratorFunction&lt;&#39;a&gt; list -&gt; GeneratorFunction&lt;&#39;a list&gt;<br />
+                          <strong>Type parameters:</strong> 'a          </div>
+        </td>
+        <td class="xmldoc"><p>Merges random stream list into one.</p>
+</td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '23', 23)" onmouseover="showTip(event, '23', 23)">
+            Random.mergeWith(f)
+          </code>
+          <div class="tip" id="23">
+            <strong>Signature:</strong>f:(&#39;a list -&gt; &#39;b) -&gt; GeneratorFunction&lt;&#39;a&gt; list -&gt; GeneratorFunction&lt;&#39;b&gt;<br />
+                          <strong>Type parameters:</strong> 'a, 'b          </div>
+        </td>
+        <td class="xmldoc"><p>Merges random stream list into one and then apply the specified function.</p>
+</td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '24', 24)" onmouseover="showTip(event, '24', 24)">
+            Random.next(generator arg2)
+          </code>
+          <div class="tip" id="24">
+            <strong>Signature:</strong>generator:GeneratorFunction&lt;&#39;a&gt; -&gt; PrngState -&gt; &#39;a * PrngState<br />
+                          <strong>Type parameters:</strong> 'a          </div>
+        </td>
+        <td class="xmldoc"><p>Generates a random number with the next random state.</p>
+</td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '25', 25)" onmouseover="showTip(event, '25', 25)">
+            Random.singleton(x)
+          </code>
+          <div class="tip" id="25">
+            <strong>Signature:</strong>x:&#39;a -&gt; GeneratorFunction&lt;&#39;a&gt;<br />
+                          <strong>Type parameters:</strong> 'a          </div>
+        </td>
+        <td class="xmldoc"><p>Always returns the specified value.</p>
+</td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '26', 26)" onmouseover="showTip(event, '26', 26)">
+            Random.transformBy(...)
+          </code>
+          <div class="tip" id="26">
+            <strong>Signature:</strong>transformation:(&#39;a -&gt; &#39;b) -&gt; generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;b&gt;<br />
+                          <strong>Type parameters:</strong> 'a, 'b          </div>
+        </td>
+        <td class="xmldoc"><p>Generates a random number by  and returns a transformed value by  function.</p>
+</td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '27', 27)" onmouseover="showTip(event, '27', 27)">
+            Random.transformBy2(...)
+          </code>
+          <div class="tip" id="27">
+            <strong>Signature:</strong>transformation:(&#39;a1 -&gt; &#39;a2 -&gt; &#39;b) -&gt; generator1:GeneratorFunction&lt;&#39;a1&gt; -&gt; generator2:GeneratorFunction&lt;&#39;a2&gt; -&gt; GeneratorFunction&lt;&#39;b&gt;<br />
+                          <strong>Type parameters:</strong> 'a1, 'a2, 'b          </div>
+        </td>
+        <td class="xmldoc"><p>Generates a random number by using two random numbers.</p>
+</td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '28', 28)" onmouseover="showTip(event, '28', 28)">
+            Random.transformBy3(...)
+          </code>
+          <div class="tip" id="28">
+            <strong>Signature:</strong>transformation:(&#39;a1 -&gt; &#39;a2 -&gt; &#39;a3 -&gt; &#39;b) -&gt; generator1:GeneratorFunction&lt;&#39;a1&gt; -&gt; generator2:GeneratorFunction&lt;&#39;a2&gt; -&gt; generator2:GeneratorFunction&lt;&#39;a3&gt; -&gt; GeneratorFunction&lt;&#39;b&gt;<br />
+                          <strong>Type parameters:</strong> 'a1, 'a2, 'a3, 'b          </div>
+        </td>
+        <td class="xmldoc"><p>Generates a random number by using three random numbers.</p>
+</td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '29', 29)" onmouseover="showTip(event, '29', 29)">
+            Random.zip(generator1 generator2)
+          </code>
+          <div class="tip" id="29">
+            <strong>Signature:</strong>generator1:GeneratorFunction&lt;&#39;a1&gt; -&gt; generator2:GeneratorFunction&lt;&#39;a2&gt; -&gt; GeneratorFunction&lt;&#39;a1 * &#39;a2&gt;<br />
+                          <strong>Type parameters:</strong> 'a1, 'a2          </div>
+        </td>
+        <td class="xmldoc"><p>Merges two random streams into one.</p>
+</td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '30', 30)" onmouseover="showTip(event, '30', 30)">
+            Random.zip3(...)
+          </code>
+          <div class="tip" id="30">
+            <strong>Signature:</strong>generator1:GeneratorFunction&lt;&#39;a1&gt; -&gt; generator2:GeneratorFunction&lt;&#39;a2&gt; -&gt; generator3:GeneratorFunction&lt;&#39;a3&gt; -&gt; GeneratorFunction&lt;&#39;a1 * &#39;a2 * &#39;a3&gt;<br />
+                          <strong>Type parameters:</strong> 'a1, 'a2, 'a3          </div>
+        </td>
+        <td class="xmldoc"><p>Merges three random streams into one.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+        </div>
+        <div class="span3">
+          <ul class="nav nav-list" id="menu">
+            <li class="nav-header">FsRandom</li>
+            <li><a href="http://kos59125.github.io/FsRandom//index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="https://nuget.org/packages/FsRandom">Get Library via NuGet</a></li>
+            <li><a href="https://github.com/kos59125/FsRandom">Source Code on GitHub</a></li>
+            <li><a href="https://github.com/kos59125/FsRandom/blob/master/LICENSE">License (BSD 3-clause)</a></li>
+            <li><a href="https://github.com/kos59125/FsRandom/blob/master/ChangeLog.md">Change Log</a></li>
+            
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//documentation.html">Documentation</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#first-random-number">First random number</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#random-number-sequence">Random Number Sequence</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#generator-function">Generator function</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
+
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//reference/index.html">API Reference</a></li>
+            
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//numerical-examples.html">Numerical Examples</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#monte-carlo">Estimating pi</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#approximate-bayesian-computation">Approximate Bayesian Computation</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="https://github.com/kos59125/FsRandom"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+</html>
