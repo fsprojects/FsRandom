@@ -1,6 +1,7 @@
 ﻿module FsRandom.Issues
 
 open System
+open System.Globalization
 open FsRandom.Statistics
 open FsRandom.Utility
 open NUnit.Framework
@@ -43,3 +44,17 @@ let ``multinormal (mu, _) is affected by modification of mu`` () =
    mu.[0] <- 100.0
    let sample = Random.get m (getDefaultTester ())
    sample.[0] |> should be (lessThan 50.0)
+
+[<Test>]
+[<Category("Issue #65")>]
+let ``String.randomByString breaks surrogate pairs`` () =
+   let s = "𠮷野家"  // the first character is a surrogate pair character
+   let tester = getDefaultTester ()
+   let actual =
+      let r = Random.get (String.randomByString s 100) tester
+      StringInfo (r)
+   actual.LengthInTextElements |> should equal 100
+   let actual = seq { 0 .. 99 } |> Seq.map (fun i -> actual.SubstringByTextElements (i, 1)) |> Seq.toArray
+   actual |> should contain "𠮷"
+   actual |> should contain "野"
+   actual |> should contain "家"
