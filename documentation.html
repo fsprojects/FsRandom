@@ -13,8 +13,8 @@
     <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 
-    <link type="text/css" rel="stylesheet" href="http://kos59125.github.io/FsRandom//content/style.css" />
-    <script type="text/javascript" src="http://kos59125.github.io/FsRandom//content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="http://kos59125.github.io/FsRandom/content/style.css" />
+    <script type="text/javascript" src="http://kos59125.github.io/FsRandom/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -24,7 +24,7 @@
   <body>
     <div class="container">
       <div class="masthead">
-        <h3 class="muted"><a href="http://kos59125.github.io/FsRandom/">FsRandom</a></h3>
+        <h3 class="muted"><a href="http://kos59125.github.io/FsRandom">FsRandom</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -81,15 +81,34 @@ And then, you should combine the PRNG and the seed using <code>createState</code
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="i">z</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 12)" onmouseover="showTip(event, 'fs1', 12)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs5', 13)" onmouseover="showTip(event, 'fs5', 13)" class="i">state</span>
-<span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="i">printfn</span> <span class="s">&quot;</span><span class="s">%</span><span class="s">f</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs8', 15)" onmouseover="showTip(event, 'fs8', 15)" class="i">z</span></pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="i">z1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 12)" onmouseover="showTip(event, 'fs1', 12)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs5', 13)" onmouseover="showTip(event, 'fs5', 13)" class="i">state</span>
+<span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="i">printf</span> <span class="s">&quot;</span><span class="s">z1</span><span class="s"> </span><span class="s">=</span><span class="s"> </span><span class="s">%</span><span class="s">f</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs8', 15)" onmouseover="showTip(event, 'fs8', 15)" class="i">z1</span></pre>
 </td>
 </tr>
 </table>
 
+<pre><code>z1 = -0.276323
+</code></pre>
+
 <p>Since <code>Random.get</code> returns a stateless function,
-if you do the code above, the same thing occurs.
-To generate a new random number,
+if you do the code above, the same thing occurs.</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 16)" onmouseover="showTip(event, 'fs12', 16)" class="i">z2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 17)" onmouseover="showTip(event, 'fs9', 17)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 18)" onmouseover="showTip(event, 'fs10', 18)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 19)" onmouseover="showTip(event, 'fs1', 19)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs5', 20)" onmouseover="showTip(event, 'fs5', 20)" class="i">state</span>
+<span onmouseout="hideTip(event, 'fs11', 21)" onmouseover="showTip(event, 'fs11', 21)" class="i">printf</span> <span class="s">&quot;</span><span class="s">z2</span><span class="s"> </span><span class="s">=</span><span class="s"> </span><span class="s">%</span><span class="s">f</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs12', 22)" onmouseover="showTip(event, 'fs12', 22)" class="i">z2</span></pre>
+</td>
+</tr>
+</table>
+
+<pre><code>z2 = -0.276323
+</code></pre>
+
+<p>To generate a new random number,
 you need to get next state using <code>Random.next</code> instead of <code>Random.get</code>:</p>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
@@ -99,12 +118,15 @@ you need to get next state using <code>Random.next</code> instead of <code>Rando
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> _, <span onmouseout="hideTip(event, 'fs12', 16)" onmouseover="showTip(event, 'fs12', 16)" class="i">nextState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 17)" onmouseover="showTip(event, 'fs9', 17)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="i">next</span> <span onmouseout="hideTip(event, 'fs1', 19)" onmouseover="showTip(event, 'fs1', 19)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs5', 20)" onmouseover="showTip(event, 'fs5', 20)" class="i">state</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 21)" onmouseover="showTip(event, 'fs14', 21)" class="i">z2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 22)" onmouseover="showTip(event, 'fs9', 22)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 23)" onmouseover="showTip(event, 'fs10', 23)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 24)" onmouseover="showTip(event, 'fs1', 24)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs12', 25)" onmouseover="showTip(event, 'fs12', 25)" class="i">nextState</span>
-<span onmouseout="hideTip(event, 'fs11', 26)" onmouseover="showTip(event, 'fs11', 26)" class="i">printfn</span> <span class="s">&quot;</span><span class="s">%</span><span class="s">f</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs14', 27)" onmouseover="showTip(event, 'fs14', 27)" class="i">z2</span></pre>
+<span class="k">let</span> _, <span onmouseout="hideTip(event, 'fs13', 23)" onmouseover="showTip(event, 'fs13', 23)" class="i">nextState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 24)" onmouseover="showTip(event, 'fs9', 24)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 25)" onmouseover="showTip(event, 'fs14', 25)" class="i">next</span> <span onmouseout="hideTip(event, 'fs1', 26)" onmouseover="showTip(event, 'fs1', 26)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs5', 27)" onmouseover="showTip(event, 'fs5', 27)" class="i">state</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 28)" onmouseover="showTip(event, 'fs15', 28)" class="i">z3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 29)" onmouseover="showTip(event, 'fs9', 29)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 30)" onmouseover="showTip(event, 'fs10', 30)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 31)" onmouseover="showTip(event, 'fs1', 31)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs13', 32)" onmouseover="showTip(event, 'fs13', 32)" class="i">nextState</span>
+<span onmouseout="hideTip(event, 'fs11', 33)" onmouseover="showTip(event, 'fs11', 33)" class="i">printf</span> <span class="s">&quot;</span><span class="s">z3</span><span class="s"> </span><span class="s">=</span><span class="s"> </span><span class="s">%</span><span class="s">f</span><span class="s">&quot;</span> <span onmouseout="hideTip(event, 'fs15', 34)" onmouseover="showTip(event, 'fs15', 34)" class="i">z3</span></pre>
 </td>
 </tr>
 </table>
+
+<pre><code>z3 = -1.561583
+</code></pre>
 
 <a name="transforming-random-numbers"></a>
 
@@ -122,10 +144,10 @@ The following code shows how to use it.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 28)" onmouseover="showTip(event, 'fs15', 28)" class="i">plusOne</span> <span onmouseout="hideTip(event, 'fs16', 29)" onmouseover="showTip(event, 'fs16', 29)" class="i">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs16', 30)" onmouseover="showTip(event, 'fs16', 30)" class="i">x</span> <span class="o">+</span> <span class="n">1.0</span>
-<span onmouseout="hideTip(event, 'fs9', 31)" onmouseover="showTip(event, 'fs9', 31)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs17', 32)" onmouseover="showTip(event, 'fs17', 32)" class="i">transformBy</span> <span onmouseout="hideTip(event, 'fs15', 33)" onmouseover="showTip(event, 'fs15', 33)" class="i">plusOne</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs2', 34)" onmouseover="showTip(event, 'fs2', 34)" class="i">Statistics</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 35)" onmouseover="showTip(event, 'fs18', 35)" class="i">uniform</span> (<span class="n">0.0</span>, <span class="n">1.0</span>)
-<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 36)" onmouseover="showTip(event, 'fs9', 36)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 37)" onmouseover="showTip(event, 'fs10', 37)" class="i">get</span>
-<span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs5', 38)" onmouseover="showTip(event, 'fs5', 38)" class="i">state</span></pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 35)" onmouseover="showTip(event, 'fs16', 35)" class="i">plusOne</span> <span onmouseout="hideTip(event, 'fs17', 36)" onmouseover="showTip(event, 'fs17', 36)" class="i">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs17', 37)" onmouseover="showTip(event, 'fs17', 37)" class="i">x</span> <span class="o">+</span> <span class="n">1.0</span>
+<span onmouseout="hideTip(event, 'fs9', 38)" onmouseover="showTip(event, 'fs9', 38)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 39)" onmouseover="showTip(event, 'fs18', 39)" class="i">transformBy</span> <span onmouseout="hideTip(event, 'fs16', 40)" onmouseover="showTip(event, 'fs16', 40)" class="i">plusOne</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs2', 41)" onmouseover="showTip(event, 'fs2', 41)" class="i">Statistics</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 42)" onmouseover="showTip(event, 'fs19', 42)" class="i">uniform</span> (<span class="n">0.0</span>, <span class="n">1.0</span>)
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 43)" onmouseover="showTip(event, 'fs9', 43)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 44)" onmouseover="showTip(event, 'fs10', 44)" class="i">get</span>
+<span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs5', 45)" onmouseover="showTip(event, 'fs5', 45)" class="i">state</span></pre>
 </td>
 </tr>
 </table>
@@ -144,10 +166,10 @@ So <code>x</code> finally becomes a uniform random number between 1 and 2.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs9', 39)" onmouseover="showTip(event, 'fs9', 39)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 40)" onmouseover="showTip(event, 'fs19', 40)" class="i">identity</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs2', 41)" onmouseover="showTip(event, 'fs2', 41)" class="i">Statistics</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 42)" onmouseover="showTip(event, 'fs18', 42)" class="i">uniform</span> (<span class="n">0.0</span>, <span class="n">1.0</span>)
-<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 43)" onmouseover="showTip(event, 'fs9', 43)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 44)" onmouseover="showTip(event, 'fs10', 44)" class="i">get</span>
-<span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs5', 45)" onmouseover="showTip(event, 'fs5', 45)" class="i">state</span>
-<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs15', 46)" onmouseover="showTip(event, 'fs15', 46)" class="i">plusOne</span></pre>
+<span onmouseout="hideTip(event, 'fs9', 46)" onmouseover="showTip(event, 'fs9', 46)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs20', 47)" onmouseover="showTip(event, 'fs20', 47)" class="i">identity</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs2', 48)" onmouseover="showTip(event, 'fs2', 48)" class="i">Statistics</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 49)" onmouseover="showTip(event, 'fs19', 49)" class="i">uniform</span> (<span class="n">0.0</span>, <span class="n">1.0</span>)
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 50)" onmouseover="showTip(event, 'fs9', 50)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 51)" onmouseover="showTip(event, 'fs10', 51)" class="i">get</span>
+<span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs5', 52)" onmouseover="showTip(event, 'fs5', 52)" class="i">state</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs16', 53)" onmouseover="showTip(event, 'fs16', 53)" class="i">plusOne</span></pre>
 </td>
 </tr>
 </table>
@@ -160,10 +182,10 @@ So <code>x</code> finally becomes a uniform random number between 1 and 2.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs2', 47)" onmouseover="showTip(event, 'fs2', 47)" class="i">Statistics</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs18', 48)" onmouseover="showTip(event, 'fs18', 48)" class="i">uniform</span> (<span class="n">0.0</span>, <span class="n">1.0</span>)
-<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 49)" onmouseover="showTip(event, 'fs9', 49)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 50)" onmouseover="showTip(event, 'fs10', 50)" class="i">get</span>
-<span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs5', 51)" onmouseover="showTip(event, 'fs5', 51)" class="i">state</span>
-<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs15', 52)" onmouseover="showTip(event, 'fs15', 52)" class="i">plusOne</span></pre>
+<span onmouseout="hideTip(event, 'fs2', 54)" onmouseover="showTip(event, 'fs2', 54)" class="i">Statistics</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs19', 55)" onmouseover="showTip(event, 'fs19', 55)" class="i">uniform</span> (<span class="n">0.0</span>, <span class="n">1.0</span>)
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 56)" onmouseover="showTip(event, 'fs9', 56)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 57)" onmouseover="showTip(event, 'fs10', 57)" class="i">get</span>
+<span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs5', 58)" onmouseover="showTip(event, 'fs5', 58)" class="i">state</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs16', 59)" onmouseover="showTip(event, 'fs16', 59)" class="i">plusOne</span></pre>
 </td>
 </tr>
 </table>
@@ -186,10 +208,10 @@ and it illustrates how you can generate a number of random numbers.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs20', 53)" onmouseover="showTip(event, 'fs20', 53)" class="i">binaries</span> <span onmouseout="hideTip(event, 'fs21', 54)" onmouseover="showTip(event, 'fs21', 54)" class="i">initialState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs22', 55)" onmouseover="showTip(event, 'fs22', 55)" class="i">seq</span> {
-   <span class="k">let</span> <span onmouseout="hideTip(event, 'fs23', 56)" onmouseover="showTip(event, 'fs23', 56)" class="i">binary</span>, <span onmouseout="hideTip(event, 'fs24', 57)" onmouseover="showTip(event, 'fs24', 57)" class="i">nextState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 58)" onmouseover="showTip(event, 'fs9', 58)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 59)" onmouseover="showTip(event, 'fs13', 59)" class="i">next</span> (<span onmouseout="hideTip(event, 'fs2', 60)" onmouseover="showTip(event, 'fs2', 60)" class="i">Statistics</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs25', 61)" onmouseover="showTip(event, 'fs25', 61)" class="i">bernoulli</span> <span class="n">0.5</span>) <span onmouseout="hideTip(event, 'fs21', 62)" onmouseover="showTip(event, 'fs21', 62)" class="i">initialState</span>
-   <span class="k">yield</span> <span onmouseout="hideTip(event, 'fs23', 63)" onmouseover="showTip(event, 'fs23', 63)" class="i">binary</span>
-   <span class="k">yield!</span> <span onmouseout="hideTip(event, 'fs20', 64)" onmouseover="showTip(event, 'fs20', 64)" class="i">binaries</span> <span onmouseout="hideTip(event, 'fs24', 65)" onmouseover="showTip(event, 'fs24', 65)" class="i">nextState</span> <span class="c">// recursively generating binaries.</span>
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs21', 60)" onmouseover="showTip(event, 'fs21', 60)" class="i">binaries</span> <span onmouseout="hideTip(event, 'fs22', 61)" onmouseover="showTip(event, 'fs22', 61)" class="i">initialState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs23', 62)" onmouseover="showTip(event, 'fs23', 62)" class="i">seq</span> {
+   <span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 63)" onmouseover="showTip(event, 'fs24', 63)" class="i">binary</span>, <span onmouseout="hideTip(event, 'fs25', 64)" onmouseover="showTip(event, 'fs25', 64)" class="i">nextState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 65)" onmouseover="showTip(event, 'fs9', 65)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 66)" onmouseover="showTip(event, 'fs14', 66)" class="i">next</span> (<span onmouseout="hideTip(event, 'fs2', 67)" onmouseover="showTip(event, 'fs2', 67)" class="i">Statistics</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 68)" onmouseover="showTip(event, 'fs26', 68)" class="i">bernoulli</span> <span class="n">0.5</span>) <span onmouseout="hideTip(event, 'fs22', 69)" onmouseover="showTip(event, 'fs22', 69)" class="i">initialState</span>
+   <span class="k">yield</span> <span onmouseout="hideTip(event, 'fs24', 70)" onmouseover="showTip(event, 'fs24', 70)" class="i">binary</span>
+   <span class="k">yield!</span> <span onmouseout="hideTip(event, 'fs21', 71)" onmouseover="showTip(event, 'fs21', 71)" class="i">binaries</span> <span onmouseout="hideTip(event, 'fs25', 72)" onmouseover="showTip(event, 'fs25', 72)" class="i">nextState</span> <span class="c">// recursively generating binaries.</span>
 }</pre>
 </td>
 </tr>
@@ -202,7 +224,7 @@ and it illustrates how you can generate a number of random numbers.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs26', 66)" onmouseover="showTip(event, 'fs26', 66)" class="i">binaries2</span> <span onmouseout="hideTip(event, 'fs27', 67)" onmouseover="showTip(event, 'fs27', 67)" class="i">state</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs28', 68)" onmouseover="showTip(event, 'fs28', 68)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs29', 69)" onmouseover="showTip(event, 'fs29', 69)" class="i">ofRandom</span> (<span onmouseout="hideTip(event, 'fs2', 70)" onmouseover="showTip(event, 'fs2', 70)" class="i">Statistics</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs25', 71)" onmouseover="showTip(event, 'fs25', 71)" class="i">bernoulli</span> <span class="n">0.5</span>) <span onmouseout="hideTip(event, 'fs27', 72)" onmouseover="showTip(event, 'fs27', 72)" class="i">state</span></pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs27', 73)" onmouseover="showTip(event, 'fs27', 73)" class="i">binaries2</span> <span onmouseout="hideTip(event, 'fs28', 74)" onmouseover="showTip(event, 'fs28', 74)" class="i">state</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs29', 75)" onmouseover="showTip(event, 'fs29', 75)" class="i">Seq</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs30', 76)" onmouseover="showTip(event, 'fs30', 76)" class="i">ofRandom</span> (<span onmouseout="hideTip(event, 'fs2', 77)" onmouseover="showTip(event, 'fs2', 77)" class="i">Statistics</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs26', 78)" onmouseover="showTip(event, 'fs26', 78)" class="i">bernoulli</span> <span class="n">0.5</span>) <span onmouseout="hideTip(event, 'fs28', 79)" onmouseover="showTip(event, 'fs28', 79)" class="i">state</span></pre>
 </td>
 </tr>
 </table>
@@ -221,8 +243,8 @@ Just use <code>systemrandom</code> instead of <code>xorshift</code>.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs30', 73)" onmouseover="showTip(event, 'fs30', 73)" class="i">r0</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs31', 74)" onmouseover="showTip(event, 'fs31', 74)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs32', 75)" onmouseover="showTip(event, 'fs32', 75)" class="i">Random</span> ()
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs33', 76)" onmouseover="showTip(event, 'fs33', 76)" class="i">s</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 77)" onmouseover="showTip(event, 'fs6', 77)" class="i">createState</span> <span onmouseout="hideTip(event, 'fs34', 78)" onmouseover="showTip(event, 'fs34', 78)" class="i">systemrandom</span> <span onmouseout="hideTip(event, 'fs30', 79)" onmouseover="showTip(event, 'fs30', 79)" class="i">r0</span></pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs31', 80)" onmouseover="showTip(event, 'fs31', 80)" class="i">r0</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs32', 81)" onmouseover="showTip(event, 'fs32', 81)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs33', 82)" onmouseover="showTip(event, 'fs33', 82)" class="i">Random</span> ()
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs34', 83)" onmouseover="showTip(event, 'fs34', 83)" class="i">s</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 84)" onmouseover="showTip(event, 'fs6', 84)" class="i">createState</span> <span onmouseout="hideTip(event, 'fs35', 85)" onmouseover="showTip(event, 'fs35', 85)" class="i">systemrandom</span> <span onmouseout="hideTip(event, 'fs31', 86)" onmouseover="showTip(event, 'fs31', 86)" class="i">r0</span></pre>
 </td>
 </tr>
 </table>
@@ -236,8 +258,8 @@ unlike <code>xorshift</code>, you will get different result on each call.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs35', 80)" onmouseover="showTip(event, 'fs35', 80)" class="i">u1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 81)" onmouseover="showTip(event, 'fs9', 81)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 82)" onmouseover="showTip(event, 'fs10', 82)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 83)" onmouseover="showTip(event, 'fs1', 83)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs33', 84)" onmouseover="showTip(event, 'fs33', 84)" class="i">s</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs36', 85)" onmouseover="showTip(event, 'fs36', 85)" class="i">u2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 86)" onmouseover="showTip(event, 'fs9', 86)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 87)" onmouseover="showTip(event, 'fs10', 87)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 88)" onmouseover="showTip(event, 'fs1', 88)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs33', 89)" onmouseover="showTip(event, 'fs33', 89)" class="i">s</span></pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs36', 87)" onmouseover="showTip(event, 'fs36', 87)" class="i">u1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 88)" onmouseover="showTip(event, 'fs9', 88)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 89)" onmouseover="showTip(event, 'fs10', 89)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 90)" onmouseover="showTip(event, 'fs1', 90)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs34', 91)" onmouseover="showTip(event, 'fs34', 91)" class="i">s</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs37', 92)" onmouseover="showTip(event, 'fs37', 92)" class="i">u2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 93)" onmouseover="showTip(event, 'fs9', 93)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 94)" onmouseover="showTip(event, 'fs10', 94)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 95)" onmouseover="showTip(event, 'fs1', 95)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs34', 96)" onmouseover="showTip(event, 'fs34', 96)" class="i">s</span></pre>
 </td>
 </tr>
 </table>
@@ -268,9 +290,9 @@ approximates a standard normal random number.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs37', 90)" onmouseover="showTip(event, 'fs37', 90)" class="i">approximatelyStandardNormal</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs38', 91)" onmouseover="showTip(event, 'fs38', 91)" class="i">random</span> {
-   <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs39', 92)" onmouseover="showTip(event, 'fs39', 92)" class="i">values</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs40', 93)" onmouseover="showTip(event, 'fs40', 93)" class="i">Array</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs41', 94)" onmouseover="showTip(event, 'fs41', 94)" class="i">randomCreate</span> <span class="n">12</span> <span onmouseout="hideTip(event, 'fs42', 95)" onmouseover="showTip(event, 'fs42', 95)" class="i">``(0, 1)``</span>
-   <span class="k">return</span> <span onmouseout="hideTip(event, 'fs40', 96)" onmouseover="showTip(event, 'fs40', 96)" class="i">Array</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs43', 97)" onmouseover="showTip(event, 'fs43', 97)" class="i">sum</span> <span onmouseout="hideTip(event, 'fs39', 98)" onmouseover="showTip(event, 'fs39', 98)" class="i">values</span> <span class="o">-</span> <span class="n">6.0</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs38', 97)" onmouseover="showTip(event, 'fs38', 97)" class="i">approximatelyStandardNormal</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs39', 98)" onmouseover="showTip(event, 'fs39', 98)" class="i">random</span> {
+   <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs40', 99)" onmouseover="showTip(event, 'fs40', 99)" class="i">values</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs41', 100)" onmouseover="showTip(event, 'fs41', 100)" class="i">Array</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs42', 101)" onmouseover="showTip(event, 'fs42', 101)" class="i">randomCreate</span> <span class="n">12</span> <span onmouseout="hideTip(event, 'fs43', 102)" onmouseover="showTip(event, 'fs43', 102)" class="i">``(0, 1)``</span>
+   <span class="k">return</span> <span onmouseout="hideTip(event, 'fs41', 103)" onmouseover="showTip(event, 'fs41', 103)" class="i">Array</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs44', 104)" onmouseover="showTip(event, 'fs44', 104)" class="i">sum</span> <span onmouseout="hideTip(event, 'fs40', 105)" onmouseover="showTip(event, 'fs40', 105)" class="i">values</span> <span class="o">-</span> <span class="n">6.0</span>
 }</pre>
 </td>
 </tr>
@@ -283,7 +305,7 @@ approximates a standard normal random number.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span onmouseout="hideTip(event, 'fs9', 99)" onmouseover="showTip(event, 'fs9', 99)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 100)" onmouseover="showTip(event, 'fs10', 100)" class="i">get</span> <span onmouseout="hideTip(event, 'fs37', 101)" onmouseover="showTip(event, 'fs37', 101)" class="i">approximatelyStandardNormal</span> <span onmouseout="hideTip(event, 'fs5', 102)" onmouseover="showTip(event, 'fs5', 102)" class="i">state</span></pre>
+<span onmouseout="hideTip(event, 'fs9', 106)" onmouseover="showTip(event, 'fs9', 106)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 107)" onmouseover="showTip(event, 'fs10', 107)" class="i">get</span> <span onmouseout="hideTip(event, 'fs38', 108)" onmouseover="showTip(event, 'fs38', 108)" class="i">approximatelyStandardNormal</span> <span onmouseout="hideTip(event, 'fs5', 109)" onmouseover="showTip(event, 'fs5', 109)" class="i">state</span></pre>
 </td>
 </tr>
 </table>
@@ -312,7 +334,7 @@ First, you make a function of <code>Prng</code>.</p>
 </td>
 <td class="snippet"><pre class="fssnip">
 <span class="c">// Coefficients are cited from Wikipedia</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs44', 103)" onmouseover="showTip(event, 'fs44', 103)" class="i">linear</span> <span onmouseout="hideTip(event, 'fs45', 104)" onmouseover="showTip(event, 'fs45', 104)" class="i">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs45', 105)" onmouseover="showTip(event, 'fs45', 105)" class="i">x</span>, <span class="n">6364136223846793005uL</span> <span class="o">*</span> <span onmouseout="hideTip(event, 'fs45', 106)" onmouseover="showTip(event, 'fs45', 106)" class="i">x</span> <span class="o">+</span> <span class="n">1442695040888963407uL</span></pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs45', 110)" onmouseover="showTip(event, 'fs45', 110)" class="i">linear</span> <span onmouseout="hideTip(event, 'fs46', 111)" onmouseover="showTip(event, 'fs46', 111)" class="i">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs46', 112)" onmouseover="showTip(event, 'fs46', 112)" class="i">x</span>, <span class="n">6364136223846793005uL</span> <span class="o">*</span> <span onmouseout="hideTip(event, 'fs46', 113)" onmouseover="showTip(event, 'fs46', 113)" class="i">x</span> <span class="o">+</span> <span class="n">1442695040888963407uL</span></pre>
 </td>
 </tr>
 </table>
@@ -329,8 +351,8 @@ in 64-bit resolution.</p>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs46', 107)" onmouseover="showTip(event, 'fs46', 107)" class="i">linearState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 108)" onmouseover="showTip(event, 'fs6', 108)" class="i">createState</span> <span onmouseout="hideTip(event, 'fs44', 109)" onmouseover="showTip(event, 'fs44', 109)" class="i">linear</span> <span class="n">0x123456789ABCDEFuL</span>
-<span onmouseout="hideTip(event, 'fs9', 110)" onmouseover="showTip(event, 'fs9', 110)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 111)" onmouseover="showTip(event, 'fs10', 111)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 112)" onmouseover="showTip(event, 'fs1', 112)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs46', 113)" onmouseover="showTip(event, 'fs46', 113)" class="i">linearState</span></pre>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs47', 114)" onmouseover="showTip(event, 'fs47', 114)" class="i">linearState</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 115)" onmouseover="showTip(event, 'fs6', 115)" class="i">createState</span> <span onmouseout="hideTip(event, 'fs45', 116)" onmouseover="showTip(event, 'fs45', 116)" class="i">linear</span> <span class="n">0x123456789ABCDEFuL</span>
+<span onmouseout="hideTip(event, 'fs9', 117)" onmouseover="showTip(event, 'fs9', 117)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs10', 118)" onmouseover="showTip(event, 'fs10', 118)" class="i">get</span> <span onmouseout="hideTip(event, 'fs1', 119)" onmouseover="showTip(event, 'fs1', 119)" class="i">generator</span> <span onmouseout="hideTip(event, 'fs47', 120)" onmouseover="showTip(event, 'fs47', 120)" class="i">linearState</span></pre>
 </td>
 </tr>
 </table>
@@ -342,71 +364,72 @@ in 64-bit resolution.</p>
 <div class="tip" id="fs5">val state : PrngState<br /><br />Full name: Documentation.state</div>
 <div class="tip" id="fs6">val createState : prng:Prng&lt;&#39;s&gt; -&gt; seed:&#39;s -&gt; PrngState<br /><br />Full name: FsRandom.RandomNumberGenerator.createState</div>
 <div class="tip" id="fs7">val xorshift : Prng&lt;uint32 * uint32 * uint32 * uint32&gt;<br /><br />Full name: FsRandom.RandomNumberGenerator.xorshift</div>
-<div class="tip" id="fs8">val z : float<br /><br />Full name: Documentation.z</div>
+<div class="tip" id="fs8">val z1 : float<br /><br />Full name: Documentation.z1</div>
 <div class="tip" id="fs9">module Random<br /><br />from FsRandom</div>
 <div class="tip" id="fs10">val get : generator:GeneratorFunction&lt;&#39;a&gt; -&gt; PrngState -&gt; &#39;a<br /><br />Full name: FsRandom.Random.get</div>
-<div class="tip" id="fs11">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printfn</div>
-<div class="tip" id="fs12">val nextState : PrngState<br /><br />Full name: Documentation.nextState</div>
-<div class="tip" id="fs13">val next : generator:GeneratorFunction&lt;&#39;a&gt; -&gt; PrngState -&gt; &#39;a * PrngState<br /><br />Full name: FsRandom.Random.next</div>
-<div class="tip" id="fs14">val z2 : float<br /><br />Full name: Documentation.z2</div>
-<div class="tip" id="fs15">val plusOne : x:float -&gt; float<br /><br />Full name: Documentation.plusOne</div>
-<div class="tip" id="fs16">val x : float</div>
-<div class="tip" id="fs17">val transformBy : transformation:(&#39;a -&gt; &#39;b) -&gt; generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;b&gt;<br /><br />Full name: FsRandom.Random.transformBy</div>
-<div class="tip" id="fs18">val uniform : min:float * max:float -&gt; GeneratorFunction&lt;float&gt;<br /><br />Full name: FsRandom.Statistics.uniform</div>
-<div class="tip" id="fs19">val identity : generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;a&gt;<br /><br />Full name: FsRandom.Random.identity</div>
-<div class="tip" id="fs20">val binaries : initialState:PrngState -&gt; seq&lt;int&gt;<br /><br />Full name: Documentation.binaries</div>
-<div class="tip" id="fs21">val initialState : PrngState</div>
-<div class="tip" id="fs22">Multiple items<br />val seq : sequence:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Core.Operators.seq<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.seq&lt;_&gt;</div>
-<div class="tip" id="fs23">val binary : int</div>
-<div class="tip" id="fs24">val nextState : PrngState</div>
-<div class="tip" id="fs25">val bernoulli : probability:float -&gt; GeneratorFunction&lt;int&gt;<br /><br />Full name: FsRandom.Statistics.bernoulli</div>
-<div class="tip" id="fs26">val binaries2 : state:PrngState -&gt; seq&lt;int&gt;<br /><br />Full name: Documentation.binaries2</div>
-<div class="tip" id="fs27">val state : PrngState</div>
-<div class="tip" id="fs28">Multiple items<br />module Seq<br /><br />from FsRandom<br /><br />--------------------<br />module Seq<br /><br />from Microsoft.FSharp.Collections</div>
-<div class="tip" id="fs29">val ofRandom : generator:GeneratorFunction&lt;&#39;a&gt; -&gt; (PrngState -&gt; seq&lt;&#39;a&gt;)<br /><br />Full name: FsRandom.Seq.ofRandom</div>
-<div class="tip" id="fs30">val r0 : System.Random<br /><br />Full name: Documentation.r0</div>
-<div class="tip" id="fs31">namespace System</div>
-<div class="tip" id="fs32">Multiple items<br />type Random =<br />&#160;&#160;new : unit -&gt; Random + 1 overload<br />&#160;&#160;member Next : unit -&gt; int + 2 overloads<br />&#160;&#160;member NextBytes : buffer:byte[] -&gt; unit<br />&#160;&#160;member NextDouble : unit -&gt; float<br /><br />Full name: System.Random<br /><br />--------------------<br />System.Random() : unit<br />System.Random(Seed: int) : unit</div>
-<div class="tip" id="fs33">val s : PrngState<br /><br />Full name: Documentation.s</div>
-<div class="tip" id="fs34">val systemrandom : Prng&lt;System.Random&gt;<br /><br />Full name: FsRandom.RandomNumberGenerator.systemrandom</div>
-<div class="tip" id="fs35">val u1 : float<br /><br />Full name: Documentation.u1</div>
-<div class="tip" id="fs36">val u2 : float<br /><br />Full name: Documentation.u2</div>
-<div class="tip" id="fs37">val approximatelyStandardNormal : GeneratorFunction&lt;float&gt;<br /><br />Full name: Documentation.approximatelyStandardNormal</div>
-<div class="tip" id="fs38">val random : RandomBuilder<br /><br />Full name: FsRandom.RandomNumberGenerator.random</div>
-<div class="tip" id="fs39">val values : float []</div>
-<div class="tip" id="fs40">Multiple items<br />module Array<br /><br />from FsRandom<br /><br />--------------------<br />module Array<br /><br />from Microsoft.FSharp.Collections</div>
-<div class="tip" id="fs41">val randomCreate : count:int -&gt; generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;a []&gt;<br /><br />Full name: FsRandom.Array.randomCreate</div>
-<div class="tip" id="fs42">val ( (0, 1) ) : GeneratorFunction&lt;float&gt;<br /><br />Full name: FsRandom.RandomNumberGenerator.( (0, 1) )</div>
-<div class="tip" id="fs43">val sum : array:&#39;T [] -&gt; &#39;T (requires member ( + ) and member get_Zero)<br /><br />Full name: Microsoft.FSharp.Collections.Array.sum</div>
-<div class="tip" id="fs44">val linear : x:uint64 -&gt; uint64 * uint64<br /><br />Full name: Documentation.linear</div>
-<div class="tip" id="fs45">val x : uint64</div>
-<div class="tip" id="fs46">val linearState : PrngState<br /><br />Full name: Documentation.linearState</div>
+<div class="tip" id="fs11">val printf : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printf</div>
+<div class="tip" id="fs12">val z2 : float<br /><br />Full name: Documentation.z2</div>
+<div class="tip" id="fs13">val nextState : PrngState<br /><br />Full name: Documentation.nextState</div>
+<div class="tip" id="fs14">val next : generator:GeneratorFunction&lt;&#39;a&gt; -&gt; PrngState -&gt; &#39;a * PrngState<br /><br />Full name: FsRandom.Random.next</div>
+<div class="tip" id="fs15">val z3 : float<br /><br />Full name: Documentation.z3</div>
+<div class="tip" id="fs16">val plusOne : x:float -&gt; float<br /><br />Full name: Documentation.plusOne</div>
+<div class="tip" id="fs17">val x : float</div>
+<div class="tip" id="fs18">val transformBy : transformation:(&#39;a -&gt; &#39;b) -&gt; generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;b&gt;<br /><br />Full name: FsRandom.Random.transformBy</div>
+<div class="tip" id="fs19">val uniform : min:float * max:float -&gt; GeneratorFunction&lt;float&gt;<br /><br />Full name: FsRandom.Statistics.uniform</div>
+<div class="tip" id="fs20">val identity : generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;a&gt;<br /><br />Full name: FsRandom.Random.identity</div>
+<div class="tip" id="fs21">val binaries : initialState:PrngState -&gt; seq&lt;int&gt;<br /><br />Full name: Documentation.binaries</div>
+<div class="tip" id="fs22">val initialState : PrngState</div>
+<div class="tip" id="fs23">Multiple items<br />val seq : sequence:seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Core.Operators.seq<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Collections.seq&lt;_&gt;</div>
+<div class="tip" id="fs24">val binary : int</div>
+<div class="tip" id="fs25">val nextState : PrngState</div>
+<div class="tip" id="fs26">val bernoulli : probability:float -&gt; GeneratorFunction&lt;int&gt;<br /><br />Full name: FsRandom.Statistics.bernoulli</div>
+<div class="tip" id="fs27">val binaries2 : state:PrngState -&gt; seq&lt;int&gt;<br /><br />Full name: Documentation.binaries2</div>
+<div class="tip" id="fs28">val state : PrngState</div>
+<div class="tip" id="fs29">Multiple items<br />module Seq<br /><br />from FsRandom<br /><br />--------------------<br />module Seq<br /><br />from Microsoft.FSharp.Collections</div>
+<div class="tip" id="fs30">val ofRandom : generator:GeneratorFunction&lt;&#39;a&gt; -&gt; (PrngState -&gt; seq&lt;&#39;a&gt;)<br /><br />Full name: FsRandom.Seq.ofRandom</div>
+<div class="tip" id="fs31">val r0 : System.Random<br /><br />Full name: Documentation.r0</div>
+<div class="tip" id="fs32">namespace System</div>
+<div class="tip" id="fs33">Multiple items<br />type Random =<br />&#160;&#160;new : unit -&gt; Random + 1 overload<br />&#160;&#160;member Next : unit -&gt; int + 2 overloads<br />&#160;&#160;member NextBytes : buffer:byte[] -&gt; unit<br />&#160;&#160;member NextDouble : unit -&gt; float<br /><br />Full name: System.Random<br /><br />--------------------<br />System.Random() : unit<br />System.Random(Seed: int) : unit</div>
+<div class="tip" id="fs34">val s : PrngState<br /><br />Full name: Documentation.s</div>
+<div class="tip" id="fs35">val systemrandom : Prng&lt;System.Random&gt;<br /><br />Full name: FsRandom.RandomNumberGenerator.systemrandom</div>
+<div class="tip" id="fs36">val u1 : float<br /><br />Full name: Documentation.u1</div>
+<div class="tip" id="fs37">val u2 : float<br /><br />Full name: Documentation.u2</div>
+<div class="tip" id="fs38">val approximatelyStandardNormal : GeneratorFunction&lt;float&gt;<br /><br />Full name: Documentation.approximatelyStandardNormal</div>
+<div class="tip" id="fs39">val random : RandomBuilder<br /><br />Full name: FsRandom.RandomNumberGenerator.random</div>
+<div class="tip" id="fs40">val values : float []</div>
+<div class="tip" id="fs41">Multiple items<br />module Array<br /><br />from FsRandom<br /><br />--------------------<br />module Array<br /><br />from Microsoft.FSharp.Collections</div>
+<div class="tip" id="fs42">val randomCreate : count:int -&gt; generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;a []&gt;<br /><br />Full name: FsRandom.Array.randomCreate</div>
+<div class="tip" id="fs43">val ( (0, 1) ) : GeneratorFunction&lt;float&gt;<br /><br />Full name: FsRandom.RandomNumberGenerator.( (0, 1) )</div>
+<div class="tip" id="fs44">val sum : array:&#39;T [] -&gt; &#39;T (requires member ( + ) and member get_Zero)<br /><br />Full name: Microsoft.FSharp.Collections.Array.sum</div>
+<div class="tip" id="fs45">val linear : x:uint64 -&gt; uint64 * uint64<br /><br />Full name: Documentation.linear</div>
+<div class="tip" id="fs46">val x : uint64</div>
+<div class="tip" id="fs47">val linearState : PrngState<br /><br />Full name: Documentation.linearState</div>
 
         </div>
         <div class="span3">
           <ul class="nav nav-list" id="menu">
             <li class="nav-header">FsRandom</li>
-            <li><a href="http://kos59125.github.io/FsRandom//index.html">Home page</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="https://nuget.org/packages/FsRandom">Get Library via NuGet</a></li>
             <li><a href="https://github.com/kos59125/FsRandom">Source Code on GitHub</a></li>
             <li><a href="https://github.com/kos59125/FsRandom/blob/master/LICENSE">License (BSD 3-clause)</a></li>
             <li><a href="https://github.com/kos59125/FsRandom/blob/master/ChangeLog.md">Change Log</a></li>
             
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//documentation.html">Documentation</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#first-random-number">First random number</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#random-number-sequence">Random Number Sequence</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#generator-function">Generator function</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/documentation.html">Documentation</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#first-random-number">First random number</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#random-number-sequence">Random Number Sequence</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#generator-function">Generator function</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
 
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//reference/index.html">API Reference</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/reference/index.html">API Reference</a></li>
             
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//numerical-examples.html">Numerical Examples</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#monte-carlo">Estimating pi</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#approximate-bayesian-computation">Approximate Bayesian Computation</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/numerical-examples.html">Numerical Examples</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#monte-carlo">Estimating pi</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#approximate-bayesian-computation">Approximate Bayesian Computation</a></li>
           </ul>
         </div>
       </div>

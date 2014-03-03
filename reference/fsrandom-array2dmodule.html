@@ -12,8 +12,8 @@
     <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 
-    <link type="text/css" rel="stylesheet" href="http://kos59125.github.io/FsRandom//content/style.css" />
-    <script type="text/javascript" src="http://kos59125.github.io/FsRandom//content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="http://kos59125.github.io/FsRandom/content/style.css" />
+    <script type="text/javascript" src="http://kos59125.github.io/FsRandom/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -23,7 +23,7 @@
   <body>
     <div class="container">
       <div class="masthead">
-        <h3 class="muted"><a href="http://kos59125.github.io/FsRandom/">FsRandom</a></h3>
+        <h3 class="muted"><a href="http://kos59125.github.io/FsRandom">FsRandom</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -37,13 +37,7 @@
 <p>Provides basic operations on 2-dimensional arrays.</p>
 </div>
 
-<!-- TODO: Refactor me - copy & paste from 'namespaces.cshtml' -->
-
-
-
-<!-- END TODO -->
-
-
+<!-- Render nested types and modules, if there are any -->
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -54,54 +48,62 @@
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '3', 3)" onmouseover="showTip(event, '3', 3)">
-            Array2D.randomCreate(...)
+          <code onmouseout="hideTip(event, '14', 14)" onmouseover="showTip(event, '14', 14)">
+            randomCreate(...)
           </code>
-          <div class="tip" id="3">
-            <strong>Signature:</strong>rowCount:int -&gt; columnCount:int -&gt; generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;a [,]&gt;<br />
+          <div class="tip" id="14">
+            <strong>Signature:</strong> rowCount:int -&gt; columnCount:int -&gt; generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;a [,]&gt;<br />
                           <strong>Type parameters:</strong> 'a          </div>
         </td>
-        <td class="xmldoc"><p>Creates an array whose elements are randomly generated.</p>
-</td>
+        <td class="xmldoc">
+        <p>Creates an array whose elements are randomly generated.</p>
+
+        </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '32', 32)" onmouseover="showTip(event, '32', 32)">
-            Array2D.randomCreateBased(...)
+          <code onmouseout="hideTip(event, '16', 16)" onmouseover="showTip(event, '16', 16)">
+            randomCreateBased(...)
           </code>
-          <div class="tip" id="32">
-            <strong>Signature:</strong>rowBase:int -&gt; columnBase:int -&gt; rowCount:int -&gt; columnCount:int -&gt; generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;a [,]&gt;<br />
+          <div class="tip" id="16">
+            <strong>Signature:</strong> rowBase:int -&gt; columnBase:int -&gt; rowCount:int -&gt; columnCount:int -&gt; generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;a [,]&gt;<br />
                           <strong>Type parameters:</strong> 'a          </div>
         </td>
-        <td class="xmldoc"><p>Creates a based array whose elements are randomly generated.</p>
-</td>
+        <td class="xmldoc">
+        <p>Creates a based array whose elements are randomly generated.</p>
+
+        </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '33', 33)" onmouseover="showTip(event, '33', 33)">
-            Array2D.randomInit(...)
+          <code onmouseout="hideTip(event, '17', 17)" onmouseover="showTip(event, '17', 17)">
+            randomInit(...)
           </code>
-          <div class="tip" id="33">
-            <strong>Signature:</strong>rowCount:int -&gt; columnCount:int -&gt; initializer:(int -&gt; int -&gt; GeneratorFunction&lt;&#39;a&gt;) -&gt; GeneratorFunction&lt;&#39;a [,]&gt;<br />
+          <div class="tip" id="17">
+            <strong>Signature:</strong> rowCount:int -&gt; columnCount:int -&gt; initializer:(int -&gt; int -&gt; GeneratorFunction&lt;&#39;a&gt;) -&gt; GeneratorFunction&lt;&#39;a [,]&gt;<br />
                           <strong>Type parameters:</strong> 'a          </div>
         </td>
-        <td class="xmldoc"><p>Creates an array whose elements are randomly generated.</p>
-</td>
+        <td class="xmldoc">
+        <p>Creates an array whose elements are randomly generated.</p>
+
+        </td>
       </tr>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '34', 34)" onmouseover="showTip(event, '34', 34)">
-            Array2D.randomInitBased(...)
+          <code onmouseout="hideTip(event, '18', 18)" onmouseover="showTip(event, '18', 18)">
+            randomInitBased(...)
           </code>
-          <div class="tip" id="34">
-            <strong>Signature:</strong>rowBase:int -&gt; columnBase:int -&gt; rowCount:int -&gt; columnCount:int -&gt; initializer:(int -&gt; int -&gt; GeneratorFunction&lt;&#39;a&gt;) -&gt; GeneratorFunction&lt;&#39;a [,]&gt;<br />
+          <div class="tip" id="18">
+            <strong>Signature:</strong> rowBase:int -&gt; columnBase:int -&gt; rowCount:int -&gt; columnCount:int -&gt; initializer:(int -&gt; int -&gt; GeneratorFunction&lt;&#39;a&gt;) -&gt; GeneratorFunction&lt;&#39;a [,]&gt;<br />
                           <strong>Type parameters:</strong> 'a          </div>
         </td>
-        <td class="xmldoc"><p>Creates a based array whose elements are randomly generated.</p>
-</td>
+        <td class="xmldoc">
+        <p>Creates a based array whose elements are randomly generated.</p>
+
+        </td>
       </tr>
     </tbody>
   </table>
@@ -110,27 +112,27 @@
         <div class="span3">
           <ul class="nav nav-list" id="menu">
             <li class="nav-header">FsRandom</li>
-            <li><a href="http://kos59125.github.io/FsRandom//index.html">Home page</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="https://nuget.org/packages/FsRandom">Get Library via NuGet</a></li>
             <li><a href="https://github.com/kos59125/FsRandom">Source Code on GitHub</a></li>
             <li><a href="https://github.com/kos59125/FsRandom/blob/master/LICENSE">License (BSD 3-clause)</a></li>
             <li><a href="https://github.com/kos59125/FsRandom/blob/master/ChangeLog.md">Change Log</a></li>
             
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//documentation.html">Documentation</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#first-random-number">First random number</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#random-number-sequence">Random Number Sequence</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#generator-function">Generator function</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/documentation.html">Documentation</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#first-random-number">First random number</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#random-number-sequence">Random Number Sequence</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#generator-function">Generator function</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
 
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//reference/index.html">API Reference</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/reference/index.html">API Reference</a></li>
             
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//numerical-examples.html">Numerical Examples</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#monte-carlo">Estimating pi</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#approximate-bayesian-computation">Approximate Bayesian Computation</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/numerical-examples.html">Numerical Examples</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#monte-carlo">Estimating pi</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#approximate-bayesian-computation">Approximate Bayesian Computation</a></li>
           </ul>
         </div>
       </div>

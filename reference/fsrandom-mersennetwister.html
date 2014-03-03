@@ -12,8 +12,8 @@
     <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 
-    <link type="text/css" rel="stylesheet" href="http://kos59125.github.io/FsRandom//content/style.css" />
-    <script type="text/javascript" src="http://kos59125.github.io/FsRandom//content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="http://kos59125.github.io/FsRandom/content/style.css" />
+    <script type="text/javascript" src="http://kos59125.github.io/FsRandom/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -23,7 +23,7 @@
   <body>
     <div class="container">
       <div class="masthead">
-        <h3 class="muted"><a href="http://kos59125.github.io/FsRandom/">FsRandom</a></h3>
+        <h3 class="muted"><a href="http://kos59125.github.io/FsRandom">FsRandom</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -35,14 +35,13 @@
 <h1>MersenneTwister</h1>
 <div class="xmldoc">
 <p>Implements Mersenne Twister 64-bit version.
-See http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html for details.</p>
+See <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html</a> for details.</p>
 </div>
 
-<!-- TODO: Refactor me - copy & paste from 'namespaces.cshtml' -->
-
+<!-- Render nested types and modules, if there are any -->
   <h2>Nested types and modules</h2>
-
-  <table class="table table-bordered type-list">
+  <div>
+      <table class="table table-bordered type-list">
     <thead>
       <tr><td>Type</td><td>Description</td></tr>
     </thead>
@@ -57,9 +56,7 @@ See http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html for details.</p>
     </tbody>
   </table>
 
-<!-- END TODO -->
-
-
+  </div>
 
   <h3>Functions and values</h3>
   <table class="table table-bordered member-list">
@@ -70,15 +67,17 @@ See http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html for details.</p>
       <tr>
         <td class="member-name">
 
-          <code onmouseout="hideTip(event, '4', 4)" onmouseover="showTip(event, '4', 4)">
+          <code onmouseout="hideTip(event, '43', 43)" onmouseover="showTip(event, '43', 43)">
             mersenne 
           </code>
-          <div class="tip" id="4">
-            <strong>Signature:</strong>Prng&lt;StateVector&gt;<br />
+          <div class="tip" id="43">
+            <strong>Signature:</strong> Prng&lt;StateVector&gt;<br />
                       </div>
         </td>
-        <td class="xmldoc"><p>Random number generator using Mersenne Twister algorithm (Matsumoto &amp; Nishimura 1998).</p>
-</td>
+        <td class="xmldoc">
+        <p>Random number generator using Mersenne Twister algorithm (Matsumoto &amp; Nishimura 1998).</p>
+
+        </td>
       </tr>
     </tbody>
   </table>
@@ -87,27 +86,27 @@ See http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html for details.</p>
         <div class="span3">
           <ul class="nav nav-list" id="menu">
             <li class="nav-header">FsRandom</li>
-            <li><a href="http://kos59125.github.io/FsRandom//index.html">Home page</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="https://nuget.org/packages/FsRandom">Get Library via NuGet</a></li>
             <li><a href="https://github.com/kos59125/FsRandom">Source Code on GitHub</a></li>
             <li><a href="https://github.com/kos59125/FsRandom/blob/master/LICENSE">License (BSD 3-clause)</a></li>
             <li><a href="https://github.com/kos59125/FsRandom/blob/master/ChangeLog.md">Change Log</a></li>
             
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//documentation.html">Documentation</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#first-random-number">First random number</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#random-number-sequence">Random Number Sequence</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#generator-function">Generator function</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/documentation.html">Documentation</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#first-random-number">First random number</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#random-number-sequence">Random Number Sequence</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#generator-function">Generator function</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
 
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//reference/index.html">API Reference</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/reference/index.html">API Reference</a></li>
             
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//numerical-examples.html">Numerical Examples</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#monte-carlo">Estimating pi</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#approximate-bayesian-computation">Approximate Bayesian Computation</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/numerical-examples.html">Numerical Examples</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#monte-carlo">Estimating pi</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#approximate-bayesian-computation">Approximate Bayesian Computation</a></li>
           </ul>
         </div>
       </div>

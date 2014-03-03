@@ -13,8 +13,8 @@
     <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
     <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
 
-    <link type="text/css" rel="stylesheet" href="http://kos59125.github.io/FsRandom//content/style.css" />
-    <script type="text/javascript" src="http://kos59125.github.io/FsRandom//content/tips.js"></script>
+    <link type="text/css" rel="stylesheet" href="http://kos59125.github.io/FsRandom/content/style.css" />
+    <script type="text/javascript" src="http://kos59125.github.io/FsRandom/content/tips.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -24,7 +24,7 @@
   <body>
     <div class="container">
       <div class="masthead">
-        <h3 class="muted"><a href="http://kos59125.github.io/FsRandom/">FsRandom</a></h3>
+        <h3 class="muted"><a href="http://kos59125.github.io/FsRandom">FsRandom</a></h3>
       </div>
       <hr />
       <div class="row">
@@ -101,10 +101,15 @@ and to define a new function to generate random numbers you want.</p>
 
 <span class="c">// Get a random point</span>
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 14)" onmouseover="showTip(event, 'fs12', 14)" class="i">randomPoint</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 15)" onmouseover="showTip(event, 'fs13', 15)" class="i">Random</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs14', 16)" onmouseover="showTip(event, 'fs14', 16)" class="i">get</span> <span onmouseout="hideTip(event, 'fs5', 17)" onmouseover="showTip(event, 'fs5', 17)" class="i">randomPointGenerator</span> <span onmouseout="hideTip(event, 'fs2', 18)" onmouseover="showTip(event, 'fs2', 18)" class="i">state</span>
-<span onmouseout="hideTip(event, 'fs15', 19)" onmouseover="showTip(event, 'fs15', 19)" class="i">printfn</span> <span class="s">&quot;</span><span class="s">(</span><span class="s">%</span><span class="s">f</span><span class="s">,</span><span class="s"> </span><span class="s">%</span><span class="s">f</span><span class="s">)</span><span class="s">&quot;</span> <span class="o">&lt;||</span> <span onmouseout="hideTip(event, 'fs12', 20)" onmouseover="showTip(event, 'fs12', 20)" class="i">randomPoint</span></pre>
+<span onmouseout="hideTip(event, 'fs15', 19)" onmouseover="showTip(event, 'fs15', 19)" class="i">printf</span> <span class="s">&quot;</span><span class="s">(</span><span class="s">x</span><span class="s">,</span><span class="s"> </span><span class="s">y</span><span class="s">)</span><span class="s"> </span><span class="s">=</span><span class="s"> </span><span class="s">(</span><span class="s">%</span><span class="s">f</span><span class="s">,</span><span class="s"> </span><span class="s">%</span><span class="s">f</span><span class="s">)</span><span class="s">&quot;</span> <span class="o">&lt;||</span> <span onmouseout="hideTip(event, 'fs12', 20)" onmouseover="showTip(event, 'fs12', 20)" class="i">randomPoint</span></pre>
 </td>
 </tr>
 </table>
+
+<p>The script yields:</p>
+
+<pre><code>(x, y) = (0.106706, -1.561583)
+</code></pre>
 
 <h2>Features</h2>
 
@@ -149,33 +154,33 @@ This PRNG is not purely functional because the state of the PRNG is controled in
 <div class="tip" id="fs12">val randomPoint : float * float<br /><br />Full name: Index.randomPoint</div>
 <div class="tip" id="fs13">module Random<br /><br />from FsRandom</div>
 <div class="tip" id="fs14">val get : generator:GeneratorFunction&lt;&#39;a&gt; -&gt; PrngState -&gt; &#39;a<br /><br />Full name: FsRandom.Random.get</div>
-<div class="tip" id="fs15">val printfn : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printfn</div>
+<div class="tip" id="fs15">val printf : format:Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.printf</div>
 
         </div>
         <div class="span3">
           <ul class="nav nav-list" id="menu">
             <li class="nav-header">FsRandom</li>
-            <li><a href="http://kos59125.github.io/FsRandom//index.html">Home page</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/index.html">Home page</a></li>
             <li class="divider"></li>
             <li><a href="https://nuget.org/packages/FsRandom">Get Library via NuGet</a></li>
             <li><a href="https://github.com/kos59125/FsRandom">Source Code on GitHub</a></li>
             <li><a href="https://github.com/kos59125/FsRandom/blob/master/LICENSE">License (BSD 3-clause)</a></li>
             <li><a href="https://github.com/kos59125/FsRandom/blob/master/ChangeLog.md">Change Log</a></li>
             
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//documentation.html">Documentation</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#first-random-number">First random number</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#random-number-sequence">Random Number Sequence</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#generator-function">Generator function</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/documentation.html">Documentation</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#first-random-number">First random number</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#transforming-random-numbers">Transforming random numbers</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#random-number-sequence">Random Number Sequence</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#generator-function">Generator function</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/documentation.html#pseudo-random-number-generator">Pseudo-random number generator</a></li>
 
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//reference/index.html">API Reference</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/reference/index.html">API Reference</a></li>
             
-            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom//numerical-examples.html">Numerical Examples</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#monte-carlo">Estimating pi</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
-            <li><a href="http://kos59125.github.io/FsRandom//numerical-examples.html#approximate-bayesian-computation">Approximate Bayesian Computation</a></li>
+            <li class="nav-header"><a href="http://kos59125.github.io/FsRandom/numerical-examples.html">Numerical Examples</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#monte-carlo">Estimating pi</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#gibbs-sampler">Gibbs sampler</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#hamiltonian-monte-carlo">Hamiltonian Monte Carlo</a></li>
+            <li><a href="http://kos59125.github.io/FsRandom/numerical-examples.html#approximate-bayesian-computation">Approximate Bayesian Computation</a></li>
           </ul>
         </div>
       </div>
