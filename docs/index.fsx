@@ -45,6 +45,7 @@ Short Example
 -------------
 *)
 
+(*** define-output:randomPoint ***)
 open FsRandom
 
 // Random state
@@ -59,7 +60,12 @@ let randomPointGenerator = random {
 
 // Get a random point
 let randomPoint = Random.get randomPointGenerator state
-printfn "(%f, %f)" <|| randomPoint
+printf "(x, y) = (%f, %f)" <|| randomPoint
+
+(**
+The script yields:
+*)
+(*** include-output:randomPoint ***)
 
 (**
 Features

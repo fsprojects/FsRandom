@@ -1,5 +1,6 @@
 ﻿#I "FSharp.Formatting/lib/net40"
-#I "RazorEngine/lib/net40/"
+#I "FSharp.Compiler.Service/lib/net40"
+#I "RazorEngine/lib/net40"
 #I "Microsoft.AspNet.Razor/lib/net40"
 #r "FakeLib.dll"
 #r "ICSharpCode.SharpZipLib.dll"
@@ -126,8 +127,8 @@ Target "CleanDeploy" (fun () ->
 Target "Clean" DoNothing
 
 let getProducts projectName =
-   if buildParams.Debug then ["*"] else ["dll"; "XML"]
-   |> Seq.collect (fun s -> % projectName % "bin" % snd configuration % (sprintf "*.%s" s) |> (!+) |> Scan)
+   if buildParams.Debug then ["*"] else ["*.dll"; "*.XML"]
+   |> Seq.collect (fun s -> % projectName % "bin" % snd configuration % s |> (!+) |> Scan)
 Target "Build" (fun () ->
    build setBuildParams mainSolution
    getProducts projectName
@@ -187,8 +188,10 @@ Target "Documentation" (fun () ->
       CopyRecursive (content % "images") (docsDir % "images") true
       |> Log "Copying images: "
       ensureDirectory (docsDir % "content")
-      CopyRecursive (formatting % "content") (docsDir % "content") true 
+      CopyRecursive (formatting % "styles") (docsDir % "content") true 
       |> Log "Copying styles and scripts: "
+
+   let fsi = FsiEvaluator ()
 
    // Build documentation from `*.fsx` files in `docs`
    let buildDocumentation () =
@@ -197,7 +200,7 @@ Target "Documentation" (fun () ->
          let sub = if dir.Length > content.Length then dir.Substring(content.Length + 1) else "."
          Literate.ProcessDirectory
             ( dir, docTemplate, docsDir % sub, replacements = ("root", buildParams.DocumentationRoot)::info,
-              layoutRoots = layoutRoots )
+              layoutRoots = layoutRoots, fsiEvaluator = fsi )
 
    let buildReference () =
       let referenceDir = docsDir % "reference"

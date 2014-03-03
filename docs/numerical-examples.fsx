@@ -47,17 +47,19 @@ To generate the sequence of the scores:
 *)
 
 let weight (x, y) = if x * x + y * y <= 1.0 then 4.0 else 0.0
-let scores = Seq.ofRandom (Random.transformBy weight randomPointGenerator)
+let scores : PrngState -> seq<_> = Seq.ofRandom (Random.transformBy weight randomPointGenerator)
 
 (**
 Then, the average of the sequence approximates \\(\pi\\).
 To generate 1,000,000 scores and to compute the average, the approximation of \\(\pi\\):
 *)
 
+(*** define-output:pi ***)
 scores state
 |> Seq.take 1000000
 |> Seq.average
-|> printfn "%f"
+|> printf "%f"
+(*** include-output:pi ***)
 
 (**
 <a name="gibbs-sampler"></a>

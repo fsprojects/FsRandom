@@ -38,19 +38,31 @@ let state = createState xorshift seed
 Now you can retrieve a random number using `Random.get` function.
 *)
 
-let z = Random.get generator state
-printfn "%f" z
+(*** define-output:z1 ***)
+let z1 = Random.get generator state
+printf "z1 = %f" z1
+(*** include-output:z1 ***)
 
 (**
 Since `Random.get` returns a stateless function,
 if you do the code above, the same thing occurs.
+*)
+
+(*** define-output:z2 ***)
+let z2 = Random.get generator state
+printf "z2 = %f" z2
+(*** include-output:z2 ***)
+
+(**
 To generate a new random number,
 you need to get next state using `Random.next` instead of `Random.get`:
 *)
 
+(*** define-output:z3 ***)
 let _, nextState = Random.next generator state
-let z2 = Random.get generator nextState
-printfn "%f" z2
+let z3 = Random.get generator nextState
+printf "z3 = %f" z3
+(*** include-output:z3 ***)
 
 (**
 <a name="transforming-random-numbers"></a>
