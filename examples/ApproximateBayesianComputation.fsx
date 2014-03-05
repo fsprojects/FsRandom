@@ -11,11 +11,9 @@ let state = createState xorshift seed
 
 type HiddenSystem = A | B
 let switch = function A -> B | B -> A
-let observe correctly system =
-   if correctly then
-      match system with A -> 'A' | B -> 'B'
-   else
-      match system with B -> 'B' | A -> 'A'
+let observe correctly = function
+   | A -> if correctly then 'A' else 'B'
+   | B -> if correctly then 'B' else 'A'
 let model (theta, gamma, length) = random {
    let state = ref A
    let builder = System.Text.StringBuilder ()

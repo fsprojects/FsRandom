@@ -43,19 +43,18 @@ let randomPointGenerator = random {
 (**
 To give each point weight 4 if the point is inside the circle and 0 otherwise
 adjusts the average of total score to become \\(\pi\\).
-To generate the sequence of the scores:
 *)
 
 let weight (x, y) = if x * x + y * y <= 1.0 then 4.0 else 0.0
-let scores : PrngState -> seq<_> = Seq.ofRandom (Random.transformBy weight randomPointGenerator)
+let randomScoreGenerator = Random.transformBy weight randomPointGenerator
 
 (**
-Then, the average of the sequence approximates \\(\pi\\).
-To generate 1,000,000 scores and to compute the average, the approximation of \\(\pi\\):
+The average of the random scores approximates \\(\pi\\).
+To generate 1,000,000 scores and to compute the approximation:
 *)
 
 (*** define-output:pi ***)
-scores state
+Seq.ofRandom randomScoreGenerator state
 |> Seq.take 1000000
 |> Seq.average
 |> printf "%f"
@@ -186,11 +185,9 @@ Then, the model is described as follows:
 
 type HiddenSystem = A | B
 let switch = function A -> B | B -> A
-let observe correctly system =
-   if correctly then
-      match system with A -> 'A' | B -> 'B'
-   else
-      match system with B -> 'B' | A -> 'A'
+let observe correctly = function
+   | A -> if correctly then 'A' else 'B'
+   | B -> if correctly then 'B' else 'A'
 let model (theta, gamma, length) = random {
    let state = ref A
    let builder = System.Text.StringBuilder ()
