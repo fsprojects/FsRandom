@@ -20,9 +20,9 @@ let flipCoin probability =
 
 let choose m n =
    if m <= 0 then
-      outOfRange "m" "`m' must be positive."
+      outOfRange "size" "`size' must be positive."
    elif n < 0 || m < n then
-      outOfRange "n" "`n' must be in the range of [0, m]."
+      outOfRange "count" "`count' must be in the range of [0, size]."
    else
       GeneratorFunction (fun s0 ->
          let rec loop (acc, p, s) = function
@@ -40,3 +40,10 @@ let choose m n =
                loop (m - p - 1 :: acc, p, s') (index - 1)
          loop ([], m, s0) (n - 1)
       )
+
+let chooseOne n =
+   if n <= 0  then
+      outOfRange "upper" "`upper' must be positive."
+   else
+      let n = float n
+      Random.transformBy (fun u -> int (u * n)) ``[0, 1)``

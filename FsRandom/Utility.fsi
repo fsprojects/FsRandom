@@ -24,5 +24,11 @@ val flipCoin : probability:float -> GeneratorFunction<bool>
 /// Returns random indices of collections.
 /// </summary>
 /// <param name="size">The size of collections.</param>
-/// <param name="n">The number of indices to take.</param>
-val choose : size:int -> n:int -> GeneratorFunction<int list>
+/// <param name="count">The number of indices to take.</param>
+val choose : size:int -> count:int -> GeneratorFunction<int list>
+
+/// <summary>
+/// Returns a random number less than the specified value.
+/// </summary>
+/// <param name="upper">The exclusive upper bound.</param>
+val chooseOne : upper:int -> GeneratorFunction<int>

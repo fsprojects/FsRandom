@@ -22,3 +22,9 @@ let ``Validates choose`` () =
    Assert.That (List.length result, Is.EqualTo(n))
    Assert.That (List.forall (fun x -> List.exists ((=) x) [0..9]) result, Is.True)
    Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(n))
+
+[<Test>]
+let ``Validates chooseOne`` () =
+   let tester = getDefaultTester ()
+   let result = Random.get (Utility.chooseOne 10) tester
+   Assert.That (0 <= result && result < 10, Is.True)
