@@ -128,7 +128,10 @@ Target "Clean" DoNothing
 
 let getProducts projectName =
    if buildParams.Debug then ["*"] else ["*.dll"; "*.XML"]
-   |> Seq.collect (fun s -> % projectName % "bin" % snd configuration % s |> (!+) |> Scan)
+   |> Seq.collect (fun pattern ->
+      let path =  % projectName % "bin" % snd configuration
+      Directory.GetFiles (path, pattern)
+   )
 Target "Build" (fun () ->
    build setBuildParams mainSolution
    getProducts projectName
