@@ -29,10 +29,37 @@ val inline identity : generator:GeneratorFunction<'a> -> GeneratorFunction<'a>
 /// </summary>
 /// <param name="transformation">The function to transform a random value.</param>
 /// <param name="generator">The random number generator.</param>
+val inline map : transformation:('a -> 'b) -> generator:GeneratorFunction<'a> -> GeneratorFunction<'b>
+/// <summary>
+/// Generates a random number by using two random numbers.
+/// </summary>
+/// <param name="transformation">The function to transform two random values into one.</param>
+/// <param name="generator1">The first random number generator.</param>
+/// <param name="generator2">The second random number generator.</param>
+val inline map2 : transformation:('a1 -> 'a2 -> 'b) -> generator1:GeneratorFunction<'a1> -> generator2:GeneratorFunction<'a2> -> GeneratorFunction<'b>
+/// <summary>
+/// Generates a random number by using three random numbers.
+/// </summary>
+/// <param name="transformation">The function to transform two random values into one.</param>
+/// <param name="generator1">The first random number generator.</param>
+/// <param name="generator2">The second random number generator.</param>
+/// <param name="generator3">The third random number generator.</param>
+val inline map3 : transformation:('a1 -> 'a2 -> 'a3 -> 'b) -> generator1:GeneratorFunction<'a1> -> generator2:GeneratorFunction<'a2> -> generator2:GeneratorFunction<'a3> -> GeneratorFunction<'b>
+/// <summary>
+/// Generates a random number by <paramref name="generator" /> and returns a transformed value by <paramref name="transformation" /> function.
+/// </summary>
+/// <remarks>
+/// This function is a synonym for <see cref="map" />.
+/// </remarks>
+/// <param name="transformation">The function to transform a random value.</param>
+/// <param name="generator">The random number generator.</param>
 val inline transformBy : transformation:('a -> 'b) -> generator:GeneratorFunction<'a> -> GeneratorFunction<'b>
 /// <summary>
 /// Generates a random number by using two random numbers.
 /// </summary>
+/// <remarks>
+/// This function is a synonym for <see cref="map2" />.
+/// </remarks>
 /// <param name="transformation">The function to transform two random values into one.</param>
 /// <param name="generator1">The first random number generator.</param>
 /// <param name="generator2">The second random number generator.</param>
@@ -40,6 +67,9 @@ val inline transformBy2 : transformation:('a1 -> 'a2 -> 'b) -> generator1:Genera
 /// <summary>
 /// Generates a random number by using three random numbers.
 /// </summary>
+/// <remarks>
+/// This function is a synonym for <see cref="map3" />.
+/// </remarks>
 /// <param name="transformation">The function to transform two random values into one.</param>
 /// <param name="generator1">The first random number generator.</param>
 /// <param name="generator2">The second random number generator.</param>

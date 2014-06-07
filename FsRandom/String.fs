@@ -15,7 +15,7 @@ let inline randomStringByCharArray array length =
    if length = 0 then
       Random.singleton ""
    else
-      Random.transformBy makeString (Array.sampleWithReplacement length array)
+      Random.map makeString (Array.sampleWithReplacement length array)
 let getCharacters s =
    let e = StringInfo.GetTextElementEnumerator (s)
    seq { while e.MoveNext () do yield string e.Current } |> Seq.toArray
@@ -23,7 +23,7 @@ let inline randomStringByStringArray array length =
    if length = 0 then
       Random.singleton ""
    else
-      Random.transformBy (String.concat "") (Array.sampleWithReplacement length array)
+      Random.map (String.concat "") (Array.sampleWithReplacement length array)
 
 let randomByString (s:string) length = randomStringByStringArray (getCharacters s) length
 let randomAscii length = randomStringByCharArray ascii length

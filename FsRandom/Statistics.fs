@@ -136,7 +136,7 @@ module Standard =
             GeneratorFunction (gammaLarge shape)
 
    let exponential =
-      Random.transformBy minusLog ``(0, 1)``
+      Random.map minusLog ``(0, 1)``
 
    let weibull shape =
       ensuresFiniteValue shape "shape"
@@ -144,14 +144,14 @@ module Standard =
          outOfRange "shape" "`shape' must be positive."
       else
          let transform u = (-log u) ** (1.0 / shape)
-         Random.transformBy transform ``(0, 1)``
+         Random.map transform ``(0, 1)``
 
    let gumbel =
-      Random.transformBy (minusLog >> minusLog) ``(0, 1)``
+      Random.map (minusLog >> minusLog) ``(0, 1)``
 
    let cauchy =
       let transform u = tan (pi * (u - 0.5))
-      Random.transformBy transform ``(0, 1)``
+      Random.map transform ``(0, 1)``
       
 let uniform (min, max) =
    ensuresFiniteValue min "min"
@@ -172,7 +172,7 @@ let uniform (min, max) =
       else
          let length = max - min
          let transform u =  min + u * length
-         Random.transformBy transform ``[0, 1]``
+         Random.map transform ``[0, 1]``
 
 let loguniform (min, max) =
    ensuresFiniteValue min "min"
@@ -180,7 +180,7 @@ let loguniform (min, max) =
    if min <= 0.0 || min > max then
       outOfRange "min" "Invalid range."
    else
-      Random.transformBy exp (uniform (log min, log max))
+      Random.map exp (uniform (log min, log max))
 
 let triangular (min, max, mode) =
    ensuresFiniteValue min "min"
@@ -192,7 +192,7 @@ let triangular (min, max, mode) =
       let left u = min + sqrt ((u - min) * (mode - min))
       let right u = max - sqrt ((max - u) * (max - mode))
       let transform u = if u < mode then left u else right u
-      Random.transformBy transform (uniform (min, max))
+      Random.map transform (uniform (min, max))
 
 let normal (mean, sd) =
    ensuresFiniteValue mean "mean"
@@ -201,9 +201,9 @@ let normal (mean, sd) =
       outOfRange "sd" "`sd' must be positive."
    else
       let transform z = mean + z * sd
-      Random.transformBy transform Standard.normal
+      Random.map transform Standard.normal
 
-let lognormal p = Random.transformBy exp (normal p)
+let lognormal p = Random.map exp (normal p)
       
 let gamma (shape, scale) =
    ensuresFiniteValue shape "shape"
@@ -213,7 +213,7 @@ let gamma (shape, scale) =
    elif scale <= 0.0 then
       outOfRange "scale" "`scale' must be positive."
    else
-      Random.transformBy ((*) scale) (Standard.gamma (shape))
+      Random.map ((*) scale) (Standard.gamma (shape))
 
 let beta (alpha, beta) =
    ensuresFiniteValue alpha "alpha"
@@ -224,7 +224,7 @@ let beta (alpha, beta) =
       outOfRange "beta" "`beta' must be positive."
    else
       let transform y1 y2 = y1 / (y1 + y2)
-      Random.transformBy2 transform (Standard.gamma (alpha)) (Standard.gamma (beta))
+      Random.map2 transform (Standard.gamma (alpha)) (Standard.gamma (beta))
 
 let exponential rate =
    ensuresFiniteValue rate "rate"
@@ -232,14 +232,14 @@ let exponential rate =
       outOfRange "rate" "`rate' must be positive."
    else
       let transform t = t / rate
-      Random.transformBy transform Standard.exponential
+      Random.map transform Standard.exponential
 
 let weibull (shape, scale) =
    ensuresFiniteValue scale "scale"
    if scale <= 0.0 then
       outOfRange "scale" "`scale' must be positive."
    else
-      Random.transformBy ((*) scale) (Standard.weibull (shape))
+      Random.map ((*) scale) (Standard.weibull (shape))
 
 let gumbel (location, scale) =
    ensuresFiniteValue location "location"
@@ -248,7 +248,7 @@ let gumbel (location, scale) =
       outOfRange "scale" "`scale' must be positive."
    else
       let transform g = location + scale * g
-      Random.transformBy transform Standard.gumbel
+      Random.map transform Standard.gumbel
 
 let cauchy (location, scale) =
    ensuresFiniteValue location "location"
@@ -257,7 +257,7 @@ let cauchy (location, scale) =
       outOfRange "scale" "`scale' must be positive."
    else
       let transform c = location + c * scale
-      Random.transformBy transform Standard.cauchy
+      Random.map transform Standard.cauchy
 
 let chisquare df =
    if df <= 0 then
@@ -265,7 +265,7 @@ let chisquare df =
    else
       if df = 1 then
          let transform u y = 2.0 * y * u * u
-         Random.transformBy2 transform ``[0, 1)`` (gamma (1.5, 2.0))
+         Random.map2 transform ``[0, 1)`` (gamma (1.5, 2.0))
       else
          gamma (float df / 2.0, 2.0)
 
@@ -277,12 +277,12 @@ let t df =
          Standard.cauchy
       elif df = 2 then
          let transform z w = z / sqrt w
-         Random.transformBy2 transform Standard.normal Standard.exponential
+         Random.map2 transform Standard.normal Standard.exponential
       else
          let r = float df / 2.0
          let d = sqrt r
          let transform z w = d * z / sqrt w
-         Random.transformBy2 transform Standard.normal (Standard.gamma (r))
+         Random.map2 transform Standard.normal (Standard.gamma (r))
 
 let vonMises (mu, kappa) =
    if mu < -pi || pi <= mu then
@@ -314,7 +314,7 @@ let uniformDiscrete (min, max) =
    else
       let range = float <| int64 max - int64 min + 1L
       let transform u = min + int (u * range)
-      Random.transformBy transform ``[0, 1)``
+      Random.map transform ``[0, 1)``
 
 let poisson lambda =
    ensuresFiniteValue lambda "lambda"
@@ -361,7 +361,7 @@ let geometric0 probability =
          let u, s' = Random.next ``(0, 1)`` s0
          Random.next (poisson (log u * q)) s'
       )
-let geometric1 probability = Random.transformBy ((+) 1) (geometric0 probability)
+let geometric1 probability = Random.map ((+) 1) (geometric0 probability)
 
 let bernoulli probability =
    ensuresFiniteValue probability "probability"
@@ -369,7 +369,7 @@ let bernoulli probability =
       outOfRange "probability" "`probability' must be in the range of (0, 1)."
    else
       let transform u = if u <= probability then 1 else 0
-      Random.transformBy transform ``[0, 1]``
+      Random.map transform ``[0, 1]``
 
 let binomial (n, probability) =
    ensuresFiniteValue probability "probability"
@@ -440,7 +440,7 @@ let multinormal (mu, sigma) =
          let mu = Array.copy mu  // Modification of mu outside affects the transformation
          let standard = Array.randomCreate n Standard.normal
          let transform = Matrix.multiplyVector q >> Vector.add mu
-         Random.transformBy transform standard
+         Random.map transform standard
 
 let wishart (df, sigma) =
    if Array2D.length1 sigma > df || Array2D.length2 sigma > df then

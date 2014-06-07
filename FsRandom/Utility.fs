@@ -16,7 +16,7 @@ let flipCoin probability =
       outOfRange "probability" "`probability' must be in the range of [0, 1]."
    else
       let transform u = u < probability
-      Random.transformBy transform ``[0, 1)``
+      Random.map transform ``[0, 1)``
 
 let choose m n =
    if m <= 0 then
@@ -46,4 +46,4 @@ let chooseOne n =
       outOfRange "upper" "`upper' must be positive."
    else
       let n = float n
-      Random.transformBy (fun u -> int (u * n)) ``[0, 1)``
+      Random.map (fun u -> int (u * n)) ``[0, 1)``
