@@ -4,7 +4,7 @@ open FsUnit
 open NUnit.Framework
 
 [<Test>]
-let ``Validates randomCreate`` () =
+let ``Validates Array2D.randomCreate`` () =
    let tester = getDefaultTester ()
    let expected =
       Random.get
@@ -23,7 +23,7 @@ let ``Validates randomCreate`` () =
    actual |> should equal expected
 
 [<Test>]
-let ``Validates randomCreateBased`` () =
+let ``Validates Array2D.randomCreateBased`` () =
    let tester = getDefaultTester ()
    let expected =
       Random.get
@@ -42,7 +42,7 @@ let ``Validates randomCreateBased`` () =
    actual |> should equal expected
 
 [<Test>]
-let ``Validates randomInit`` () =
+let ``Validates Array2D.randomInit`` () =
    let tester = getDefaultTester ()
    let f i j u = float i + float j * u
    let expected =
@@ -65,7 +65,7 @@ let ``Validates randomInit`` () =
    actual |> should equal expected
 
 [<Test>]
-let ``Validates randomInitBased`` () =
+let ``Validates Array2D.randomInitBased`` () =
    let tester = getDefaultTester ()
    let f i j u = float i + float j * u
    let expected =

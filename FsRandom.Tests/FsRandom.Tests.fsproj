@@ -48,6 +48,7 @@
     <Compile Include="RandomTest.fs" />
     <Compile Include="ArrayTest.fs" />
     <Compile Include="Array2DTest.fs" />
+    <Compile Include="ListTest.fs" />
     <Compile Include="StatisticsTest.fs" />
     <Compile Include="StringTest.fs" />
     <Compile Include="UtilityTest.fs" />

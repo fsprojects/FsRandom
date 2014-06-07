@@ -50,6 +50,8 @@
     <Compile Include="Array.fs" />
     <Compile Include="Array2D.fsi" />
     <Compile Include="Array2D.fs" />
+    <Compile Include="List.fsi" />
+    <Compile Include="List.fs" />
     <Compile Include="Statistics.fsi" />
     <Compile Include="Statistics.fs" />
     <Compile Include="String.fsi" />
