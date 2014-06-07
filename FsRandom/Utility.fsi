@@ -4,6 +4,14 @@
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module FsRandom.Utility
 
+/// <summary>
+/// Provides a default random state.
+/// </summary>
+val defaultState : PrngState
+/// <summary>
+/// Creates a random random state.
+/// </summary>
+val createRandomState : unit -> PrngState
 
 /// <summary>
 /// Returns +1 or -1 randomly.

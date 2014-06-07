@@ -1,7 +1,15 @@
 ﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module FsRandom.Utility
 
+open System
 open Microsoft.FSharp.Core.LanguagePrimitives
+
+let defaultState = createState xorshift (123456789u, 362436069u, 521288629u, 88675123u)
+let createRandomState () =
+   let guid = Guid.NewGuid ()
+   let bytes = guid.ToByteArray ()
+   let seed = Array.init 4 (fun i -> BitConverter.ToUInt32 (bytes, i * 4))
+   createState xorshift (seed.[0], seed.[1], seed.[2], seed.[3])
 
 let inline randomSign () =
    let inline g s0 =
