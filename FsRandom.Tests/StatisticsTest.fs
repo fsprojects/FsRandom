@@ -183,7 +183,7 @@ let ``Validates chisquare`` () =
 let ``Validates t`` () =
    let engine = getREngine ()
    use samples =
-      let samples = getSamples (t (3))
+      let samples = getSamples (studentT (3))
       engine.CreateNumericVector (samples)
    engine.SetSymbol ("x", samples)
    engine.Evaluate ("""ks.test(x, "pt", df=3)""")

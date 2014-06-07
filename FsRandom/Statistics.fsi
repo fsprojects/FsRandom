@@ -79,6 +79,15 @@ val chisquare : degreeOfFreedom:int -> GeneratorFunction<float>
 /// Returns a random number distributed Student-t.
 /// </summary>
 /// <param name="degreeOfFreedom">The degree of freedom.</param>
+val studentT : degreeOfFreedom:int -> GeneratorFunction<float>
+/// <summary>
+/// Returns a random number distributed Student-t.
+/// </summary>
+/// <remarks>
+/// This is a synonym for <see cref="studentT" />
+/// </remarks>
+/// <param name="degreeOfFreedom">The degree of freedom.</param>
+[<System.Obsolete("Will be removed. Use studentT instead.")>]
 val t : degreeOfFreedom:int -> GeneratorFunction<float>
 /// <summary>
 /// Returns a random number distributed von Mises.

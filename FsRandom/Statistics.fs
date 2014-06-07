@@ -269,7 +269,7 @@ let chisquare df =
       else
          gamma (float df / 2.0, 2.0)
 
-let t df =
+let studentT df =
    if df <= 0 then
       outOfRange "degreeOfFreedom" "`degreeOfFreedom' must be positive."
    else
@@ -283,6 +283,7 @@ let t df =
          let d = sqrt r
          let transform z w = d * z / sqrt w
          Random.map2 transform Standard.normal (Standard.gamma (r))
+let t df = studentT df
 
 let vonMises (mu, kappa) =
    if mu < -pi || pi <= mu then
