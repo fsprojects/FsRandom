@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Namespaces - FsRandom</title>
+    <title>List - FsRandom</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="RecycleBin">
@@ -30,98 +30,53 @@
         <div class="span9" id="main">
           
 
-<h1>FsRandom</h1>
 
-  <h2>FsRandom Namespace</h2>
-  <div>
-      <table class="table table-bordered module-list">
+
+<h1>List</h1>
+<div class="xmldoc">
+<p>Provides basic operations on lists.</p>
+</div>
+
+<!-- Render nested types and modules, if there are any -->
+
+  <h3>Functions and values</h3>
+  <table class="table table-bordered member-list">
     <thead>
-      <tr><td>Module</td><td>Description</td></tr>
+      <tr><td>Function or value</td><td>Description</td></tr>
     </thead>
     <tbody>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-arraymodule.html">Array</a>
-          </td>
-          <td class="xmldoc"><p>Provides basic operations on arrays.</p>
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-array2dmodule.html">Array2D</a>
-          </td>
-          <td class="xmldoc"><p>Provides basic operations on 2-dimensional arrays.</p>
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-listmodule.html">List</a>
-          </td>
-          <td class="xmldoc"><p>Provides basic operations on lists.</p>
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-mersennetwister.html">MersenneTwister</a>
-          </td>
-          <td class="xmldoc"><p>Implements Mersenne Twister 64-bit version.
-See <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html</a> for details.</p>
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-randommodule.html">Random</a>
-          </td>
-          <td class="xmldoc"><p>Provides basic operations on generator functions.</p>
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-randomnumbergenerator.html">RandomNumberGenerator</a>
-          </td>
-          <td class="xmldoc"><p>Provides the core random classes and the primitive random number generators.</p>
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-seqmodule.html">Seq</a>
-          </td>
-          <td class="xmldoc"><p>Generates sequences for generator functions.</p>
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-simdorientedfastmersennetwister.html">SimdOrientedFastMersenneTwister</a>
-          </td>
-          <td class="xmldoc"><p>Implements SIMD-Oriented Fast Mersenne Twister.
-See <a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/index.html">http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/index.html</a> for details.</p>
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-statisticsmodule.html">Statistics</a>
-          </td>
-          <td class="xmldoc"><p>Provides generator functions related to statistical random distributions.</p>
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-stringmodule.html">String</a>
-          </td>
-          <td class="xmldoc"><p>Provides basic operations on strings.</p>
-</td>
-        </tr>
-        <tr>
-          <td class="module-name">
-            <a href="fsrandom-utilitymodule.html">Utility</a>
-          </td>
-          <td class="xmldoc"><p>Provides utility functions.</p>
-</td>
-        </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '2', 2)" onmouseover="showTip(event, '2', 2)">
+            randomCreate(count generator)
+          </code>
+          <div class="tip" id="2">
+            <strong>Signature:</strong> count:int -&gt; generator:GeneratorFunction&lt;&#39;a&gt; -&gt; GeneratorFunction&lt;&#39;a list&gt;<br />
+                          <strong>Type parameters:</strong> 'a          </div>
+        </td>
+        <td class="xmldoc">
+        <p>Creates a list whose elements are randomly generated.</p>
+
+        </td>
+      </tr>
+      <tr>
+        <td class="member-name">
+
+          <code onmouseout="hideTip(event, '7', 7)" onmouseover="showTip(event, '7', 7)">
+            randomInit(count initializer)
+          </code>
+          <div class="tip" id="7">
+            <strong>Signature:</strong> count:int -&gt; initializer:(int -&gt; GeneratorFunction&lt;&#39;a&gt;) -&gt; GeneratorFunction&lt;&#39;a list&gt;<br />
+                          <strong>Type parameters:</strong> 'a          </div>
+        </td>
+        <td class="xmldoc">
+        <p>Creates a list whose elements are randomly generated.</p>
+
+        </td>
+      </tr>
     </tbody>
   </table>
-
-  </div>
 
         </div>
         <div class="span3">
