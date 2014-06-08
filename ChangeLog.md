@@ -1,6 +1,14 @@
 FsRandom ChangeLog
 ==================
 
+Version 1.2.3
+-------------
+
+* Add utility random state (#61).
+* Add List module (#70).
+* Add or rename functions (#66, #68, #69).
+* Fix a bug (#65).
+
 Version 1.2.2
 -------------
 
