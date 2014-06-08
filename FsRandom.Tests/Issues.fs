@@ -10,13 +10,13 @@ open FsUnit
 [<Test>]
 [<Category("Issue #17")>]
 let ``flipCoin can accept 0`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    Random.get (flipCoin 0.0) tester |> ignore
 
 [<Test>]
 [<Category("Issue #17")>]
 let ``flipCoin can accept 1`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    Random.get (flipCoin 1.0) tester |> ignore
    
 [<Test>]
@@ -39,17 +39,17 @@ let ``multinormal (mu, _) is affected by modification of mu`` () =
    let mu = [|0.0; 0.0|]
    let sigma = Array2D.init 2 2 (fun i j -> if i = j then 1.0 else 0.7)
    let m = multinormal (mu, sigma)
-   let sample = Random.get m (getDefaultTester ())
+   let sample = Random.get m Utility.defaultState
    sample.[0] |> should be (lessThan 50.0)
    mu.[0] <- 100.0
-   let sample = Random.get m (getDefaultTester ())
+   let sample = Random.get m Utility.defaultState
    sample.[0] |> should be (lessThan 50.0)
 
 [<Test>]
 [<Category("Issue #65")>]
 let ``String.randomByString breaks surrogate pairs`` () =
    let s = "𠮷野家"  // the first character is a surrogate pair character
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let actual =
       let r = Random.get (String.randomByString s 100) tester
       StringInfo (r)

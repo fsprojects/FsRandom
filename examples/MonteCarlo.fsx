@@ -19,7 +19,7 @@ let randomPointGenerator = random {
 // the weight is 4 (because random points are distributed on [-1, 1] x [-1, 1]).
 let weight (x, y) = if x * x + y * y <= 1.0 then 4.0 else 0.0
 // Function to generate a sequence
-let values = Seq.ofRandom (Random.transformBy weight randomPointGenerator)
+let values = Seq.ofRandom (Random.map weight randomPointGenerator)
 
 // Monte Carlo integration
 // Generates 1,000,000 random values and the average becomes estimator of pi

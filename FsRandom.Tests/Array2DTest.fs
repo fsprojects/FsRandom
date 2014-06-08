@@ -5,7 +5,7 @@ open NUnit.Framework
 
 [<Test>]
 let ``Validates Array2D.randomCreate`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected =
       Random.get
       <| random {
@@ -24,7 +24,7 @@ let ``Validates Array2D.randomCreate`` () =
 
 [<Test>]
 let ``Validates Array2D.randomCreateBased`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected =
       Random.get
       <| random {
@@ -43,7 +43,7 @@ let ``Validates Array2D.randomCreateBased`` () =
 
 [<Test>]
 let ``Validates Array2D.randomInit`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let f i j u = float i + float j * u
    let expected =
       Random.get
@@ -58,7 +58,7 @@ let ``Validates Array2D.randomInit`` () =
       <| tester
    let actual =
       Random.get
-      <| Array2D.randomInit 3 2 (fun i j -> Random.transformBy (f i j) ``[0, 1)``)
+      <| Array2D.randomInit 3 2 (fun i j -> Random.map (f i j) ``[0, 1)``)
       <| tester
    actual.GetLength (0) |> should equal 3
    actual.GetLength (1) |> should equal 2
@@ -66,7 +66,7 @@ let ``Validates Array2D.randomInit`` () =
 
 [<Test>]
 let ``Validates Array2D.randomInitBased`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let f i j u = float i + float j * u
    let expected =
       Random.get
@@ -81,7 +81,7 @@ let ``Validates Array2D.randomInitBased`` () =
       <| tester
    let actual =
       Random.get
-      <| Array2D.randomInitBased 4 1 3 2 (fun i j -> Random.transformBy (f i j) ``[0, 1)``)
+      <| Array2D.randomInitBased 4 1 3 2 (fun i j -> Random.map (f i j) ``[0, 1)``)
       <| tester
    actual.GetLength (0) |> should equal 3
    actual.GetLength (1) |> should equal 2

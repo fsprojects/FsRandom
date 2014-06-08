@@ -25,7 +25,7 @@ let inline transformBy f generator = map f generator
 let inline transformBy2 f g1 g2 = map2 f g1 g2
 let inline transformBy3 f g1 g2 g3 = map3 f g1 g2 g3
 
-let inline zip g1 g2 = transformBy2 tuple g1 g2
-let inline zip3 g1 g2 g3 = transformBy3 tuple3 g1 g2 g3
-let inline merge gs = List.foldBack (transformBy2 cons) gs (returnRandom [])
-let inline mergeWith f gs = merge gs |> transformBy f
+let inline zip g1 g2 = map2 tuple g1 g2
+let inline zip3 g1 g2 g3 = map3 tuple3 g1 g2 g3
+let inline merge gs = List.foldBack (map2 cons) gs (returnRandom [])
+let inline mergeWith f gs = merge gs |> map f

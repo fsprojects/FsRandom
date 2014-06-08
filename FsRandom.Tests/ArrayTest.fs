@@ -5,7 +5,7 @@ open NUnit.Framework
 
 [<Test>]
 let ``Validates Array.randomCreate`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected =
       Random.get
       <| random {
@@ -22,7 +22,7 @@ let ``Validates Array.randomCreate`` () =
 
 [<Test>]
 let ``Validates Array.randomInit`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected =
       Random.get
       <| random {
@@ -39,7 +39,7 @@ let ``Validates Array.randomInit`` () =
 
 [<Test>]
 let ``Validates Array.randomFill`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected =
       Random.get
       <| random {
@@ -57,7 +57,7 @@ let ``Validates Array.randomFill`` () =
 [<Test>]
 let ``Validates Array.sample`` () =
    let array = Array.init 10 id
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let result, next = Random.next (Array.sample 8 array) tester
    Assert.That (next, Is.Not.EqualTo(tester))
    Assert.That (Array.length result, Is.EqualTo(8))
@@ -68,7 +68,7 @@ let ``Validates Array.sample`` () =
 let ``Validates Array.weightedSample`` () =
    let array = Array.init 10 id
    let weight = Array.init (Array.length array) (id >> float >> ((+) 1.0))
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let result, next = Random.next (Array.weightedSample 8 weight array) tester
    Assert.That (next, Is.Not.EqualTo(tester))
    Assert.That (Array.length result, Is.EqualTo(8))
@@ -78,7 +78,7 @@ let ``Validates Array.weightedSample`` () =
 [<Test>]
 let ``Validates Array.sampleWithReplacement`` () =
    let array = Array.init 5 id
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let result, next = Random.next (Array.sampleWithReplacement 8 array) tester
    Assert.That (next, Is.Not.EqualTo(tester))
    Assert.That (Array.length result, Is.EqualTo(8))
@@ -89,7 +89,7 @@ let ``Validates Array.sampleWithReplacement`` () =
 let ``Validates Array.weightedSampleWithReplacement`` () =
    let array = Array.init 5 id
    let weight = Array.init (Array.length array) (id >> float >> ((+) 1.0))
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let result, next = Random.next (Array.weightedSampleWithReplacement 8 weight array) tester
    Assert.That (next, Is.Not.EqualTo(tester))
    Assert.That (Array.length result, Is.EqualTo(8))
@@ -98,7 +98,7 @@ let ``Validates Array.weightedSampleWithReplacement`` () =
 
 [<Test>]
 let ``Validates Array.shuffle`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let array = Array.init 8 id
    let result, next = Random.next (Array.shuffle array) tester
    Assert.That (next, Is.Not.EqualTo(tester))
@@ -109,10 +109,9 @@ let ``Validates Array.shuffle`` () =
 
 [<Test>]
 let ``Validates Array.shuffleInPlace`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let array = Array.init 8 id
    let copied = Array.copy array
    let _, next = Random.next (Array.shuffleInPlace array) tester
-   Assert.That (next, Is.Not.EqualTo(seed))
    Assert.That (Array.zip copied array |> Array.forall (fun (x, y) -> x = y), Is.False)
    Assert.That (Array.sort array, Is.EquivalentTo(copied))

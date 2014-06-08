@@ -70,12 +70,12 @@ Transforming Random Numbers
 ---------------------------
 
 Transformation of random numbers is a regular work.
-FsRandom defines `Random.transformBy` function for the purpose.
+FsRandom defines `Random.map` function for the purpose.
 The following code shows how to use it.
 *)
 
 let plusOne x = x + 1.0
-Random.transformBy plusOne <| Statistics.uniform (0.0, 1.0)
+Random.map plusOne <| Statistics.uniform (0.0, 1.0)
 |> Random.get
 <| state
 

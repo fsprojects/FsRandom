@@ -5,28 +5,28 @@ open NUnit.Framework
 
 [<Test>]
 let ``Validates singleton`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    Random.get (Random.singleton 42) tester |> should equal 42
    Random.get (Random.singleton "foo") tester |> should equal "foo"
 
 [<Test>]
 let ``Validates identity`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected = Random.get ``[0, 1)`` tester
    let actual = Random.get (Random.identity ``[0, 1)``) tester
    actual |> should equal expected
 
 [<Test>]
 let ``Validates transformBy`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let f = (+) 1.0
    let expected = Random.get ``[0, 1)`` tester |> f
-   let actual = Random.get (Random.transformBy f ``[0, 1)``) tester
+   let actual = Random.get (Random.map f ``[0, 1)``) tester
    actual |> should equal expected
 
 [<Test>]
 let ``Validates transformBy2`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let f x y = 2.0 * x - y
    let expected =
       Random.get
@@ -36,12 +36,12 @@ let ``Validates transformBy2`` () =
          return f u1 u2
       }
       <| tester
-   let actual = Random.get (Random.transformBy2 f ``[0, 1)`` ``[0, 1)``) tester
+   let actual = Random.get (Random.map2 f ``[0, 1)`` ``[0, 1)``) tester
    actual |> should equal expected
 
 [<Test>]
 let ``Validates zip`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected =
       Random.get
       <| random {
@@ -55,7 +55,7 @@ let ``Validates zip`` () =
 
 [<Test>]
 let ``Validates zip3`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected =
       Random.get
       <| random {
@@ -70,7 +70,7 @@ let ``Validates zip3`` () =
 
 [<Test>]
 let ``Validates merge`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected =
       Random.get
       <| random {
@@ -85,7 +85,7 @@ let ``Validates merge`` () =
 
 [<Test>]
 let ``Validates mergeWith`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let f = List.reduce (+)
    let expected =
       Random.get

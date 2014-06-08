@@ -6,7 +6,7 @@ open NUnit.Framework
 
 [<Test>]
 let ``Validates randomByString`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let actual = Random.get (String.randomByString "FsRandom" 1000) tester
    String.length actual |> should equal 1000
    let actual = List.ofSeq actual
@@ -23,13 +23,13 @@ let ``Validates randomByString`` () =
 
 [<Test>]
 let ``randomByString _ 0 generates empty string`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let actual = Random.get (String.randomByString "" 0) tester
    actual |> should be EmptyString
 
 [<Test>]
 let ``Validates randomAscii`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let actual = Random.get (String.randomAscii 1000) tester
    String.length actual |> should equal 1000
    actual |> String.forall (fun c -> int c < 128) |> should be True
@@ -38,7 +38,7 @@ let ``Validates randomAscii`` () =
 
 [<Test>]
 let ``Validates randomNumeric`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let actual = Random.get (String.randomNumeric 1000) tester
    String.length actual |> should equal 1000
    actual
@@ -47,7 +47,7 @@ let ``Validates randomNumeric`` () =
 
 [<Test>]
 let ``Validates randomAlphabet`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let actual = Random.get (String.randomAlphabet 1000) tester
    String.length actual |> should equal 1000
    actual
@@ -56,7 +56,7 @@ let ``Validates randomAlphabet`` () =
 
 [<Test>]
 let ``Validates randomAlphanumeric`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let actual = Random.get (String.randomAlphanumeric 1000) tester
    String.length actual |> should equal 1000
    actual
@@ -65,7 +65,7 @@ let ``Validates randomAlphanumeric`` () =
 
 [<Test>]
 let ``Validates randomConcat`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let suffix = ".png"
    let generators = [String.randomByString "AB" 3; String.randomNumeric 5; Random.singleton suffix]
    let actual = Random.get (String.randomConcat "x" generators) tester

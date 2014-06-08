@@ -5,7 +5,7 @@ open NUnit.Framework
 
 [<Test>]
 let ``Validates List.randomCreate`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected =
       Random.get
       <| random {
@@ -21,7 +21,7 @@ let ``Validates List.randomCreate`` () =
 
 [<Test>]
 let ``Validates List.randomInit`` () =
-   let tester = getDefaultTester ()
+   let tester = Utility.defaultState
    let expected =
       Random.get
       <| random {

@@ -7,7 +7,7 @@ open RDotNet
 
 let p = 0.01
 let n = 5000
-let getSamples g = Seq.ofRandom g (getDefaultTester ()) |> Seq.take n |> Seq.toArray
+let getSamples g = Seq.ofRandom g Utility.defaultState |> Seq.take n |> Seq.toArray
 
 [<TearDown>]
 let tearDown () =
@@ -180,7 +180,7 @@ let ``Validates chisquare`` () =
    |> should be (greaterThan p)
 
 [<Test>]
-let ``Validates t`` () =
+let ``Validates studentT`` () =
    let engine = getREngine ()
    use samples =
       let samples = getSamples (studentT (3))
@@ -321,12 +321,12 @@ let ``Validates binomial`` () =
 // TODO: implement
 //[<Test>]
 //let ``Validates dirichlet`` () =
-//   testDirichlet (getDefaultTester ()) [1.0; 2.0; 2.5; 0.5]
+//   testDirichlet Utility.defaultState [1.0; 2.0; 2.5; 0.5]
 //
 // TODO: implement
 //[<Test>]
 //let ``Validates multinomial`` () =
-//   testMultinomial (getDefaultTester ()) [1.0; 2.0; 2.5; 0.5]
+//   testMultinomial Utility.defaultState [1.0; 2.0; 2.5; 0.5]
 
 [<Test>]
 let ``wishart returns positive and positive semidefinite matrices`` () =
@@ -341,7 +341,7 @@ let ``wishart returns positive and positive semidefinite matrices`` () =
          | _ -> failwith "never"
       )
    let samples =
-      Seq.ofRandom (wishart (4, sigma)) (getDefaultTester ())
+      Seq.ofRandom (wishart (4, sigma)) Utility.defaultState
       |> Seq.take 1000
       |> Seq.toList
    samples

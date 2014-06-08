@@ -46,7 +46,7 @@ adjusts the average of total score to become \\(\pi\\).
 *)
 
 let weight (x, y) = if x * x + y * y <= 1.0 then 4.0 else 0.0
-let randomScoreGenerator = Random.transformBy weight randomPointGenerator
+let randomScoreGenerator = Random.map weight randomPointGenerator
 
 (**
 The average of the random scores approximates \\(\pi\\).
