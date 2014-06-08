@@ -80,6 +80,7 @@ FsRandom provides a variety of random number generator functions:
 * **Statistics module** provides a variety of statistical distributions such like `uniform`, `normal` and `gamma`.
 * **Seq module** provides functions for generating random number sequences.
 * **Array module** and **Array2D module** provide functions for array operations like `createRandom`, `sample`, `sampleWithReplacement`, and `shuffle`.
+* **List module** provides functions for generating random lists.
 * **String module** provides functions for generating random strings.
 * **Utility module** provides utility functions.
 

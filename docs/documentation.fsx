@@ -35,6 +35,13 @@ let seed = 123456789u, 362436069u, 521288629u, 88675123u
 let state = createState xorshift seed
 
 (**
+FsRandom also provides a default random state and a method to create a random state randomly for ease of use:
+*)
+
+Utility.defaultState
+Utility.createRandomState ()
+
+(**
 Now you can retrieve a random number using `Random.get` function.
 *)
 
