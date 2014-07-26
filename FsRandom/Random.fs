@@ -1,6 +1,7 @@
 ﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module FsRandom.Random
 
+let inline bind f m = bindRandom m f
 let inline next generator s = runRandom generator s
 let inline get generator s = evaluateRandom generator s
 

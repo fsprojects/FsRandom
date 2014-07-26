@@ -8,7 +8,7 @@ let ``Satisfies monad law 1 (left identity)`` () =
    let tester = Utility.defaultState
    let a = 1.0
    let f x = Random.map ((+) x) ``[0, 1)``
-   let l = random.Bind (random.Return (a), f) |> Random.get <| tester
+   let l = Random.bind f (random.Return (a)) |> Random.get <| tester
    let r = f a |> Random.get <| tester
    r |> should equal l
 
@@ -16,7 +16,7 @@ let ``Satisfies monad law 1 (left identity)`` () =
 let ``Satisfies monad law 2 (right identity)`` () =
    let tester = Utility.defaultState
    let m = ``[0, 1)``
-   let l = random.Bind (m, random.Return) |> Random.get <| tester
+   let l = Random.bind random.Return m |> Random.get <| tester
    let r = m |> Random.get <| tester
    r |> should equal l
 
@@ -26,8 +26,8 @@ let ``Satisfies monad law 3 (associativity)`` () =
    let m = ``[0, 1)``
    let f x = Random.map ((+) x) ``[0, 1)``
    let g x = Random.map (fun t -> t - x) ``[0, 1)``
-   let l = random.Bind (random.Bind (m, f), g) |> Random.get <| tester
-   let r = random.Bind (m, fun y -> random.Bind (f y, g)) |> Random.get <| tester
+   let l = Random.bind g (Random.bind f m) |> Random.get <| tester
+   let r = Random.bind (fun y -> Random.bind g (f y)) m |> Random.get <| tester
    r |> should equal l
 
 [<Test>]

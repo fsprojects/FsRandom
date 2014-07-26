@@ -6,6 +6,10 @@
 module FsRandom.Random
 
 /// <summary>
+/// Invokes a function on a random function.
+/// </summary>
+val inline bind : binder:('a -> GeneratorFunction<'b>) -> generator:GeneratorFunction<'a> -> GeneratorFunction<'b>
+/// <summary>
 /// Generates a random number with the next random state.
 /// </summary>
 val inline next : generator:GeneratorFunction<'a> -> PrngState -> 'a * PrngState
