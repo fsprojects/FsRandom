@@ -31,6 +31,102 @@ let ``Satisfies monad law 3 (associativity)`` () =
    r |> should equal l
 
 [<Test>]
+let ``Can use if-else expression in random computation expression (true)`` () =
+   let actual =
+      Random.get
+      <| random {
+         let u = ref 0uL
+         let! x = rawBits
+         if true then
+            u := x
+         else
+            u := x >>> 1
+         return !u
+      }
+      <| Utility.defaultState
+   let expected = Random.get rawBits Utility.defaultState
+   actual |> should equal expected
+
+[<Test>]
+let ``Can use if-else expression in random computation expression (false)`` () =
+   let actual =
+      Random.get
+      <| random {
+         let u = ref 0uL
+         let! x = rawBits
+         if false then
+            u := x
+         else
+            u := x >>> 1
+         return !u
+      }
+      <| Utility.defaultState
+   let expected = Random.get <| Random.map (fun u -> u >>> 1) rawBits <| Utility.defaultState
+   actual |> should equal expected
+
+[<Test>]
+let ``Can use if without else expression in random computation expression`` () =
+   let actual =
+      Random.get
+      <| random {
+         let u = ref -1.0
+         if false then
+            let! x = ``[0, 1)``
+            u := x
+         return !u
+      }
+      <| Utility.defaultState
+   actual |> should equal -1.0
+
+[<Test>]
+let ``Can use while-do expression in random computation expression`` () =
+   let actual =
+      Random.get
+      <| random {
+         let r = ref []
+         let i = ref 0
+         while !i < 3 do
+            let! x = rawBits
+            r := x :: !r
+            incr i
+         return !r
+      }
+      <| Utility.defaultState
+   let expected =
+      Random.get
+      <| random {
+         let! x = rawBits
+         let! y = rawBits
+         let! z = rawBits
+         return [z; y; x]
+      }
+      <| Utility.defaultState
+   actual |> should equal expected
+
+[<Test>]
+let ``Can use for-do expression in random computation expression`` () =
+   let actual =
+      Random.get
+      <| random {
+         let r = ref []
+         for i = 0 to 2 do
+            let! x = rawBits
+            r := x :: !r
+         return !r
+      }
+      <| Utility.defaultState
+   let expected =
+      Random.get
+      <| random {
+         let! x = rawBits
+         let! y = rawBits
+         let! z = rawBits
+         return [z; y; x]
+      }
+      <| Utility.defaultState
+   actual |> should equal expected
+
+[<Test>]
 let ``Can use try-with expression in random computation expression`` () =
    Random.get
    <| random {

@@ -29,11 +29,11 @@ type RandomBuilder () =
    member this.Combine (a, b) = a &>> b
    member this.Return (x) = returnRandom x
    member this.ReturnFrom (m : GeneratorFunction<_>) = m
-   member this.Zero () = GeneratorFunction (fun s -> (), s)
+   member this.Zero () = GeneratorFunction (fun s -> Unchecked.defaultof<_>, s)
    member this.Delay (f) = returnRandom () |>> f
-   member this.While (condition, m) =
+   member this.While (condition, m:GeneratorFunction<'a>) : GeneratorFunction<'a> =
       if condition () then
-         m |>> (fun () -> this.While (condition, m))
+         m |>> (fun _ -> this.While (condition, m))
       else
          this.Zero ()
    member this.For (source : seq<'a>, f) =

@@ -41,10 +41,10 @@ type RandomBuilder =
    member Combine : a:GeneratorFunction<'a> * b:GeneratorFunction<'b> -> GeneratorFunction<'b>
    member Return : a:'a -> GeneratorFunction<'a>
    member ReturnFrom : m:GeneratorFunction<'a> -> GeneratorFunction<'a>
-   member Zero : unit -> GeneratorFunction<unit>
+   member Zero : unit -> GeneratorFunction<'a>
    member Delay : (unit -> GeneratorFunction<'a>) -> GeneratorFunction<'a>
-   member While : condition:(unit -> bool) * m:GeneratorFunction<unit> -> GeneratorFunction<unit>
-   member For : source:seq<'a> * f:('a -> GeneratorFunction<unit>) -> GeneratorFunction<unit>
+   member While : condition:(unit -> bool) * m:GeneratorFunction<'a> -> GeneratorFunction<'a>
+   member For : source:seq<'a> * f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b>
    member TryFinally : m:GeneratorFunction<'a> * finalizer:(unit -> unit) -> GeneratorFunction<'a>
    member TryWith : m:GeneratorFunction<'a> * handler:(exn -> GeneratorFunction<'a>) -> GeneratorFunction<'a>
    member Using : a:'a * f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b> when 'a :> IDisposable
