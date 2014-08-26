@@ -8,6 +8,7 @@ let swap i j (array:'a []) =
    array.[i] <- array.[j]
    array.[j] <- temp
 
+[<CompiledName("RandomCreate")>]
 let randomCreate count generator =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
@@ -22,6 +23,7 @@ let randomCreate count generator =
          result, s0
       )
 
+[<CompiledName("RandomInitialize")>]
 let randomInit count initializer =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
@@ -36,6 +38,7 @@ let randomInit count initializer =
          result, s0
       )
 
+[<CompiledName("RandomFill")>]
 let randomFill (array:'a []) targetIndex count generator =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
@@ -49,6 +52,7 @@ let randomFill (array:'a []) targetIndex count generator =
          (), s0
       )
 
+[<CompiledName("ShuffleInPlace")>]
 let shuffleInPlace array =
    GeneratorFunction (fun s0 ->
       let mutable s0 = s0
@@ -60,6 +64,7 @@ let shuffleInPlace array =
       (), s0
    )
 
+[<CompiledName("Shuffle")>]
 let shuffle array =
    GeneratorFunction (fun s0 ->
       let copiedArray = Array.copy array
@@ -67,6 +72,7 @@ let shuffle array =
       copiedArray, s'
    )
 
+[<CompiledName("Sample")>]
 let sample n source =
    let size = Array.length source
    if n < 0 || size < n then
@@ -87,6 +93,7 @@ let sample n source =
          result, s0
       )
 
+[<CompiledName("WeightedSample")>]
 let weightedSample n weight source =
    let size = Array.length source
    if n < 0 || size < n then
@@ -124,6 +131,7 @@ let weightedSample n weight source =
          !result |> (BinarySearchTree.toList >> List.map snd >> List.toArray), !s
       )
 
+[<CompiledName("SampleWithReplacement")>]
 let sampleWithReplacement n source =
    let size = Array.length source
    if n < 0 then
@@ -142,6 +150,7 @@ let sampleWithReplacement n source =
          result, s0
       )
 
+[<CompiledName("WeightedSampleWithReplacement")>]
 let weightedSampleWithReplacement n weight source =
    let size = Array.length source
    if n < 0 then

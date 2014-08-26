@@ -3,6 +3,7 @@ module FsRandom.Array2D
 
 open System
 
+[<CompiledName("RandomCreate")>]
 let randomCreate rowCount columnCount generator =
    if rowCount < 0 then
       outOfRange "rowCount" "`rowCount' must not be negative."
@@ -20,6 +21,7 @@ let randomCreate rowCount columnCount generator =
          result, s0
       )
 
+[<CompiledName("RandomCreateBased")>]
 let randomCreateBased rowBase columnBase rowCount columnCount generator =
    if rowCount < 0 then
       outOfRange "rowCount" "`rowCount' must not be negative."
@@ -37,6 +39,7 @@ let randomCreateBased rowBase columnBase rowCount columnCount generator =
          result, s0
       )
 
+[<CompiledName("RandomInitialize")>]
 let randomInit rowCount columnCount initializer =
    if rowCount < 0 then
       outOfRange "rowCount" "`rowCount' must not be negative."
@@ -55,6 +58,7 @@ let randomInit rowCount columnCount initializer =
          result, s0
       )
 
+[<CompiledName("RandomInitializeBased")>]
 let randomInitBased rowBase columnBase rowCount columnCount initializer =
    if rowCount < 0 then
       outOfRange "rowCount" "`rowCount' must not be negative."

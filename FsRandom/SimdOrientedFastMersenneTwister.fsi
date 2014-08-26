@@ -82,4 +82,5 @@ type StateVector =
 /// <remarks>
 /// SIMD is not supported.
 /// </remarks>
+[<CompiledName("SfmtPrng")>]
 val sfmt : Prng<StateVector>

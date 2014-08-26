@@ -25,6 +25,7 @@ type GeneratorFunction<'a> = GeneratorFunction of (PrngState -> 'a * PrngState)
 /// </summary>
 /// <param name="prng">The PRNG.</param>
 /// <param name="seed">The random seed.</param>
+[<CompiledName("CreateState")>]
 val createState : prng:Prng<'s> -> seed:'s -> PrngState
 
 val inline internal ( |>> ) : m:GeneratorFunction<'a> -> f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b>
@@ -59,29 +60,36 @@ val random : RandomBuilder
 /// <remarks>
 /// You will get different result on each call because an instance of <see cref="System.Random" /> has state by itself.
 /// </remarks>
+[<CompiledName("SystemRandomPrng")>]
 val systemrandom : Prng<Random>
 /// <summary>
 /// Random number generator using Xorshift algorithm (Marsaglia 2003).
 /// </summary>
+[<CompiledName("XorshiftPrng")>]
 val xorshift : Prng<uint32 * uint32 * uint32 * uint32>
 
 /// <summary>
 /// Returns a random 64-bit number.
 /// </summary>
+[<CompiledName("RawBits")>]
 val rawBits : GeneratorFunction<uint64>
 /// <summary>
 /// Returns a random number in the range of (0, 1).
 /// </summary>
+[<CompiledName("StandardExclusive")>]
 val ``(0, 1)`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of [0, 1).
 /// </summary>
+[<CompiledName("Standard")>]
 val ``[0, 1)`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of (0, 1].
 /// </summary>
+[<CompiledName("StandardLowerExclusiveUpperInclusive")>]
 val ``(0, 1]`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of [0, 1].
 /// </summary>
+[<CompiledName("StandardInclusive")>]
 val ``[0, 1]`` : GeneratorFunction<float>

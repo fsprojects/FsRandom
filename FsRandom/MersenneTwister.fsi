@@ -23,4 +23,5 @@ type StateVector =
 /// <summary>
 /// Random number generator using Mersenne Twister algorithm (Matsumoto &amp; Nishimura 1998).
 /// </summary>
+[<CompiledName("MersenneTwisterPrng")>]
 val mersenne : Prng<StateVector>

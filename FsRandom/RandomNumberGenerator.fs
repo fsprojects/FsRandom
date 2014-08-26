@@ -7,6 +7,7 @@ type PrngState =
    abstract Next64Bits : unit -> uint64 * PrngState
 type GeneratorFunction<'a> = GeneratorFunction of (PrngState -> 'a * PrngState)
 
+[<CompiledName("CreateState")>]
 let rec createState (prng:Prng<'s>) (seed:'s) = {
    new PrngState with
       member __.Next64Bits () =
@@ -47,12 +48,14 @@ type RandomBuilder () =
       this.TryFinally (f x, fun () -> using x ignore)
 let random = RandomBuilder ()
 
+[<CompiledName("SystemRandomPrng")>]
 let systemrandom (random : Random) =
    let lower  = (uint64 (random.Next ())       ) &&& 0b0000000000000000000000000000000000000000000011111111111111111111uL
    let middle = (uint64 (random.Next ()) <<< 20) &&& 0b0000000000000000000000111111111111111111111100000000000000000000uL
    let upper  = (uint64 (random.Next ()) <<< 42) &&& 0b1111111111111111111111000000000000000000000000000000000000000000uL
    lower ||| middle ||| upper, random
-   
+
+[<CompiledName("XorshiftPrng")>]   
 let xorshift (x:uint32, y:uint32, z:uint32, w:uint32) =
    let s = x ^^^ (x <<< 11)
    let t = y ^^^ (y <<< 11)
@@ -60,6 +63,7 @@ let xorshift (x:uint32, y:uint32, z:uint32, w:uint32) =
    let v = (u ^^^ (u >>> 19)) ^^^ (t ^^^ (t >>> 8))
    to64bit u v, (z, w, u, v)
 
+[<CompiledName("RawBits")>]
 let rawBits = GeneratorFunction (fun s -> s.Next64Bits ())
 [<Literal>]
 let ``1 / 2^52`` = 2.22044604925031308084726333618e-16
@@ -67,7 +71,11 @@ let ``1 / 2^52`` = 2.22044604925031308084726333618e-16
 let ``1 / 2^53`` = 1.11022302462515654042363166809e-16
 [<Literal>]
 let ``1 / (2^53 - 1)`` = 1.1102230246251566636831481e-16
+[<CompiledName("StandardExclusive")>]
 let ``(0, 1)`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 0.5) * ``1 / 2^52``, s')
+[<CompiledName("Standard")>]
 let ``[0, 1)`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / 2^53``, s')
+[<CompiledName("StandardLowerExclusiveUpperInclusive")>]
 let ``(0, 1]`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 1.0) * ``1 / 2^52``, s')
+[<CompiledName("StandardInclusive")>]
 let ``[0, 1]`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / (2^53 - 1)``, s')
