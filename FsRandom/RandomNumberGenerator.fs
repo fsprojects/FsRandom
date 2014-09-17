@@ -71,11 +71,11 @@ let ``1 / 2^52`` = 2.22044604925031308084726333618e-16
 let ``1 / 2^53`` = 1.11022302462515654042363166809e-16
 [<Literal>]
 let ``1 / (2^53 - 1)`` = 1.1102230246251566636831481e-16
-[<CompiledName("StandardExclusive")>]
+[<CompiledName("StandardOpen")>]
 let ``(0, 1)`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 0.5) * ``1 / 2^52``, s')
 [<CompiledName("Standard")>]
 let ``[0, 1)`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / 2^53``, s')
-[<CompiledName("StandardLowerExclusiveUpperInclusive")>]
+[<CompiledName("StandardOpenClosed")>]
 let ``(0, 1]`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 1.0) * ``1 / 2^52``, s')
-[<CompiledName("StandardInclusive")>]
+[<CompiledName("StandardClosed")>]
 let ``[0, 1]`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / (2^53 - 1)``, s')

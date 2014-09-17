@@ -76,7 +76,7 @@ val rawBits : GeneratorFunction<uint64>
 /// <summary>
 /// Returns a random number in the range of (0, 1).
 /// </summary>
-[<CompiledName("StandardExclusive")>]
+[<CompiledName("StandardOpen")>]
 val ``(0, 1)`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of [0, 1).
@@ -86,10 +86,10 @@ val ``[0, 1)`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of (0, 1].
 /// </summary>
-[<CompiledName("StandardLowerExclusiveUpperInclusive")>]
+[<CompiledName("StandardOpenClosed")>]
 val ``(0, 1]`` : GeneratorFunction<float>
 /// <summary>
 /// Returns a random number in the range of [0, 1].
 /// </summary>
-[<CompiledName("StandardInclusive")>]
+[<CompiledName("StandardClosed")>]
 val ``[0, 1]`` : GeneratorFunction<float>
