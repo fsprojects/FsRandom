@@ -1,6 +1,7 @@
 ﻿[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module FsRandom.Seq
 
+[<CompiledName("OfRandom")>]
 let ofRandom generator =
    let f = Random.next generator
    fun s0 -> seq {

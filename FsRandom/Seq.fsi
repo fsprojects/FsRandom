@@ -12,4 +12,5 @@ module FsRandom.Seq
 /// <returns>
 /// A function which takes a seed and returns infinite sequence of random numbers.
 /// </returns>
+[<CompiledName("OfRandom")>]
 val ofRandom : generator:GeneratorFunction<'a> -> (PrngState -> seq<'a>)

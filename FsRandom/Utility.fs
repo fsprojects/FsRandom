@@ -4,13 +4,16 @@ module FsRandom.Utility
 open System
 open Microsoft.FSharp.Core.LanguagePrimitives
 
+[<CompiledName("DefaultState")>]
 let defaultState = createState xorshift (123456789u, 362436069u, 521288629u, 88675123u)
+[<CompiledName("CreateRandomState")>]
 let createRandomState () =
    let guid = Guid.NewGuid ()
    let bytes = guid.ToByteArray ()
    let seed = Array.init 4 (fun i -> BitConverter.ToUInt32 (bytes, i * 4))
    createState xorshift (seed.[0], seed.[1], seed.[2], seed.[3])
 
+[<CompiledName("RandomSign")>]
 let inline randomSign () =
    let inline g s0 =
       let r, s' = Random.next rawBits s0
@@ -18,6 +21,7 @@ let inline randomSign () =
       sign, s'
    GeneratorFunction (g)
 
+[<CompiledName("FlipCoin")>]
 let flipCoin probability =
    ensuresFiniteValue probability "probability"
    if probability < 0.0 || 1.0 < probability then
@@ -26,6 +30,7 @@ let flipCoin probability =
       let transform u = u < probability
       Random.map transform ``[0, 1)``
 
+[<CompiledName("Choose")>]
 let choose m n =
    if m <= 0 then
       outOfRange "size" "`size' must be positive."
@@ -49,6 +54,7 @@ let choose m n =
          loop ([], m, s0) (n - 1)
       )
 
+[<CompiledName("ChooseOne")>]
 let chooseOne n =
    if n <= 0  then
       outOfRange "upper" "`upper' must be positive."

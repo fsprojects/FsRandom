@@ -192,6 +192,7 @@ let sfmtImpl (state : StateVector) =
    // Creates a new instance of StateVector, but the parameter and the internal vector
    // refers to the same array to avoid cost of copying.
    r, StateVector(state.Parameter, index + 1, vector)
+[<CompiledName("SfmtPrng")>]
 let sfmt (s : StateVector) =
    let lower, s = sfmtImpl s
    let upper, s = sfmtImpl s

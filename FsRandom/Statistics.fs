@@ -5,6 +5,7 @@ module FsRandom.Statistics
 module Standard =
    let inline minusLog x = -log x
 
+   [<CompiledName("Uniform")>]
    let uniform = ``[0, 1]``
 
    // Ziggurat algorithm for normal distribution.
@@ -36,6 +37,7 @@ module Standard =
    //   kn.[0] <- 0uL
       fn.[0] <- 1.0
       kn, fn, wn
+   [<CompiledName("Normal")>]
    let normal = GeneratorFunction (fun s0 ->
       let s = ref s0
       let mutable result = None
@@ -123,6 +125,7 @@ module Standard =
                loop (n - 1) (sum - log u, s')
       loop alpha (0.0, s0)
 
+   [<CompiledName("Gamma")>]
    let gamma shape =
       ensuresFiniteValue shape "shape"
       if shape <= 0.0 then
@@ -135,9 +138,11 @@ module Standard =
          else
             GeneratorFunction (gammaLarge shape)
 
+   [<CompiledName("Exponential")>]
    let exponential =
       Random.map minusLog ``(0, 1)``
 
+   [<CompiledName("Weibull")>]
    let weibull shape =
       ensuresFiniteValue shape "shape"
       if shape <= 0.0 then
@@ -146,13 +151,16 @@ module Standard =
          let transform u = (-log u) ** (1.0 / shape)
          Random.map transform ``(0, 1)``
 
+   [<CompiledName("Gumbel")>]
    let gumbel =
       Random.map (minusLog >> minusLog) ``(0, 1)``
 
+   [<CompiledName("Cauchy")>]
    let cauchy =
       let transform u = tan (pi * (u - 0.5))
       Random.map transform ``(0, 1)``
-      
+
+[<CompiledName("Uniform")>]
 let uniform (min, max) =
    ensuresFiniteValue min "min"
    ensuresFiniteValue max "max"
@@ -174,6 +182,7 @@ let uniform (min, max) =
          let transform u =  min + u * length
          Random.map transform ``[0, 1]``
 
+[<CompiledName("LogUniform")>]
 let loguniform (min, max) =
    ensuresFiniteValue min "min"
    ensuresFiniteValue max "max"
@@ -182,6 +191,7 @@ let loguniform (min, max) =
    else
       Random.map exp (uniform (log min, log max))
 
+[<CompiledName("Triangular")>]
 let triangular (min, max, mode) =
    ensuresFiniteValue min "min"
    ensuresFiniteValue max "max"
@@ -194,6 +204,7 @@ let triangular (min, max, mode) =
       let transform u = if u < mode then left u else right u
       Random.map transform (uniform (min, max))
 
+[<CompiledName("Normal")>]
 let normal (mean, sd) =
    ensuresFiniteValue mean "mean"
    ensuresFiniteValue sd "sd"
@@ -203,8 +214,10 @@ let normal (mean, sd) =
       let transform z = mean + z * sd
       Random.map transform Standard.normal
 
+[<CompiledName("LogNormal")>]
 let lognormal p = Random.map exp (normal p)
       
+[<CompiledName("Gamma")>]
 let gamma (shape, scale) =
    ensuresFiniteValue shape "shape"
    ensuresFiniteValue scale "scale"
@@ -215,6 +228,7 @@ let gamma (shape, scale) =
    else
       Random.map ((*) scale) (Standard.gamma (shape))
 
+[<CompiledName("Beta")>]
 let beta (alpha, beta) =
    ensuresFiniteValue alpha "alpha"
    ensuresFiniteValue beta "beta"
@@ -226,6 +240,7 @@ let beta (alpha, beta) =
       let transform y1 y2 = y1 / (y1 + y2)
       Random.map2 transform (Standard.gamma (alpha)) (Standard.gamma (beta))
 
+[<CompiledName("Exponential")>]
 let exponential rate =
    ensuresFiniteValue rate "rate"
    if rate <= 0.0 then
@@ -234,6 +249,7 @@ let exponential rate =
       let transform t = t / rate
       Random.map transform Standard.exponential
 
+[<CompiledName("Weibull")>]
 let weibull (shape, scale) =
    ensuresFiniteValue scale "scale"
    if scale <= 0.0 then
@@ -241,6 +257,7 @@ let weibull (shape, scale) =
    else
       Random.map ((*) scale) (Standard.weibull (shape))
 
+[<CompiledName("Gumbel")>]
 let gumbel (location, scale) =
    ensuresFiniteValue location "location"
    ensuresFiniteValue scale "scale"
@@ -250,6 +267,7 @@ let gumbel (location, scale) =
       let transform g = location + scale * g
       Random.map transform Standard.gumbel
 
+[<CompiledName("Cauchy")>]
 let cauchy (location, scale) =
    ensuresFiniteValue location "location"
    ensuresFiniteValue scale "scale"
@@ -259,6 +277,7 @@ let cauchy (location, scale) =
       let transform c = location + c * scale
       Random.map transform Standard.cauchy
 
+[<CompiledName("ChiSquare")>]
 let chisquare df =
    if df <= 0 then
       outOfRange "degreeOfFreedom" "`degreeOfFreedom' must be positive."
@@ -269,6 +288,7 @@ let chisquare df =
       else
          gamma (float df / 2.0, 2.0)
 
+[<CompiledName("StudentT")>]
 let studentT df =
    if df <= 0 then
       outOfRange "degreeOfFreedom" "`degreeOfFreedom' must be positive."
@@ -283,8 +303,10 @@ let studentT df =
          let d = sqrt r
          let transform z w = d * z / sqrt w
          Random.map2 transform Standard.normal (Standard.gamma (r))
+[<CompiledName("T")>]
 let t df = studentT df
 
+[<CompiledName("VonMises")>]
 let vonMises (mu, kappa) =
    if mu < -pi || pi <= mu then
       outOfRange "direction" "`direction' must be in [-pi, pi)."
@@ -309,6 +331,7 @@ let vonMises (mu, kappa) =
          r.Value, s
       )
 
+[<CompiledName("UniformDiscrete")>]
 let uniformDiscrete (min, max) =
    if min > max then
       outOfRange "min" "Invalid range."
@@ -317,6 +340,7 @@ let uniformDiscrete (min, max) =
       let transform u = min + int (u * range)
       Random.map transform ``[0, 1)``
 
+[<CompiledName("Poisson")>]
 let poisson lambda =
    ensuresFiniteValue lambda "lambda"
    if lambda <= 0.0 then
@@ -352,6 +376,7 @@ let poisson lambda =
          result.Value, s'
       )
 
+[<CompiledName("GeometricZeroBased")>]
 let geometric0 probability =
    ensuresFiniteValue probability "probability"
    if probability <= 0.0 || 1.0 < probability then
@@ -362,8 +387,10 @@ let geometric0 probability =
          let u, s' = Random.next ``(0, 1)`` s0
          Random.next (poisson (log u * q)) s'
       )
+[<CompiledName("GeometricOneBased")>]
 let geometric1 probability = Random.map ((+) 1) (geometric0 probability)
 
+[<CompiledName("Bernoulli")>]
 let bernoulli probability =
    ensuresFiniteValue probability "probability"
    if probability <= 0.0 || 1.0 <= probability then
@@ -372,6 +399,7 @@ let bernoulli probability =
       let transform u = if u <= probability then 1 else 0
       Random.map transform ``[0, 1]``
 
+[<CompiledName("Binomial")>]
 let binomial (n, probability) =
    ensuresFiniteValue probability "probability"
    if n <= 0 then
@@ -389,6 +417,7 @@ let binomial (n, probability) =
          !count, s
       )
 
+[<CompiledName("Dirichlet")>]
 let dirichlet alpha =
    let k = List.length alpha
    if k < 2 then
@@ -401,6 +430,7 @@ let dirichlet alpha =
          List.map (fun y' -> y' / sum) y, s'
       )
 
+[<CompiledName("Multinomial")>]
 let multinomial (n, weight) =
    if n <= 0 then
       outOfRange "n" "`n' must be positive."
@@ -423,6 +453,7 @@ let multinomial (n, weight) =
          Array.toList result, s
       )
 
+[<CompiledName("Normal")>]
 let multinormal (mu, sigma) =
    let n = Array.length mu
    if Array2D.length1 sigma <> n || Array2D.length2 sigma <> n then
@@ -443,6 +474,7 @@ let multinormal (mu, sigma) =
          let transform = Matrix.multiplyVector q >> Vector.add mu
          Random.map transform standard
 
+[<CompiledName("Wishart")>]
 let wishart (df, sigma) =
    if Array2D.length1 sigma > df || Array2D.length2 sigma > df then
       invalidArg "degreeOfFreedom" "The degree of freedom must be greater than the size of the covariance matrix."
@@ -468,6 +500,7 @@ let wishart (df, sigma) =
          |> List.replicate df
          |> Random.mergeWith transform
 
+[<CompiledName("Mix")>]
 let mix model =
    let distribution = List.map fst model |> List.toArray
    let cdf = List.map snd model |> cdf
@@ -480,6 +513,7 @@ let mix model =
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module Seq =
+   [<CompiledName("MarkovChain")>]
    let markovChain generator =
       let f = generator >> Random.next
       fun x0 s0 -> seq {

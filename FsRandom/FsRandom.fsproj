@@ -62,6 +62,8 @@
     <Compile Include="MersenneTwister.fs" />
     <Compile Include="SimdOrientedFastMersenneTwister.fsi" />
     <Compile Include="SimdOrientedFastMersenneTwister.fs" />
+    <Compile Include="FsRandomExtensions.fsi" />
+    <Compile Include="FsRandomExtensions.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

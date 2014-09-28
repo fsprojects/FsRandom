@@ -10,6 +10,7 @@ module FsRandom.Array
 /// </summary>
 /// <param name="count">The length of the array to create.</param>
 /// <param name="generator">The generator function.</param>
+[<CompiledName("RandomCreate")>]
 val randomCreate : count:int -> generator:GeneratorFunction<'a> -> GeneratorFunction<'a []>
 
 /// <summary>
@@ -17,6 +18,7 @@ val randomCreate : count:int -> generator:GeneratorFunction<'a> -> GeneratorFunc
 /// </summary>
 /// <param name="count">The length of the array to create.</param>
 /// <param name="initializer">The function to take an index and produce a random number generating function.</param>
+[<CompiledName("RandomInitialize")>]
 val randomInit : count:int -> initializer:(int -> GeneratorFunction<'a>) -> GeneratorFunction<'a []>
 
 /// <summary>
@@ -24,6 +26,7 @@ val randomInit : count:int -> initializer:(int -> GeneratorFunction<'a>) -> Gene
 /// </summary>
 /// <param name="count">The length of the array to create.</param>
 /// <param name="generator">The generator function.</param>
+[<CompiledName("RandomFill")>]
 val randomFill : array:'a [] -> targetIndex:int -> count:int -> generator:GeneratorFunction<'a> -> GeneratorFunction<unit>
 
 /// <summary>
@@ -31,6 +34,7 @@ val randomFill : array:'a [] -> targetIndex:int -> count:int -> generator:Genera
 /// </summary>
 /// <param name="array">The array to shuffle.</param>
 /// <seealso cref="shuffleInPlace" />
+[<CompiledName("Shuffle")>]
 val shuffle : array:'a [] -> GeneratorFunction<'a []>
 
 /// <summary>
@@ -38,6 +42,7 @@ val shuffle : array:'a [] -> GeneratorFunction<'a []>
 /// </summary>
 /// <param name="array">The array to shuffle.</param>
 /// <seealso cref="shuffle" />
+[<CompiledName("ShuffleInPlace")>]
 val shuffleInPlace : array:'a [] -> GeneratorFunction<unit>
 
 /// <summary>
@@ -46,6 +51,7 @@ val shuffleInPlace : array:'a [] -> GeneratorFunction<unit>
 /// <param name="n">The number of samples to pick up.</param>
 /// <param name="source">The source array.</param>
 /// <seealso cref="sampleWithReplacement" />
+[<CompiledName("Sample")>]
 val sample : n:int -> source:'a [] -> GeneratorFunction<'a []>
 
 /// <summary>
@@ -57,6 +63,7 @@ val sample : n:int -> source:'a [] -> GeneratorFunction<'a []>
 /// <param name="n">The number of samples to pick up.</param>
 /// <param name="source">The source array.</param>
 /// <param name="weight">The sampling weight for each sample.</param>
+[<CompiledName("WeightedSample")>]
 val weightedSample : n:int -> weight:float [] -> source:'a [] -> GeneratorFunction<'a []>
 
 /// <summary>
@@ -65,6 +72,7 @@ val weightedSample : n:int -> weight:float [] -> source:'a [] -> GeneratorFuncti
 /// <param name="n">The number of samples to pick up.</param>
 /// <param name="source">The source array.</param>
 /// <seealso cref="sample" />
+[<CompiledName("SampleWithReplacement")>]
 val sampleWithReplacement : n:int -> source:'a [] -> GeneratorFunction<'a []>
 
 /// <summary>
@@ -73,4 +81,5 @@ val sampleWithReplacement : n:int -> source:'a [] -> GeneratorFunction<'a []>
 /// <param name="n">The number of samples to pick up.</param>
 /// <param name="source">The source array.</param>
 /// <param name="weight">The sampling weight for each sample.</param>
+[<CompiledName("WeightedSampleWithReplacement")>]
 val weightedSampleWithReplacement : n:int -> weight:float [] -> source:'a [] -> GeneratorFunction<'a []>

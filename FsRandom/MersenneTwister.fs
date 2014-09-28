@@ -61,6 +61,7 @@ let refresh (state : StateVector) =
    vector.[N - 1] <- twist vector.[N - 1] vector.[0] vector.[M - 1]
    StateVector (0, vector)
 
+[<CompiledName("MersenneTwisterPrng")>]
 let mersenne (state : StateVector) =
    let state = if state.Index >= N then refresh state else state
    let index = state.Index

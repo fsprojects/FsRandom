@@ -25,9 +25,15 @@ let inline randomStringByStringArray array length =
    else
       Random.map (String.concat "") (Array.sampleWithReplacement length array)
 
+[<CompiledName("RandomByString")>]
 let randomByString (s:string) length = randomStringByStringArray (getCharacters s) length
+[<CompiledName("RandomAscii")>]
 let randomAscii length = randomStringByCharArray ascii length
+[<CompiledName("RandomNumeric")>]
 let randomNumeric length = randomStringByCharArray digit length
+[<CompiledName("RandomAlphabet")>]
 let randomAlphabet length = randomStringByCharArray alphabet length
+[<CompiledName("RandomAlphanumeric")>]
 let randomAlphanumeric length = randomStringByCharArray alphanumeric length
+[<CompiledName("RandomConcat")>]
 let randomConcat separator randomStringGenerators = Random.mergeWith (String.concat separator) randomStringGenerators

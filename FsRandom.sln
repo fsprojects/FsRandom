@@ -49,6 +49,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 		docs\templates\template.cshtml = docs\templates\template.cshtml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsRandom.Tests.CSharp", "FsRandom.Tests.CSharp\FsRandom.Tests.CSharp.csproj", "{C926651A-F1F4-4968-8EB6-45DB95C7871B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C926651A-F1F4-4968-8EB6-45DB95C7871B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C926651A-F1F4-4968-8EB6-45DB95C7871B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C926651A-F1F4-4968-8EB6-45DB95C7871B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C926651A-F1F4-4968-8EB6-45DB95C7871B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
