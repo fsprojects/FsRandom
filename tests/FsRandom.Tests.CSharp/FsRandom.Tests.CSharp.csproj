@@ -52,7 +52,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FsRandom\FsRandom.fsproj">
+    <ProjectReference Include="..\..\src\FsRandom\FsRandom.fsproj">
       <Project>{761a3b20-4170-4007-8ec4-31c88c469295}</Project>
       <Name>FsRandom</Name>
     </ProjectReference>

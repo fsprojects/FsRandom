@@ -106,7 +106,7 @@
       <Project>{eba281f7-5d4c-4e0b-885d-a4ca87474c7f}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\FsRandom\FsRandom.fsproj">
+    <ProjectReference Include="..\..\src\FsRandom\FsRandom.fsproj">
       <Name>FsRandom</Name>
       <Project>{761a3b20-4170-4007-8ec4-31c88c469295}</Project>
       <Private>True</Private>
