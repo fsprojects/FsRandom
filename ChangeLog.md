@@ -1,6 +1,12 @@
 FsRandom ChangeLog
 ==================
 
+Version 1.3
+-----------
+
+* C# support (#64).
+* Add Random.bind function.
+
 Version 1.2.3
 -------------
 
