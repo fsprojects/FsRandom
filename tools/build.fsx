@@ -28,7 +28,7 @@ let buildDir = % "Build"
 let deployDir = % "Deploy"
 let docsDir = buildDir % "docs"
 
-let mainSolution = % "FsRandom" % "FsRandom.fsproj"
+let mainSolution = % "src" % "FsRandom" % "FsRandom.fsproj"
 let projectName = "FsRandom"
 let zipName = deployDir % "FsRandom.zip"
 
@@ -134,10 +134,9 @@ let getProducts projectName =
    )
 Target "Build" (fun () ->
    build setBuildParams mainSolution
-   getProducts projectName
+   getProducts ("src" % projectName)
    |> Copy buildDir
-   !+ (buildDir % "**")
-   |> Scan
+   !! (buildDir % "**")
    |> Log "Build-Output: "
 )
 Target "EnsureDeploy" (fun () ->
@@ -221,17 +220,15 @@ Target "Documentation" (fun () ->
 Target "Zip" (fun () ->
    let files =
       if buildParams.Documentation && buildParams.DocumentationRoot = "." then
-         !+ (buildDir % "*.*") ++ (docsDir % "**")
+         !! (buildDir % "*.*") ++ (docsDir % "**")
       else
-         !+ (buildDir % "*.*")
+         !! (buildDir % "*.*")
    files
-   |> Scan
    |> Zip buildDir zipName
 )
 
 Target "Deploy" (fun () ->
-   !+ (deployDir % "*.*")
-   |> Scan
+   !! (deployDir % "*.*")
    |> Log "Build-Output: "
 )
 

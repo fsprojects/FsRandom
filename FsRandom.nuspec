@@ -18,7 +18,7 @@
       <tags>F# random-number computation-expression monte-carlo statistics</tags>
    </metadata>
    <files>
-      <file src="FsRandom\bin\Release\FsRandom.dll" target="lib\net40" />
-      <file src="FsRandom\bin\Release\FsRandom.xml" target="lib\net40" />
+      <file src="src\FsRandom\bin\Release\FsRandom.dll" target="lib\net40" />
+      <file src="src\FsRandom\bin\Release\FsRandom.xml" target="lib\net40" />
    </files>
 </package>
