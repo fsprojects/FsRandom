@@ -197,8 +197,9 @@ Target "Documentation" (fun () ->
 
    // Build documentation from `*.fsx` files in `docs`
    let buildDocumentation () =
-      let subdirs = Directory.EnumerateDirectories(content, "*.fsx", SearchOption.AllDirectories)
-      for dir in Seq.append [content] subdirs do
+      let fsx = Directory.EnumerateDirectories (content, "*.fsx", SearchOption.AllDirectories)
+      let md = Directory.EnumerateDirectories (content, "*.md", SearchOption.AllDirectories)
+      for dir in Seq.distinct <| Seq.concat [Seq.singleton content; fsx; md] do
          let sub = if dir.Length > content.Length then dir.Substring(content.Length + 1) else "."
          Literate.ProcessDirectory
             ( dir, docTemplate, docsDir % sub, replacements = ("root", buildParams.DocumentationRoot)::info,
