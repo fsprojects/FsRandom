@@ -34,6 +34,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{F9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{668880F2-5C7B-4188-8215-11DF13C3CE8C}"
 	ProjectSection(SolutionItems) = preProject
+		docs\csharp.md = docs\csharp.md
 		docs\documentation.fsx = docs\documentation.fsx
 		docs\index.fsx = docs\index.fsx
 		docs\numerical-examples.fsx = docs\numerical-examples.fsx
