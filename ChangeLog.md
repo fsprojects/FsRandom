@@ -6,6 +6,7 @@ Version 1.3
 
 * C# support (#64).
 * Add Random.bind function.
+* Add sample functions that take one sample from array (#73).
 
 Version 1.2.3
 -------------
