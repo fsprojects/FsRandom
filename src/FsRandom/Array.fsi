@@ -55,16 +55,31 @@ val shuffleInPlace : array:'a [] -> GeneratorFunction<unit>
 val sample : n:int -> source:'a [] -> GeneratorFunction<'a []>
 
 /// <summary>
+/// Picks up a random sample in the specified array.
+/// </summary>
+/// <param name="source">The source array.</param>
+[<CompiledName("SampleOne")>]
+val sampleOne : source:'a [] -> GeneratorFunction<'a>
+
+/// <summary>
 /// Picks up weighted random samples without replacement in the specified array.
 /// </summary>
 /// <remarks>
 /// Implements Efraimidis &amp; Spirakis's A-ExpJ algorithm (Efraimidis &amp; Spirakis 2006).
 /// </remarks>
 /// <param name="n">The number of samples to pick up.</param>
-/// <param name="source">The source array.</param>
 /// <param name="weight">The sampling weight for each sample.</param>
+/// <param name="source">The source array.</param>
 [<CompiledName("WeightedSample")>]
 val weightedSample : n:int -> weight:float [] -> source:'a [] -> GeneratorFunction<'a []>
+
+/// <summary>
+/// Picks up a random sample in the specified array.
+/// </summary>
+/// <param name="weight">The sampling weight for each sample.</param>
+/// <param name="source">The source array.</param>
+[<CompiledName("WeightedSampleOne")>]
+val weightedSampleOne : weight:float [] -> source:'a [] -> GeneratorFunction<'a>
 
 /// <summary>
 /// Picks up random samples with replacement in the specified array.

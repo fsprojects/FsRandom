@@ -93,6 +93,15 @@ let sample n source =
          result, s0
       )
 
+[<CompiledName("SampleOne")>]
+let sampleOne source =
+   let size = float <| Array.length source
+   GeneratorFunction (fun s0 ->
+      let u, s' = Random.next ``[0, 1)`` s0
+      let index = int <| size * u
+      source.[index], s'
+   )
+
 [<CompiledName("WeightedSample")>]
 let weightedSample n weight source =
    let size = Array.length source
@@ -129,6 +138,32 @@ let weightedSample n weight source =
                let key = r ** (1.0 / w)
                result := BinarySearchTree.removeMinimum !result |> BinarySearchTree.insert key source.[index]
          !result |> (BinarySearchTree.toList >> List.map snd >> List.toArray), !s
+      )
+
+[<CompiledName("WeightedSampleOne")>]
+let weightedSampleOne weight source =
+   let size = Array.length source
+   if size <> Array.length weight then
+      invalidArg "source" "different size of array"
+   else
+      let cdf = Array.scan (+) 0.0 weight
+      let binarySearch u =
+         let rec loop left right =
+            let n = right - left
+            if n <= 1 then
+               left
+            else
+               let middle = (left + right) / 2
+               let v = cdf.[middle]
+               if u < v then
+                  loop left middle
+               else
+                  loop middle right
+         loop 0 size
+      GeneratorFunction (fun s0 ->
+         let u, s' = Random.next ``[0, 1)`` s0
+         let index = binarySearch u 
+         source.[index], s'
       )
 
 [<CompiledName("SampleWithReplacement")>]

@@ -65,6 +65,14 @@ let ``Validates Array.sample`` () =
    Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(8))
 
 [<Test>]
+let ``Validates Array.sampleOne`` () =
+   let array = Array.init 1000 id
+   let tester = Utility.defaultState
+   let r1, next = Random.next (Array.sampleOne array) tester
+   let r2 = Random.get (Array.sampleOne array) next
+   Assert.That (r1, Is.Not.EqualTo(r2))
+
+[<Test>]
 let ``Validates Array.weightedSample`` () =
    let array = Array.init 10 id
    let weight = Array.init (Array.length array) (id >> float >> ((+) 1.0))
@@ -74,6 +82,19 @@ let ``Validates Array.weightedSample`` () =
    Assert.That (Array.length result, Is.EqualTo(8))
    Assert.That (Array.forall (fun x -> Array.exists ((=) x) array) result, Is.True)
    Assert.That (Seq.length (Seq.distinct result), Is.EqualTo(8))
+
+[<Test>]
+let ``Validates Array.weightedSampleOne`` () =
+   let weight = [|0.1; 0.3; 0.6|]
+   let array = Array.init (Array.length weight) id
+   let counts =
+      Seq.ofRandom (Array.weightedSampleOne weight array) Utility.defaultState
+      |> Seq.take 10000
+      |> Seq.countBy id
+      |> Map.ofSeq
+   Assert.That (counts.[0], Is.GreaterThanOrEqualTo(950).Or.LessThanOrEqualTo(1050))
+   Assert.That (counts.[1], Is.GreaterThanOrEqualTo(2900).Or.LessThanOrEqualTo(3100))
+   Assert.That (counts.[2], Is.GreaterThanOrEqualTo(5800).Or.LessThanOrEqualTo(6200))
 
 [<Test>]
 let ``Validates Array.sampleWithReplacement`` () =
