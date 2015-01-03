@@ -2,14 +2,18 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
    <metadata>
       <id>FsRandom</id>
-      <version>1.2.2</version>
+      <version>1.3.0</version>
       <title>FsRandom</title>
       <authors>RecycleBin</authors>
       <owners>kos59125</owners>
       <licenseUrl>https://github.com/kos59125/FsRandom/blob/master/LICENSE</licenseUrl>
       <projectUrl>http://kos59125.github.io/FsRandom/</projectUrl>
       <requireLicenseAcceptance>true</requireLicenseAcceptance>
-      <description>Random number generating framework designed for F# (formerly RecycleBin.Random). It includes a variety of random number generating functions such as uniform, normal, gamma, and Poisson. Visit the project site for more information. http://kos59125.github.io/FsRandom/</description>
+      <description>
+         This package offers users to generate random states using computation expression syntax (and also LINQ syntax for C# users).
+         This provides a variety of random functions: generating random collections, random sampling, shufflig, and also statistical functions like normal, gamma, and Poisson.
+         Xorshift algorithm is used for the default, but you can choose another algorithm to pick random numbers, e.g. Mersenne Twister and System.Random.
+      </description>
       <summary>Random number generating framework designed for F#.</summary>
       <copyright>Copyright &#xA9; 2013 RecycleBin</copyright>
       <references>
