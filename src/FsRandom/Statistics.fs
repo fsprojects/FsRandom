@@ -337,7 +337,7 @@ let uniformDiscrete (min, max) =
       outOfRange "min" "Invalid range."
    else
       let range = float <| int64 max - int64 min + 1L
-      let transform u = min + int (u * range)
+      let transform u = int <| int64 min + int64 (u * range)
       Random.map transform ``[0, 1)``
 
 [<CompiledName("Poisson")>]
