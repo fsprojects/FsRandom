@@ -364,3 +364,10 @@ let ``Validates mix (float)`` () =
    ks.test(x, "pmix")""")
    |> getP
    |> should be (greaterThan p)
+
+[<Test>]
+let ``uniformDiscrete on full-range of int generates both positive and negative values`` () =
+   let g = uniformDiscrete (System.Int32.MinValue, System.Int32.MaxValue)
+   let values = Random.get <| List.randomCreate 10 g <| Utility.defaultState
+   List.exists (fun x -> x > 0) values |> should be True
+   List.exists (fun x -> x < 0) values |> should be True
