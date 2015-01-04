@@ -1,6 +1,11 @@
 FsRandom ChangeLog
 ==================
 
+Version 1.3.1
+-------------
+
+* Fix bug (#74).
+
 Version 1.3
 -----------
 
