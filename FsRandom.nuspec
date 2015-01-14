@@ -17,6 +17,7 @@
       <summary>Random number generating framework designed for F#.</summary>
       <copyright>Copyright &#xA9; 2013 RecycleBin</copyright>
       <references>
+         <frameworkAssemblies assemblyName="FSharp.Core" targetFramework="net40" />
          <reference file="FsRandom.dll" />
       </references>
       <tags>F# random-number computation-expression monte-carlo statistics</tags>
