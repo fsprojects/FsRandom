@@ -79,3 +79,20 @@ let ``[0, 1)`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in fl
 let ``(0, 1]`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in (float (r >>> 12) + 1.0) * ``1 / 2^52``, s')
 [<CompiledName("StandardClosed")>]
 let ``[0, 1]`` = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in float (r >>> 11) * ``1 / (2^53 - 1)``, s')
+
+[<CompiledName("RandomInt8")>]
+let rint8 = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in int8 r, s')
+[<CompiledName("RandomInt16")>]
+let rint16 = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in int16 r, s')
+[<CompiledName("RandomInt32")>]
+let rint32 = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in int32 r, s')
+[<CompiledName("RandomInt64")>]
+let rint64 = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in int64 r, s')
+[<CompiledName("RandomUInt8")>]
+let ruint8 = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in uint8 r, s')
+[<CompiledName("RandomUInt16")>]
+let ruint16 = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in uint16 r, s')
+[<CompiledName("RandomUInt32")>]
+let ruint32 = GeneratorFunction (fun s0 -> let r, s' = s0.Next64Bits () in uint32 r, s')
+[<CompiledName("RandomUInt64")>]
+let ruint64 = rawBits

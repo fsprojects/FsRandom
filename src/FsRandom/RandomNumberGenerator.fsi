@@ -93,3 +93,45 @@ val ``(0, 1]`` : GeneratorFunction<float>
 /// </summary>
 [<CompiledName("StandardClosed")>]
 val ``[0, 1]`` : GeneratorFunction<float>
+
+/// <summary>
+/// Returns a random 8-bit signed integer.
+/// </summary>
+[<CompiledName("RandomInt8")>]
+val rint8 : GeneratorFunction<int8>
+/// <summary>
+/// Returns a random 16-bit signed integer.
+/// </summary>
+[<CompiledName("RandomInt16")>]
+val rint16 : GeneratorFunction<int16>
+/// <summary>
+/// Returns a random 32-bit signed integer.
+/// </summary>
+[<CompiledName("RandomInt32")>]
+val rint32 : GeneratorFunction<int32>
+/// <summary>
+/// Returns a random 64-bit signed integer.
+/// </summary>
+[<CompiledName("RandomInt64")>]
+val rint64 : GeneratorFunction<int64>
+/// <summary>
+/// Returns a random 8-bit unsigned integer.
+/// </summary>
+[<CompiledName("RandomUInt8")>]
+val ruint8 : GeneratorFunction<uint8>
+/// <summary>
+/// Returns a random 16-bit unsigned integer.
+/// </summary>
+[<CompiledName("RandomUInt16")>]
+val ruint16 : GeneratorFunction<uint16>
+/// <summary>
+/// Returns a random 32-bit unsigned integer.
+/// </summary>
+[<CompiledName("RandomUInt32")>]
+val ruint32 : GeneratorFunction<uint32>
+/// <summary>
+/// Returns a random 64-bit unsigned integer.
+/// This function is an alias for <see cref="RawBits" />.
+/// </summary>
+[<CompiledName("RandomUInt64")>]
+val ruint64 : GeneratorFunction<uint64>
