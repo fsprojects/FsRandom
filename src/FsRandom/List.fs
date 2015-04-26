@@ -6,23 +6,27 @@ let randomCreate count generator =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
    else
-      let rec loop s = function
-         | 0 -> [], s
-         | n ->
-            let r, s1 = Random.next generator s
-            let acc, s2 = loop s1  (n - 1)
-            r :: acc, s2 
-      GeneratorFunction (fun s0 -> loop s0 count)
+      let rec loop s n cont =
+         match n with
+            | 0 -> ([], s) |> cont
+            | n ->
+               Random.next generator s
+               |> (fun (r, s1) ->
+                  loop s1  (n - 1) (fun (acc, s2) -> (r :: acc, s2) |> cont)
+               )
+      GeneratorFunction (fun s0 -> loop s0 count id)
 
 [<CompiledName("RandomInitialize")>]
 let randomInit count initializer =
    if count < 0 then
       outOfRange "count" "`count' must not be negative."
    else
-      let rec loop s = function
-         | 0 -> [], s
-         | n ->
-            let r, s1 = Random.next (initializer (count - n)) s
-            let acc, s2 = loop s1  (n - 1)
-            r :: acc, s2 
-      GeneratorFunction (fun s0 -> loop s0 count)
+      let rec loop s n cont =
+         match n with
+            | 0 -> ([], s) |> cont
+            | n ->
+               Random.next (initializer (count - n)) s
+               |> (fun (r, s1) ->
+                  loop s1  (n - 1) (fun (acc, s2) ->  (r :: acc, s2) |> cont)
+               )
+      GeneratorFunction (fun s0 -> loop s0 count id)
