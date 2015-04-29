@@ -9,17 +9,17 @@ open NUnit.Framework
 let n = 5000
 let getSamples g = Seq.ofRandom g Utility.defaultState |> Seq.take n |> Seq.toArray
 
-// Anderson-Darling test
-let adTest distribution samples =
+// Kolmogorov-Smirnov test
+let ksTest distribution samples =
    let samples = Array.sort samples
-   let S =
-      let n = Array.length samples
-      let f = distribution
-      Array.init n (fun j -> ((2.0 * float j + 1.0) / float  n) * (log (f samples.[j]) + log (1.0 - f samples.[n - 1 - j])))
-      |> Array.sum
-   let A2 = -float samples.Length - S
-   let CV = 3.857  // both mean and variance are known
-   A2 < CV
+   let n = Array.length samples
+   let f = distribution
+   let Dn =
+      samples
+      |> Array.mapi (fun index x -> abs (f x - float (index + 1) / float n))
+      |> Array.max
+   let k = 1.628  // K-S distribution critical value (99%)
+   Dn < k
 
 // Chi-square goodness of fit test
 let chisqTest distribution samples =
@@ -50,105 +50,105 @@ let tearDown () =
 let ``Validates uniform`` () =
    let distribution = ContinuousUniform (-10.0, 10.0)
    getSamples (uniform (-10.0, 10.0))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates loguniform`` () =
    let cdf (a, b) x = 1.0 / (log b - log a) * log x
    getSamples (loguniform (1.0, 100.0))
-   |> adTest (cdf (1.0, 100.0))
+   |> ksTest (cdf (1.0, 100.0))
    |> should be True
 
 [<Test>]
 let ``Validates triangular`` () =
    let distribution = Triangular (-3.3, 10.7, 2.1)
    getSamples (triangular (-3.3, 10.7, 2.1))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates normal`` () =
    let distribution = Normal (-5.0, 3.0)
    getSamples (normal (-5.0, 3.0))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates lognormal`` () =
    let distribution = LogNormal (3.1, 7.2)
    getSamples (lognormal (3.1, 7.2))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates gamma (shape < 1)`` () =
    let distribution = Gamma (0.3, 1.0 / 2.0)
    getSamples (gamma (0.3, 2.0))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates gamma (shape > 1)`` () =
    let distribution = Gamma (5.6, 1.0 / 0.4)
    getSamples (gamma (5.6, 0.4))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates gamma (shape is integer)`` () =
    let distribution = Gamma (3.0, 1.0 / 7.9)
    getSamples (gamma (3.0, 7.9))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates exponential`` () =
    let distribution = Exponential (1.5)
    getSamples (exponential (1.5))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates weibull`` () =
    let distribution = Weibull (6.1, 1.4)
    getSamples (weibull (6.1, 1.4))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates gumbel`` () =
    let cdf (mu, beta) x = exp <| -exp (-(x - mu) / beta)
    getSamples (gumbel (6.1, 1.4))
-   |> adTest (cdf (6.1, 1.4))
+   |> ksTest (cdf (6.1, 1.4))
    |> should be True
 
 [<Test>]
 let ``Validates beta`` () =
    let distribution = Beta (1.5, 0.4)
    getSamples (beta (1.5, 0.4))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates cauchy`` () =
    let distribution = Cauchy (-1.5, 0.1)
    getSamples (cauchy (-1.5, 0.1))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates chisquare`` () =
    let distribution = ChiSquared (10.0)
    getSamples (chisquare (10))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 [<Test>]
 let ``Validates studentT`` () =
    let distribution = StudentT (0.0, 1.0, 3.0)
    getSamples (studentT (3))
-   |> adTest distribution.CumulativeDistribution
+   |> ksTest distribution.CumulativeDistribution
    |> should be True
 
 // CDF is unknown
@@ -242,7 +242,7 @@ let ``Validates mix (float)`` () =
       else
          0.25 * gamma.CumulativeDistribution (x) + 0.75 * normal.CumulativeDistribution (x)
    getSamples (mix [gamma (3.0, 2.0), 1.0; normal (-2.0, 1.0), 3.0])
-   |> adTest cdf
+   |> ksTest cdf
    |> should be True
 
 [<Test>]
