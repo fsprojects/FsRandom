@@ -30,11 +30,11 @@ val createState : prng:Prng<'s> -> seed:'s -> PrngState
 
 val inline internal ( |>> ) : m:GeneratorFunction<'a> -> f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b>
 val inline internal ( &>> ) : m:GeneratorFunction<'a> -> b:GeneratorFunction<'b> -> GeneratorFunction<'b>
-val inline internal bindRandom : m:GeneratorFunction<'a> -> f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b>
-val inline internal returnRandom : a:'a -> GeneratorFunction<'a>
-val inline internal runRandom : GeneratorFunction<'a> -> PrngState -> 'a * PrngState
-val inline internal evaluateRandom : GeneratorFunction<'a> -> PrngState -> 'a
-val inline internal executeRandom : GeneratorFunction<'a> -> PrngState -> PrngState
+val internal bindRandom : m:GeneratorFunction<'a> -> f:('a -> GeneratorFunction<'b>) -> GeneratorFunction<'b>
+val internal returnRandom : a:'a -> GeneratorFunction<'a>
+val internal runRandom : GeneratorFunction<'a> -> PrngState -> 'a * PrngState
+val internal evaluateRandom : GeneratorFunction<'a> -> PrngState -> 'a
+val internal executeRandom : GeneratorFunction<'a> -> PrngState -> PrngState
 
 [<Class>]
 type RandomBuilder =

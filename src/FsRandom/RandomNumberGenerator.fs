@@ -15,12 +15,12 @@ let rec createState (prng:Prng<'s>) (seed:'s) = {
          r, createState prng next
 }
 
-let inline bindRandom (GeneratorFunction m) f =
+let bindRandom (GeneratorFunction m) f =
    GeneratorFunction (fun s0 -> let v, s' = m s0 in match f v with GeneratorFunction (g) -> g s')
-let inline returnRandom x = GeneratorFunction (fun s -> x, s)
-let inline runRandom (GeneratorFunction m) x = m x
-let inline evaluateRandom (GeneratorFunction m) x = m x |> fst
-let inline executeRandom (GeneratorFunction m) x = m x |> snd
+let returnRandom x = GeneratorFunction (fun s -> x, s)
+let runRandom (GeneratorFunction m) x = m x
+let evaluateRandom (GeneratorFunction m) x = m x |> fst
+let executeRandom (GeneratorFunction m) x = m x |> snd
 
 let inline (|>>) m f = bindRandom m f
 let inline (&>>) m b = bindRandom m (fun _ -> b)
