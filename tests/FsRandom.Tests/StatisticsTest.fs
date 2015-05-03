@@ -198,6 +198,13 @@ let ``Validates binomial`` () =
    |> chisqTest distribution.Probability
    |> should be True
 
+[<Test>]
+let ``Validates negativeBinomial`` () =
+   let distribution = NegativeBinomial (15.5, 0.8)
+   getSamples (negativeBinomial (15.5, 0.8))
+   |> chisqTest distribution.Probability
+   |> should be True
+
 // TODO: implement
 //[<Test>]
 //let ``Validates dirichlet`` () =

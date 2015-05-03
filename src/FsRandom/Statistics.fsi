@@ -152,6 +152,13 @@ val bernoulli : probability:float -> GeneratorFunction<int>
 [<CompiledName("Binomial")>]
 val binomial : n:int * probability:float -> GeneratorFunction<int>
 /// <summary>
+/// Returns a random number distributed negative binomially.
+/// </summary>
+/// <param name="r">The number of failures until the experiment is stopped.</param>
+/// <param name="probability">The probability to success a trial.</param>
+[<CompiledName("NegativeBinomial")>]
+val negativeBinomial : r:float * probability:float -> GeneratorFunction<int>
+/// <summary>
 /// Returns a random number distributed Dirichlet.
 /// </summary>
 /// <param name="alpha">The alpha parameter.</param>

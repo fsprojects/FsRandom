@@ -417,6 +417,19 @@ let binomial (n, probability) =
          !count, s
       )
 
+[<CompiledName("NegativeBinomial")>]
+let negativeBinomial (r, p) =
+   ensuresFiniteValue p "probability"
+   if r <= 0.0 then
+      outOfRange "r" "`r' must be positive."
+   elif p <= 0.0 || 1.0 <= p then
+      outOfRange "probability" "`probability' must be in the range of (0, 1)."
+   else
+      GeneratorFunction (fun s0 ->
+         let y, s' = Random.next (gamma (r, 1.0 / p - 1.0)) s0
+         Random.next (poisson (y)) s'
+      )
+
 [<CompiledName("Dirichlet")>]
 let dirichlet alpha =
    let k = List.length alpha
