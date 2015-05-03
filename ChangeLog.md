@@ -1,6 +1,13 @@
 FsRandom ChangeLog
 ==================
 
+Version 1.3.2
+-------------
+
+* Fix List module throws StackOverflowException (#77).
+* Add primitive random generators (#75).
+* Add negative binomial generator (#50).
+
 Version 1.3.1
 -------------
 
