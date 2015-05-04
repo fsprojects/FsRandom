@@ -146,7 +146,9 @@ let weightedSampleOne weight source =
    if size <> Array.length weight then
       invalidArg "source" "different size of array"
    else
-      let cdf = Array.scan (+) 0.0 weight
+      let cdf =
+         let s = Array.sum weight
+         Array.scan (+) 0.0 weight |> Array.map (fun p -> p / s)
       let binarySearch u =
          let rec loop left right =
             let n = right - left

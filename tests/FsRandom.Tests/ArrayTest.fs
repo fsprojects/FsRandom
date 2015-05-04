@@ -85,7 +85,7 @@ let ``Validates Array.weightedSample`` () =
 
 [<Test>]
 let ``Validates Array.weightedSampleOne`` () =
-   let weight = [|0.1; 0.3; 0.6|]
+   let weight = [|1.0; 3.0; 6.0|]
    let array = Array.init (Array.length weight) id
    let counts =
       Seq.ofRandom (Array.weightedSampleOne weight array) Utility.defaultState
