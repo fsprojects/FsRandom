@@ -58,3 +58,17 @@ let ``String.randomByString breaks surrogate pairs`` () =
    actual |> should contain "𠮷"
    actual |> should contain "野"
    actual |> should contain "家"
+
+[<Test>]
+[<Category("Issue #77")>]
+let ``List.randomCreate doesn't throw StackOverflowException`` () =
+   List.randomCreate 10000 rawBits
+   |> Random.get <| Utility.defaultState
+   |> ignore
+
+[<Test>]
+[<Category("Issue #77")>]
+let ``List.randomInit doesn't throw StackOverflowException`` () =
+   List.randomInit 10000 (fun _ -> rawBits)
+   |> Random.get <| Utility.defaultState
+   |> ignore
