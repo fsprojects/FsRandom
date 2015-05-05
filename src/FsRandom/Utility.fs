@@ -38,20 +38,20 @@ let choose m n =
       outOfRange "count" "`count' must be in the range of [0, size]."
    else
       GeneratorFunction (fun s0 ->
-         let rec loop (acc, p, s) = function
-            | index when index < 0 ->
-               // List.rev is for ascending order.
-               // This is undocumented specification, and might be changed in the future.
-               List.rev acc, s
-            | index ->
-               let mutable probability = 1.0
-               let mutable p = p
-               let u, s' = Random.next ``[0, 1)`` s
-               while u < probability do
-                  probability <- probability * float (p - index - 1) / float p
-                  p <- p - 1
-               loop (m - p - 1 :: acc, p, s') (index - 1)
-         loop ([], m, s0) (n - 1)
+         let mutable acc = []
+         let mutable p = m
+         let mutable index = n - 1
+         let mutable s = s0
+         while index >= 0 do
+            let mutable probability = 1.0
+            let u, s' = Random.next ``[0, 1)`` s
+            s <- s'
+            while u < probability do
+               probability <- probability * float (p - index - 1) / float p
+               p <- p - 1
+            acc <- m - p - 1 :: acc
+            index <- index - 1
+         List.rev acc, s
       )
 
 [<CompiledName("ChooseOne")>]
