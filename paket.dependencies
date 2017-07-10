@@ -1,0 +1,10 @@
+source https://api.nuget.org/v3/index.json
+
+group Build
+  source https://api.nuget.org/v3/index.json
+
+  nuget FAKE
+  nuget FSharp.Formatting
+  nuget Nuget.CommandLine
+
+  http https://github.com/icsharpcode/SharpZipLib/releases/download/0.86.0.518/ICSharpCode.SharpZipLib.dll

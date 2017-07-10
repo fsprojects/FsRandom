@@ -1,29 +1,26 @@
-﻿#I "FSharp.Formatting/lib/net40"
-#I "FSharp.Compiler.Service/lib/net40"
-#I "RazorEngine/lib/net40"
-#I "Microsoft.AspNet.Razor/lib/net40"
-#r "FakeLib.dll"
-#r "ICSharpCode.SharpZipLib.dll"
-#r "System.Web.Razor.dll"
-#r "RazorEngine.dll"
-#r "FSharp.Literate.dll"
-#r "FSharp.CodeFormat.dll"
-#r "FSharp.MetadataFormat.dll"
-#r "FSharp.Markdown.dll"
+﻿// #I @"../packages/build/FSharp.Formatting/lib/net40"
+// #I @"../packages/build/FSharp.Compiler.Service/lib/net40"
+#r @"../packages/build/FAKE/tools/FakeLib.dll"
+// #r @"../paket-files/build/github.com/ICSharpCode.SharpZipLib.dll"
+// #r "FSharp.Literate.dll"
+// #r "FSharp.CodeFormat.dll"
+// #r "FSharp.MetadataFormat.dll"
+// #r "FSharp.Markdown.dll"
+// #r "RazorEngine.dll"
 
 open System
 open System.IO
 open System.Reflection
 open Fake
 open Fake.FileHelper
-open FSharp.Literate
-open FSharp.MetadataFormat
+// open FSharp.Literate
+// open FSharp.MetadataFormat
 
 let baseDir = Path.GetDirectoryName (__SOURCE_DIRECTORY__)
 let inline (~%) name = Path.Combine (baseDir, name)
 let inline (%) dir name = Path.Combine (dir, name)
 
-let nugetToolPath = % ".nuget" % "NuGet.exe"
+let nugetToolPath = % @"../packages/build/NuGet.CommandLine/tools/NuGet.exe"
 let buildDir = % "Build"
 let deployDir = % "Deploy"
 let docsDir = buildDir % "docs"
@@ -70,7 +67,9 @@ let buildParams =
       NoNuGet = false
       Key = None
    }
-   let args = fsi.CommandLineArgs |> Array.toList  // args = ["build.fsx"; ...]
+   // https://github.com/fsharp/FAKE/issues/1477
+   // let args = fsi.CommandLineArgs |> Array.toList
+   let args = Environment.GetCommandLineArgs() |> Array.skip 1 |> Array.toList  // args = ["build.fsx"; ...]
    loop defaultBuildParam args.Tail
 
 if buildParams.Help then
@@ -106,24 +105,7 @@ let addBuildProperties =
          | None -> properties
    debugSymbol >> setKey
 let configuration = "Configuration", if buildParams.Debug then "Debug" else "Release"
-let setBuildParams (p:MSBuildParams) = {
-   p with
-      Targets = ["Build"]
-      Properties = configuration :: addBuildProperties p.Properties
-}
-let setCleanParams (p:MSBuildParams) = {
-   p with
-      Targets = ["Clean"]
-      Properties = [configuration]
-}
 
-Target "CleanBuild" (fun () ->
-   build setCleanParams mainSolution
-   CleanDir buildDir
-)
-Target "CleanDeploy" (fun () ->
-   CleanDir deployDir
-)
 Target "Clean" DoNothing
 
 let getProducts projectName =
@@ -133,7 +115,10 @@ let getProducts projectName =
       Directory.GetFiles (path, pattern)
    )
 Target "Build" (fun () ->
-   build setBuildParams mainSolution
+   DotNetCli.Build (fun p -> 
+      { p with
+          Project = mainSolution
+          Configuration = snd configuration })
    getProducts ("src" % projectName)
    |> Copy buildDir
    !! (buildDir % "**")
@@ -193,29 +178,29 @@ Target "Documentation" (fun () ->
       CopyRecursive (formatting % "styles") (docsDir % "content") true 
       |> Log "Copying styles and scripts: "
 
-   let fsi = FsiEvaluator ()
+//    let fsi = FsiEvaluator ()
 
-   // Build documentation from `*.fsx` files in `docs`
-   let buildDocumentation () =
-      let fsx = Directory.EnumerateDirectories (content, "*.fsx", SearchOption.AllDirectories)
-      let md = Directory.EnumerateDirectories (content, "*.md", SearchOption.AllDirectories)
-      for dir in Seq.distinct <| Seq.concat [Seq.singleton content; fsx; md] do
-         let sub = if dir.Length > content.Length then dir.Substring(content.Length + 1) else "."
-         Literate.ProcessDirectory
-            ( dir, docTemplate, docsDir % sub, replacements = ("root", buildParams.DocumentationRoot)::info,
-              layoutRoots = layoutRoots, fsiEvaluator = fsi )
+//    // Build documentation from `*.fsx` files in `docs`
+//    let buildDocumentation () =
+//       let fsx = Directory.EnumerateDirectories (content, "*.fsx", SearchOption.AllDirectories)
+//       let md = Directory.EnumerateDirectories (content, "*.md", SearchOption.AllDirectories)
+//       for dir in Seq.distinct <| Seq.concat [Seq.singleton content; fsx; md] do
+//          let sub = if dir.Length > content.Length then dir.Substring(content.Length + 1) else "."
+//          Literate.ProcessDirectory
+//             ( dir, docTemplate, docsDir % sub, replacements = ("root", buildParams.DocumentationRoot)::info,
+//               layoutRoots = layoutRoots, fsiEvaluator = fsi )
 
-   let buildReference () =
-      let referenceDir = docsDir % "reference"
-      ensureDirectory referenceDir
-      for lib in Directory.GetFiles (buildDir, "*.dll") do
-         MetadataFormat.Generate
-            ( lib, referenceDir, layoutRoots, parameters = ("root", buildParams.DocumentationRoot)::info )
+//    let buildReference () =
+//       let referenceDir = docsDir % "reference"
+//       ensureDirectory referenceDir
+//       for lib in Directory.GetFiles (buildDir, "*.dll") do
+//          MetadataFormat.Generate
+//             ( lib, referenceDir, layoutRoots, parameters = ("root", buildParams.DocumentationRoot)::info )
 
    // Generate
    copyFiles()
-   buildDocumentation()
-   buildReference ()
+//    buildDocumentation()
+//    buildReference ()
 )
 
 Target "Zip" (fun () ->
@@ -232,11 +217,6 @@ Target "Deploy" (fun () ->
    !! (deployDir % "*.*")
    |> Log "Build-Output: "
 )
-
-// Clean dependency
-"CleanBuild"
-=?> ("CleanDeploy", buildParams.CleanDeploy)
-==> "Clean"
 
 // Build dependency
 "Clean"
