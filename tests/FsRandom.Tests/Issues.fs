@@ -21,17 +21,13 @@ let ``flipCoin can accept 1`` () =
    
 [<Test>]
 [<Category("Issue #45")>]
-[<ExpectedException(typeof<ArgumentException>)>]
 let ``sampleWithReplacement fails before run`` () =
-   Array.sampleWithReplacement 0 Array.empty<int> |> should throw typeof<ArgumentException>
-   Assert.Fail ()
+   (fun () -> Array.sampleWithReplacement 0 Array.empty<int> |> ignore) |> should throw typeof<ArgumentException>
 
 [<Test>]
 [<Category("Issue #45")>]
-[<ExpectedException(typeof<ArgumentException>)>]
 let ``weightedSampleWithReplacement fails before run`` () =
-   Array.weightedSampleWithReplacement 0 Array.empty<float> Array.empty<int> |> should throw typeof<ArgumentException>
-   Assert.Fail ()
+   (fun () -> Array.weightedSampleWithReplacement 0 Array.empty<float> Array.empty<int> |> ignore) |> should throw typeof<ArgumentException>
 
 [<Test>]
 [<Category("Issue #60")>]
