@@ -5,6 +5,8 @@ Version 1.4.0
 -------------
 
 * Add support for .NET Standard (#81).
+* Drop support for .NET 4.0 (requires 4.5 or later).
+* Stop code signing.
 
 Version 1.3.3
 -------------
