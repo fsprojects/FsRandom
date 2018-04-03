@@ -1,15 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7EB60773-8733-4330-A519-07EF3E4B0170}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{F2FD43BB-E936-4250-A94E-53DE58DD605C}"
 	ProjectSection(SolutionItems) = preProject
 		tools\build.fsx = tools\build.fsx
@@ -50,8 +43,6 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FsRandom", "src\FsRandom\Fs
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FsRandom.Tests", "tests\FsRandom.Tests\FsRandom.Tests.fsproj", "{FF3B2DE6-21ED-4A6C-9F2C-92DE0CD00C7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsRandom.Tests.Resources", "tests\FsRandom.Tests.Resources\FsRandom.Tests.Resources.csproj", "{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsRandom.Tests.CSharp", "tests\FsRandom.Tests.CSharp\FsRandom.Tests.CSharp.csproj", "{C926651A-F1F4-4968-8EB6-45DB95C7871B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4B703750-0405-41F2-8F76-8D6A13349A67}"
@@ -72,10 +63,6 @@ Global
 		{FF3B2DE6-21ED-4A6C-9F2C-92DE0CD00C7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF3B2DE6-21ED-4A6C-9F2C-92DE0CD00C7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF3B2DE6-21ED-4A6C-9F2C-92DE0CD00C7B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C926651A-F1F4-4968-8EB6-45DB95C7871B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C926651A-F1F4-4968-8EB6-45DB95C7871B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C926651A-F1F4-4968-8EB6-45DB95C7871B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -88,7 +75,6 @@ Global
 		{F54D831F-52EE-42FD-A8D8-B64693BFA78D} = {668880F2-5C7B-4188-8215-11DF13C3CE8C}
 		{761A3B20-4170-4007-8EC4-31C88C469295} = {4B703750-0405-41F2-8F76-8D6A13349A67}
 		{FF3B2DE6-21ED-4A6C-9F2C-92DE0CD00C7B} = {84145610-C339-4052-A4E7-2D45C84E1671}
-		{EBA281F7-5D4C-4E0B-885D-A4CA87474C7F} = {84145610-C339-4052-A4E7-2D45C84E1671}
 		{C926651A-F1F4-4968-8EB6-45DB95C7871B} = {84145610-C339-4052-A4E7-2D45C84E1671}
 	EndGlobalSection
 EndGlobal

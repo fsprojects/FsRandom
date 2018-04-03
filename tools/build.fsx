@@ -1,15 +1,13 @@
-﻿#I "FSharp.Formatting/lib/net40"
-#I "FSharp.Compiler.Service/lib/net40"
-#I "RazorEngine/lib/net40"
-#I "Microsoft.AspNet.Razor/lib/net40"
-#r "FakeLib.dll"
-#r "ICSharpCode.SharpZipLib.dll"
-#r "System.Web.Razor.dll"
-#r "RazorEngine.dll"
+﻿#I @"../packages/build/FSharp.Formatting/lib/net40"
+#I @"../packages/build/FSharp.Compiler.Service/lib/net40"
+#I @"../packages/build/FSharpVSPowerTools.Core/lib/net45"
+#r @"../packages/build/FAKE/tools/FakeLib.dll"
+#r @"../paket-files/build/github.com/ICSharpCode.SharpZipLib.dll"
 #r "FSharp.Literate.dll"
 #r "FSharp.CodeFormat.dll"
 #r "FSharp.MetadataFormat.dll"
 #r "FSharp.Markdown.dll"
+#r "RazorEngine.dll"
 
 open System
 open System.IO
@@ -23,12 +21,14 @@ let baseDir = Path.GetDirectoryName (__SOURCE_DIRECTORY__)
 let inline (~%) name = Path.Combine (baseDir, name)
 let inline (%) dir name = Path.Combine (dir, name)
 
-let nugetToolPath = % ".nuget" % "NuGet.exe"
+let nugetToolPath = % @"packages/build/NuGet.CommandLine/tools/NuGet.exe"
 let buildDir = % "Build"
 let deployDir = % "Deploy"
+let libDir = buildDir % "lib"
 let docsDir = buildDir % "docs"
 
 let mainSolution = % "src" % "FsRandom" % "FsRandom.fsproj"
+let targetFrameworks = ["net45"; "netstandard1.6"; "netstandard2.0"]
 let projectName = "FsRandom"
 let zipName = deployDir % "FsRandom.zip"
 
@@ -70,7 +70,9 @@ let buildParams =
       NoNuGet = false
       Key = None
    }
-   let args = fsi.CommandLineArgs |> Array.toList  // args = ["build.fsx"; ...]
+   // https://github.com/fsharp/FAKE/issues/1477
+   let args = fsi.CommandLineArgs |> Array.toList
+   // let args = Environment.GetCommandLineArgs() |> Array.skip 1 |> Array.toList  // args = ["build.fsx"; ...]
    loop defaultBuildParam args.Tail
 
 if buildParams.Help then
@@ -106,38 +108,19 @@ let addBuildProperties =
          | None -> properties
    debugSymbol >> setKey
 let configuration = "Configuration", if buildParams.Debug then "Debug" else "Release"
-let setBuildParams (p:MSBuildParams) = {
-   p with
-      Targets = ["Build"]
-      Properties = configuration :: addBuildProperties p.Properties
-}
-let setCleanParams (p:MSBuildParams) = {
-   p with
-      Targets = ["Clean"]
-      Properties = [configuration]
-}
 
-Target "CleanBuild" (fun () ->
-   build setCleanParams mainSolution
-   CleanDir buildDir
-)
-Target "CleanDeploy" (fun () ->
-   CleanDir deployDir
-)
 Target "Clean" DoNothing
 
-let getProducts projectName =
-   if buildParams.Debug then ["*"] else ["*.dll"; "*.XML"]
-   |> Seq.collect (fun pattern ->
-      let path =  % projectName % "bin" % snd configuration
-      Directory.GetFiles (path, pattern)
-   )
 Target "Build" (fun () ->
-   build setBuildParams mainSolution
-   getProducts ("src" % projectName)
-   |> Copy buildDir
-   !! (buildDir % "**")
-   |> Log "Build-Output: "
+   targetFrameworks
+   |> Seq.iter (fun framework ->
+      DotNetCli.Build (fun p ->
+         { p with
+            Project = mainSolution
+            Configuration = snd configuration
+            Framework = framework
+            Output = libDir % framework })
+   )
 )
 Target "EnsureDeploy" (fun () ->
    ensureDirectory deployDir
@@ -157,7 +140,7 @@ let updateNuGetParams version (p:NuGetParams) = {
 }
 let pack projectName =
    let assemblyName = sprintf "%s.dll" projectName
-   let assemblyPath = buildDir % assemblyName
+   let assemblyPath = libDir % "net45" % assemblyName
    let version = getMainAssemblyVersion assemblyPath
    let nuspecPath = % (sprintf "%s.nuspec" projectName)
    NuGetPack (updateNuGetParams version) nuspecPath
@@ -178,7 +161,7 @@ Target "Documentation" (fun () ->
    // Paths with template/source/output locations
    let content    = % "docs"
    let templates  = content % "templates"
-   let formatting = __SOURCE_DIRECTORY__ % "FSharp.Formatting"
+   let formatting = % "packages/build/FSharp.Formatting"
    let docTemplate = formatting % "templates" % "docpage.cshtml"
 
    // Where to look for *.cshtml templates (in this order)
@@ -190,7 +173,7 @@ Target "Documentation" (fun () ->
       CopyRecursive (content % "images") (docsDir % "images") true
       |> Log "Copying images: "
       ensureDirectory (docsDir % "content")
-      CopyRecursive (formatting % "styles") (docsDir % "content") true 
+      CopyRecursive (formatting % "styles") (docsDir % "content") true
       |> Log "Copying styles and scripts: "
 
    let fsi = FsiEvaluator ()
@@ -221,9 +204,9 @@ Target "Documentation" (fun () ->
 Target "Zip" (fun () ->
    let files =
       if buildParams.Documentation && buildParams.DocumentationRoot = "." then
-         !! (buildDir % "*.*") ++ (docsDir % "**")
+         !! (libDir % "**") ++ (docsDir % "**")
       else
-         !! (buildDir % "*.*")
+         !! (libDir % "**")
    files
    |> Zip buildDir zipName
 )
@@ -232,11 +215,6 @@ Target "Deploy" (fun () ->
    !! (deployDir % "*.*")
    |> Log "Build-Output: "
 )
-
-// Clean dependency
-"CleanBuild"
-=?> ("CleanDeploy", buildParams.CleanDeploy)
-==> "Clean"
 
 // Build dependency
 "Clean"
