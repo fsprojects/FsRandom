@@ -24,6 +24,7 @@ let inline (%) dir name = Path.Combine (dir, name)
 let nugetToolPath = % @"packages/build/NuGet.CommandLine/tools/NuGet.exe"
 let buildDir = % "Build"
 let deployDir = % "Deploy"
+let libDir = buildDir % "lib"
 let docsDir = buildDir % "docs"
 
 let mainSolution = % "src" % "FsRandom" % "FsRandom.fsproj"
@@ -118,7 +119,7 @@ Target "Build" (fun () ->
             Project = mainSolution
             Configuration = snd configuration
             Framework = framework
-            Output = buildDir % "lib" % framework })
+            Output = libDir % framework })
    )
 )
 Target "EnsureDeploy" (fun () ->
@@ -139,7 +140,7 @@ let updateNuGetParams version (p:NuGetParams) = {
 }
 let pack projectName =
    let assemblyName = sprintf "%s.dll" projectName
-   let assemblyPath = buildDir % "lib" % "net45" % assemblyName
+   let assemblyPath = libDir % "net45" % assemblyName
    let version = getMainAssemblyVersion assemblyPath
    let nuspecPath = % (sprintf "%s.nuspec" projectName)
    NuGetPack (updateNuGetParams version) nuspecPath
@@ -203,9 +204,9 @@ Target "Documentation" (fun () ->
 Target "Zip" (fun () ->
    let files =
       if buildParams.Documentation && buildParams.DocumentationRoot = "." then
-         !! (buildDir % "lib" % "*.*") ++ (docsDir % "**")
+         !! (libDir % "**") ++ (docsDir % "**")
       else
-         !! (buildDir % "lib" % "*.*")
+         !! (libDir % "**")
    files
    |> Zip buildDir zipName
 )
