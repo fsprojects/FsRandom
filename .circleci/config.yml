@@ -40,3 +40,4 @@ jobs:
           command: fsharpi tools/build.fsx --clean-deploy --docs --deploy
       - store_artifacts:
           path: ./Deploy
+          destination: artifacts
