@@ -12,6 +12,5 @@ TestResults/
 Build/
 Deploy/
 
-.paket/Paket.Restore.targets
 packages
 paket-files

@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: microsoft/dotnet:2.0-sdk
+        environment:
+          FrameworkPathOverride: /usr/lib/mono/4.5/
+    steps:
+      - checkout
+      - run:
+          name: restore dependencies
+          command: dotnet restore
+      - run:
+          name: test FsRandom
+          command: dotnet test ./tests/FsRandom.Tests/FsRandom.Tests.fsproj
+      - run:
+          name: test FsRandom C# extension
+          command: dotnet test ./tests/FsRandom.Tests.CSharp/FsRandom.Tests.CSharp.csproj
