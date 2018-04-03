@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
    <metadata>
       <id>FsRandom</id>
-      <version>1.3.3</version>
+      <version>1.4.0</version>
       <title>FsRandom</title>
       <authors>RecycleBin</authors>
       <owners>kos59125</owners>
@@ -17,9 +17,13 @@
       <summary>Random number generating framework designed for F#.</summary>
       <copyright>Copyright &#xA9; 2013 RecycleBin</copyright>
       <tags>F# random-number computation-expression monte-carlo statistics</tags>
+      <dependencies>
+        <dependency id="FSharp.Core" version="4.3.4" />
+      </dependencies>
    </metadata>
    <files>
-      <file src="src/FsRandom/bin/Release/FsRandom.dll" target="lib/net40" />
-      <file src="src/FsRandom/bin/Release/FsRandom.xml" target="lib/net40" />
+      <file src="Build/lib/net45/FsRandom.dll" target="lib/net45" />
+      <file src="Build/lib/netstandard1.6/FsRandom.dll" target="lib/netstandard1.6" />
+      <file src="Build/lib/netstandard2.0/FsRandom.dll" target="lib/netstandard2.0" />
    </files>
 </package>

@@ -8,12 +8,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install mono
+          name: Install mono
           command: |
             apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
             echo "deb http://download.mono-project.com/repo/debian stable-stretch main" | tee /etc/apt/sources.list.d/mono-official-stable.list
             apt-get update -y
-            apt-get install -y mono-devel
+            apt-get install -y mono-devel fsharp
           environment:
             DEBIAN_FRONTEND: noninteractive
       - restore_cache:
@@ -22,7 +22,7 @@ jobs:
             - paket-cache-{{ .Branch }}
             - paket-cache
       - run:
-          name: restore dependencies
+          name: Restore dependencies
           command: dotnet restore
       - save_cache:
           key: paket-cache-{{ .Branch }}-{{ checksum "paket.lock" }}
@@ -30,8 +30,11 @@ jobs:
             - packages
             - paket-files
       - run:
-          name: test FsRandom
+          name: Test FsRandom
           command: dotnet test ./tests/FsRandom.Tests/FsRandom.Tests.fsproj
       - run:
-          name: test FsRandom C# extension
+          name: Test FsRandom C# extension
           command: dotnet test ./tests/FsRandom.Tests.CSharp/FsRandom.Tests.CSharp.csproj
+      - run:
+          name: Create deploy package
+          command: fsharpi tools/build.fsx --clean-deploy --docs --deploy

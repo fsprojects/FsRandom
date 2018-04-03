@@ -1,5 +1,5 @@
 (*** hide ***)
-#I "../Build"
+#I "../Build/lib/net45"
 #r "FsRandom.dll"
 
 (**
