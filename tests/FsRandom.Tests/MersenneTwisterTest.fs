@@ -3,7 +3,6 @@
 open System
 open System.IO
 open FsRandom.MersenneTwister
-open FsRandom.Tests.Resources
 open NUnit.Framework
 
 [<Test>]

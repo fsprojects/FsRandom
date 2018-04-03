@@ -1,6 +1,11 @@
 FsRandom ChangeLog
 ==================
 
+Version 1.4.0
+-------------
+
+* Add support for .NET Standard (#81).
+
 Version 1.3.3
 -------------
 

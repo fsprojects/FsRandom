@@ -1,9 +1,8 @@
 ﻿module FsRandom.SimdOrientedFastMersenneTwisterTest
-()
+
 open System
 open System.IO
 open FsRandom.SimdOrientedFastMersenneTwister
-open FsRandom.Tests.Resources
 open NUnit.Framework
 
 let test parameter resource =

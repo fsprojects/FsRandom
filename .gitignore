@@ -12,4 +12,5 @@ TestResults/
 Build/
 Deploy/
 
-paket.exe
+packages
+paket-files

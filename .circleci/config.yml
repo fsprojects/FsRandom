@@ -1,0 +1,43 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: microsoft/dotnet:2.0-sdk
+        environment:
+          FrameworkPathOverride: /usr/lib/mono/4.5/
+    steps:
+      - checkout
+      - run:
+          name: Install mono
+          command: |
+            apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+            echo "deb http://download.mono-project.com/repo/debian stable-stretch main" | tee /etc/apt/sources.list.d/mono-official-stable.list
+            apt-get update -y
+            apt-get install -y mono-devel fsharp
+          environment:
+            DEBIAN_FRONTEND: noninteractive
+      - restore_cache:
+          keys:
+            - paket-cache-{{ .Branch }}-{{ checksum "paket.lock" }}
+            - paket-cache-{{ .Branch }}
+            - paket-cache
+      - run:
+          name: Restore dependencies
+          command: dotnet restore
+      - save_cache:
+          key: paket-cache-{{ .Branch }}-{{ checksum "paket.lock" }}
+          paths:
+            - packages
+            - paket-files
+      - run:
+          name: Test FsRandom
+          command: dotnet test ./tests/FsRandom.Tests/FsRandom.Tests.fsproj
+      - run:
+          name: Test FsRandom C# extension
+          command: dotnet test ./tests/FsRandom.Tests.CSharp/FsRandom.Tests.CSharp.csproj
+      - run:
+          name: Create deploy package
+          command: fsharpi tools/build.fsx --clean-deploy --docs --deploy
+      - store_artifacts:
+          path: ./Deploy
+          destination: artifacts
