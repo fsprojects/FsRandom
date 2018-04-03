@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/kos59125/FsRandom.svg?style=svg)](https://circleci.com/gh/kos59125/FsRandom)
+
 FsRandom
 ========
 
