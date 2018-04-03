@@ -7,7 +7,10 @@ TestResults/
 *.nupkg
 *.pdb
 *.xml
+*.bak
 
 Build/
 Deploy/
+
+paket-files/
 
