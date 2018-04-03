@@ -1,5 +1,12 @@
 source https://api.nuget.org/v3/index.json
 
+nuget FSharp.Core
+nuget FsUnit
+nuget MathNet.Numerics
+nuget Microsoft.NET.Test.Sdk
+nuget NUnit
+nuget NUnit3TestAdapter
+
 group Build
   source https://api.nuget.org/v3/index.json
 

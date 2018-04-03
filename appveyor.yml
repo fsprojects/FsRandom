@@ -16,6 +16,6 @@ clone_depth: 50
 test: off
 
 build_script:
-- cmd: dotnet restore
+- cmd: ./.paket/paket.exe restore
 - cmd: dotnet test ./tests/FsRandom.Tests/FsRandom.Tests.fsproj
 - cmd: dotnet test ./tests/FsRandom.Tests.CSharp/FsRandom.Tests.CSharp.csproj

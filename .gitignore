@@ -12,4 +12,6 @@ TestResults/
 Build/
 Deploy/
 
-paket.exe
+.paket/Paket.Restore.targets
+packages
+paket-files
