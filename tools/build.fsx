@@ -2,7 +2,6 @@
 #I @"../packages/build/FSharp.Compiler.Service/lib/net40"
 #I @"../packages/build/FSharpVSPowerTools.Core/lib/net45"
 #r @"../packages/build/FAKE/tools/FakeLib.dll"
-#r @"../paket-files/build/github.com/ICSharpCode.SharpZipLib.dll"
 #r "FSharp.Literate.dll"
 #r "FSharp.CodeFormat.dll"
 #r "FSharp.MetadataFormat.dll"
