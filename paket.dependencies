@@ -1,5 +1,7 @@
 source https://api.nuget.org/v3/index.json
 
+storage: none
+
 nuget FSharp.Core
 nuget FsUnit
 nuget MathNet.Numerics
@@ -13,5 +15,3 @@ group Build
   nuget FAKE
   nuget FSharp.Formatting
   nuget Nuget.CommandLine
-
-  http https://github.com/icsharpcode/SharpZipLib/releases/download/0.86.0.518/ICSharpCode.SharpZipLib.dll

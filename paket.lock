@@ -1,3 +1,4 @@
+STORAGE: NONE
 NUGET
   remote: https://api.nuget.org/v3/index.json
     FSharp.Core (4.3.4)
@@ -62,16 +63,16 @@ NUGET
       System.Diagnostics.Debug (>= 4.0.11) - restriction: || (&& (< net451) (>= netstandard1.3) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6))
       System.Dynamic.Runtime (>= 4.0.11) - restriction: || (&& (< net451) (>= netstandard1.3) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6))
       System.Linq (>= 4.1) - restriction: || (&& (< net451) (>= netstandard1.3) (< netstandard1.6)) (&& (< net451) (>= netstandard1.6))
-    Microsoft.NET.Test.Sdk (15.6.2)
+    Microsoft.NET.Test.Sdk (15.7)
       Microsoft.CodeCoverage (>= 1.0.3) - restriction: || (>= net45) (>= netcoreapp1.0)
-      Microsoft.TestPlatform.TestHost (>= 15.6.2) - restriction: >= netcoreapp1.0
+      Microsoft.TestPlatform.TestHost (>= 15.7) - restriction: >= netcoreapp1.0
       Newtonsoft.Json (>= 9.0.1) - restriction: >= uap10.0
       System.ComponentModel.Primitives (>= 4.1) - restriction: >= uap10.0
       System.ComponentModel.TypeConverter (>= 4.1) - restriction: >= uap10.0
       System.Runtime.InteropServices.RuntimeInformation (>= 4.0) - restriction: >= uap10.0
     Microsoft.NETCore.Platforms (2.0.1) - restriction: || (&& (>= monoandroid) (>= netstandard2.0)) (&& (>= monotouch) (>= netstandard2.0)) (&& (>= net45) (>= netstandard2.0) (< portable-net451+win81+wpa81)) (&& (< net45) (>= netstandard2.0)) (&& (>= net451) (< netstandard1.3) (>= netstandard2.0)) (&& (< net46) (>= net461) (>= netstandard2.0)) (>= netcoreapp2.0) (&& (< netstandard1.0) (>= netstandard2.0)) (&& (< netstandard1.3) (>= netstandard2.0) (>= wpa81)) (&& (< netstandard1.5) (>= netstandard2.0) (>= uap10.0)) (&& (>= netstandard2.0) (< portable-net45+win8+wpa81)) (&& (>= netstandard2.0) (>= uap10.1)) (&& (>= netstandard2.0) (>= xamarinios)) (&& (>= netstandard2.0) (>= xamarinmac)) (&& (>= netstandard2.0) (>= xamarintvos)) (&& (>= netstandard2.0) (>= xamarinwatchos))
     Microsoft.NETCore.Targets (2.0) - restriction: || (&& (>= dnxcore50) (>= netstandard1.6)) (&& (< monoandroid) (< monotouch) (< net45) (>= netstandard1.6) (< netstandard2.0) (< win8) (< wpa81) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)) (&& (< monoandroid) (< net45) (< netstandard1.3) (>= netstandard1.6) (< win8) (< wpa81)) (&& (< monoandroid) (< net45) (< netstandard1.5) (>= netstandard1.6) (< win8) (< wpa81))
-    Microsoft.TestPlatform.ObjectModel (15.6.2) - restriction: >= netcoreapp1.0
+    Microsoft.TestPlatform.ObjectModel (15.7) - restriction: >= netcoreapp1.0
       NETStandard.Library (>= 1.6) - restriction: && (< net451) (>= netstandard1.5)
       System.ComponentModel.EventBasedAsync (>= 4.0.11) - restriction: && (< net451) (>= netstandard1.5)
       System.ComponentModel.TypeConverter (>= 4.1) - restriction: || (&& (< net451) (>= netstandard1.4) (< netstandard1.5)) (&& (< net451) (>= netstandard1.5))
@@ -86,9 +87,9 @@ NUGET
       System.Runtime.Serialization.Primitives (>= 4.1.1) - restriction: && (< net451) (>= netstandard1.5)
       System.Threading.Thread (>= 4.0) - restriction: && (< net451) (>= netstandard1.5)
       System.Xml.XPath.XmlDocument (>= 4.0.1) - restriction: && (< net451) (>= netstandard1.5)
-    Microsoft.TestPlatform.TestHost (15.6.2) - restriction: >= netcoreapp1.0
+    Microsoft.TestPlatform.TestHost (15.7) - restriction: >= netcoreapp1.0
       Microsoft.Extensions.DependencyModel (>= 1.0.3) - restriction: >= netcoreapp1.0
-      Microsoft.TestPlatform.ObjectModel (>= 15.6.2) - restriction: || (>= netcoreapp1.0) (>= uap10.0)
+      Microsoft.TestPlatform.ObjectModel (>= 15.7) - restriction: || (>= netcoreapp1.0) (>= uap10.0)
       Newtonsoft.Json (>= 9.0.1) - restriction: || (>= netcoreapp1.0) (>= uap10.0)
     Microsoft.Win32.Primitives (4.3) - restriction: >= netcoreapp1.0
       Microsoft.NETCore.Platforms (>= 1.1) - restriction: && (< monoandroid) (< monotouch) (< net46) (>= netstandard1.3) (< xamarinios) (< xamarinmac) (< xamarintvos) (< xamarinwatchos)
@@ -777,6 +778,3 @@ NUGET
     FSharpVSPowerTools.Core (2.3)
       FSharp.Compiler.Service (>= 2.0.0.3)
     NuGet.CommandLine (4.1)
-HTTP
-  remote: https://github.com
-    ICSharpCode.SharpZipLib.dll (/icsharpcode/SharpZipLib/releases/download/0.86.0.518/ICSharpCode.SharpZipLib.dll)

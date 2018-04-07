@@ -30,11 +30,15 @@ jobs:
             - packages
             - paket-files
       - run:
+          name: Build FsRandom
+          command: dotnet build --no-restore
+            
+      - run:
           name: Test FsRandom
-          command: dotnet test ./tests/FsRandom.Tests/FsRandom.Tests.fsproj
+          command: dotnet test ./tests/FsRandom.Tests/FsRandom.Tests.fsproj --no-build
       - run:
           name: Test FsRandom C# extension
-          command: dotnet test ./tests/FsRandom.Tests.CSharp/FsRandom.Tests.CSharp.csproj
+          command: dotnet test ./tests/FsRandom.Tests.CSharp/FsRandom.Tests.CSharp.csproj --no-build
       - run:
           name: Create deploy package
           command: fsharpi tools/build.fsx --clean-deploy --docs --deploy

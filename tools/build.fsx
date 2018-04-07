@@ -2,7 +2,6 @@
 #I @"../packages/build/FSharp.Compiler.Service/lib/net40"
 #I @"../packages/build/FSharpVSPowerTools.Core/lib/net45"
 #r @"../packages/build/FAKE/tools/FakeLib.dll"
-#r @"../paket-files/build/github.com/ICSharpCode.SharpZipLib.dll"
 #r "FSharp.Literate.dll"
 #r "FSharp.CodeFormat.dll"
 #r "FSharp.MetadataFormat.dll"
@@ -28,7 +27,7 @@ let libDir = buildDir % "lib"
 let docsDir = buildDir % "docs"
 
 let mainSolution = % "src" % "FsRandom" % "FsRandom.fsproj"
-let targetFrameworks = ["net45"; "netstandard1.6"; "netstandard2.0"]
+let targetFrameworks = ["net45"; "netstandard1.6"]
 let projectName = "FsRandom"
 let zipName = deployDir % "FsRandom.zip"
 
