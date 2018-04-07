@@ -14,7 +14,7 @@ open System.Runtime.InteropServices
 [<assembly: AssemblyCulture("")>]
 
 [<assembly: AssemblyVersion("1.4.0.0")>]
-[<assembly: AssemblyInformationalVersion("1.4.0")>]
+[<assembly: AssemblyInformationalVersion("1.4.0.1")>]
 
 [<assembly: InternalsVisibleTo("FsRandom.Tests")>]
 
