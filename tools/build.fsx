@@ -27,7 +27,7 @@ let libDir = buildDir % "lib"
 let docsDir = buildDir % "docs"
 
 let mainSolution = % "src" % "FsRandom" % "FsRandom.fsproj"
-let targetFrameworks = ["net45"; "netstandard1.6"; "netstandard2.0"]
+let targetFrameworks = ["net45"; "netstandard1.6"]
 let projectName = "FsRandom"
 let zipName = deployDir % "FsRandom.zip"
 
