@@ -13,3 +13,16 @@ Install
 -------
 
 FsRandom can be installed [from NuGet](https://www.nuget.org/packages/FsRandom/).
+
+License
+-------
+
+[The 3-Clause BSD License](https://github.com/fsprojects/FsRandom/blob/master/LICENSE)
+
+Maintainer(s)
+-------------
+
+- [@kos59125](https://github.com/kos59125)
+- [@pocketberserker](https://github.com/pocketberserker)
+
+The default maintainer account for projects under "fsprojects" is [@fsprojectsgit](https://github.com/fsprojectsgit) - F# Community Project Incubation Space (repo management)
